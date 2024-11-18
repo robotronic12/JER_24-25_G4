@@ -5,11 +5,11 @@ class MenuInicio extends Phaser.Scene {
 
     preload() {
         //Cargo los audios con this.load.audio("path")
-		this.load.audio("select", "/assets/musica/click.mp3"); 
-        this.load.audio("background", "/assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
+		this.load.audio("select", "assets/musica/click.mp3"); 
+        this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
         
         //Cargo los botones
-        this.load.image("start_button", "/assets/botones/B_Jugar.png");
+        this.load.image("start_button", "/assets/botones/Jugar.png");
         //this.load.image("help_button", "assets/help-button.svg");
         //this.load.image("config_button", "assets/config-button.svg");
 

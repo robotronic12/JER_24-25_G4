@@ -122,20 +122,3 @@ class Juego extends Phaser.Scene
         star.disableBody(true, true);
     }
 }
-
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'phaser-example',
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
-    scene: Example
-};
-
-const game = new Phaser.Game(config);
