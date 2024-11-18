@@ -2,9 +2,11 @@
 <html>
     <head>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.86.0/phaser.min.js"></script> 
-        <!--<link rel="stylesheet" href="../JER_24-25_G4/css/EstiloJuego.css">-->
+        <script src="../JER_24-25_G4/js/phaser.min.js"></script>
 
+        <link rel="stylesheet" href="../JER_24-25_G4/css/EstiloJuego.css">
         <script src="../JER_24-25_G4/js/MenuInicio.js"></script>
+        <script src="../JER_24-25_G4/js/Juego.js"></script>
         <!--Hay que introducir aqui los scripts-->
 
     </head>
@@ -24,7 +26,7 @@
                         gravity: { y: 10 }
                     }
                 },
-                scene: [MenuInicio] //añadir las escenas
+                scene: [MenuInicio, Juego] //añadir las escenas
             };
     
             // Create the game instance
