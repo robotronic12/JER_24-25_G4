@@ -6,9 +6,10 @@
         <script src="js/MenuInicio.js"></script> <!--HOla wapos-->
         <script src="js/Juego.js"></script>
         <script src="js/MenuPausa.js"></script>
+        <script src="js/Ajustes.js"></script>
         <!--Hay que introducir aqui los scripts-->
-
     </head>
+
     <body>
         <script>
             // Game configuration
@@ -22,10 +23,10 @@
                     default: 'arcade',
                     arcade: {
                         debug: true,
-                        gravity: { y: 350 }
+                        gravity: { y: 320  }
                     }
                 },
-                scene: [MenuInicio, Juego, MenuPausa] //añadir las escenas
+                scene: [MenuInicio, Juego, Ajustes, MenuPausa] //añadir las escenas
             };
     
             // Create the game instance
