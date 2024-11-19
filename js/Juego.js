@@ -211,6 +211,8 @@ class Juego extends Phaser.Scene
     {
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/platform2.png');
+        this.load.image('player', 'assets/jugador/j1.png'); // Ruta de tu imagen del jugador
+        this.load.image('player2', 'assets/jugador/j2.png'); // Ruta de tu imagen del jugador
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
         this.load.spritesheet('j1', 'assets/jugador/j1.png', { frameWidth: 48, frameHeight: 48 });
         this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
@@ -223,12 +225,15 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
-        
+        //para comprobar la ulsación de space
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.image(400, 300, 'sky');
 
+        //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
 
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        
 
         // platforms.create(600, 400, 'ground');
         // platforms.create(50, 250, 'ground');
@@ -251,8 +256,14 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // UPDATE
     ///////////////////////////////////////////////////////////////////////////////////////
+    
     update ()
     {
+     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
+            {
+                this.scene.stop('Juego'); //carga la escena de intro
+                this.scene.start('MenuVictoriaJ1'); //carga la escena 
+            }
         //Movimiento personajes
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
