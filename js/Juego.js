@@ -182,18 +182,10 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
+        //para comprobar la ulsación de space
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.image(400, 300, 'sky');
 
-        //jugador
-        this.player = this.physics.add.sprite(100, 300, 'player');
-
-        // Ajustar las propiedades del jugador
-        this.player.setCollideWorldBounds(true); // Evitar que salga del mundo
-        this.player.setBounce(0.2); // Pequeño rebote al colisionar con el suelo
-
-        // Crear las teclas para controlar al jugador
-        this.cursors = this.input.keyboard.createCursorKeys(); // Flechas del teclado
         //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
 
@@ -224,7 +216,7 @@ class Juego extends Phaser.Scene
     
     update ()
     {
-     if (Phaser.Input.Keyboard.JustDown(this.spaceKey))
+     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
             {
                 this.scene.stop('Juego'); //carga la escena de intro
                 this.scene.start('MenuVictoriaJ1'); //carga la escena 
