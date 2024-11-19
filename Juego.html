@@ -5,10 +5,11 @@
 
         <script src="js/MenuInicio.js"></script> <!--HOla wapos-->
         <script src="js/Juego.js"></script>
+        <script src="js/Ajustes.js"></script>
         <script src="js/menu_final_j1victory.js"></script>
         <!--Hay que introducir aqui los scripts-->
-
     </head>
+
     <body>
         <script>
             // Game configuration
@@ -22,10 +23,11 @@
                     default: 'arcade',
                     arcade: {
                         debug: true,
-                        gravity: { y: 10 }
+                        gravity: { y: 320  }
                     }
                 },
-                scene: [MenuInicio, Juego,menu_final_j1victory] //añadir las escenas
+                scene: [MenuInicio, Juego, Ajustes,menu_final_j1victory] //añadir las escenas
+                
             };
     
             // Create the game instance
