@@ -15,7 +15,8 @@ class Juego extends Phaser.Scene
     j1;
     j2;
 
-    
+    //#region JUGADOR 1
+
     ///////////////////////////////////////////////////////////////////////////////////////
     // JUGADOR 1
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +61,10 @@ class Juego extends Phaser.Scene
             }
     }
 
+    //#endregion
+    
+    //#region JUGADOR 2
+
     ///////////////////////////////////////////////////////////////////////////////////////
     // JUGADOR 2
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +108,9 @@ class Juego extends Phaser.Scene
             this.j2.setVelocityY(-330);
         }
     }
+    //#endregion
+    
+    //#region Otros
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // OTROS
@@ -148,6 +156,12 @@ class Juego extends Phaser.Scene
         this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     }
+
+    //collectStar (j1, star)
+    //{
+    //    star.disableBody(true, true);
+    //}
+    //#endregion
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // PRELOAD
@@ -211,8 +225,5 @@ class Juego extends Phaser.Scene
         }
     }
 
-    //collectStar (j1, star)
-    //{
-    //    star.disableBody(true, true);
-    //}
+    
 }
