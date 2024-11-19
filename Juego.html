@@ -2,13 +2,11 @@
 <html>
     <head>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"> </script>        
-        
-        <!--<script src="../JER_24-25_G4/js/phaser.min.js"></script>-->
 
-        <!--<link rel="stylesheet" href="../JER_24-25_G4/css/EstiloJuego.css">-->
         <script src="js/MenuInicio.js"></script> <!--HOla wapos-->
         <script src="js/Juego.js"></script>
         <script src="js/Ajustes.js"></script>
+        <script src="js/menu_final_j1victory.js"></script>
         <!--Hay que introducir aqui los scripts-->
     </head>
 
@@ -28,7 +26,7 @@
                         gravity: { y: 320  }
                     }
                 },
-                scene: [MenuInicio, Juego, Ajustes] //añadir las escenas
+                scene: [MenuInicio, Juego, Ajustes,menu_final_j1victory] //añadir las escenas
                 
             };
     
