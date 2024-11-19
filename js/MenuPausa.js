@@ -15,6 +15,9 @@ class MenuPausa extends Phaser.Scene {
 
     create() {     
 
+        // Añadimos título
+        const titulo = this.add.text(300, 100, 'Pausa', { fill: '#0f0', fontSize: 75 });
+
         //Configuracion de la musica
         //this.bgMusic = this.sound.add('background'); //pongo la musica del menu
         //this.bgMusic.setVolume(0); // Cambiar volumen (por ejemplo, 50% del volumen máximo)

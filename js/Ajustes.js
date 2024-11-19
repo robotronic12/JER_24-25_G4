@@ -54,7 +54,7 @@ class Ajustes extends Phaser.Scene {
             this.sound.play('select'); // Reproduce el sonido de click
             this.scene.stop('Ajustes'); // Detiene la escena de ajustes
             if(window.GlobalData.playing){
-                this.scene.resume('Juego');
+                this.scene.launch('MenuPausa');
             }else{
                 this.scene.start('MenuInicio'); // Inicia la escena de menú
             }            

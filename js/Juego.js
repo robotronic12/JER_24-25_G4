@@ -209,6 +209,8 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     preload ()
     {
+        this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
+
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/platform2.png');
         this.load.image('player', 'assets/jugador/j1.png'); // Ruta de tu imagen del jugador
@@ -225,9 +227,20 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
-        //para comprobar la ulsación de space
+        window.GlobalData.playing = true;
+
+        //Configuracion de la musica
+        this.bgMusic = this.sound.add('background'); //pongo la musica del menu
+        this.bgMusic.setVolume(0.01); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
+        this.bgMusic.loop = true; //que sea loop
+        this.bgMusic.play(); //que suene
+
+        //para comprobar la Pulsación de space
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.image(400, 300, 'sky');
+        
+        //Comprobamos que se usa el escape
+        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
         //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
@@ -259,11 +272,16 @@ class Juego extends Phaser.Scene
     
     update ()
     {
-     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
             {
                 this.scene.stop('Juego'); //carga la escena de intro
                 this.scene.start('MenuVictoriaJ1'); //carga la escena 
-            }
+        }
+
+        if(this.bgMusic.isPaused){
+            this.bgMusic.resume();
+        }
+
         //Movimiento personajes
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
@@ -287,6 +305,14 @@ class Juego extends Phaser.Scene
         {
             this.movingPlatform.setVelocityX(50);
         }
+        
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+            this.scene.pause('Juego');
+            this.bgMusic.pause(); //que deje de sonar           
+            this.scene.launch('MenuPausa'); 
+            this.scene.bringToTop('MenuPausa');
+        }
+
     }
 
     
