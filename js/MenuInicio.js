@@ -18,8 +18,9 @@ class MenuInicio extends Phaser.Scene {
     }
 
     create() {
-        const hello_text = this.add.text(150, 50, 'Robot Coliseum', { fill: '#0f0', fontSize: 42 })
-
+        const titulo = this.add.text(150, 75, 'Robot Coliseum', { fill: '#0f0', fontSize: 60 })
+        const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#0f0', fontSize: 20 })
+        const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#0f0', fontSize: 20 })
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
         this.bgMusic.setVolume(0); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
@@ -40,7 +41,12 @@ class MenuInicio extends Phaser.Scene {
             // Intentar cerrar la ventana si es posible
             window.close();
         });
+
         const opciones = this.add.image(400, 375, 'opciones');
+        opciones.setInteractive().on('pointerdown', () => {
+            console.log('Botón de Salir clickeado');
+            
+        });
         
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
