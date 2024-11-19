@@ -26,13 +26,9 @@ class MenuInicio extends Phaser.Scene {
 
         const start_button = this.add.image(400, 300, "start_button") //A�ado la imagen de start 
             .setInteractive(true) /*Hago que sea interactivo*/
-            .on/*Hace algo mira el que*/('pointerdown', /*Creo una funcion anonima*/(/*no recibe ningun parametros*/) => {
-                this.sound.play("select"); //que suene el sonido de play
-                //this.scene.stop("IntroScene"); //carga la escena de intro
-                //this.scene.start("GameScene"); //carga la escena de game
+            .on/*Hace algo mira el que*/('pointerdown', () => {
+                this.sound.play("select"); 
         });
-        //const config_button = this.add.image(400, 375, "config_button");
-        //const help_button = this.add.image(400, 450, "help_button");
         
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
