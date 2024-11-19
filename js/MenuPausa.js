@@ -30,6 +30,11 @@ class MenuPausa extends Phaser.Scene {
         });
 
         const opciones = this.add.image(400, 375, 'opciones');
+        opciones.setInteractive().on('pointerdown', () => {
+            this.sound.play('select'); //que suene el sonido de play
+            this.scene.stop('MenuPausa'); //carga la escena de intro
+            this.scene.launch('Ajustes'); //carga la escena de game
+        });
 
         const salir = this.add.image(400, 450, 'salir');        
         salir.setInteractive().on('pointerdown', () => {            
@@ -37,6 +42,7 @@ class MenuPausa extends Phaser.Scene {
             this.scene.stop('MenuPausa'); 
             this.scene.stop('Juego'); 
             this.scene.start('MenuInicio'); 
+            window.GlobalData.playing = false;
         });
 
         this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);

@@ -20,10 +20,13 @@ class Ajustes extends Phaser.Scene {
     }
 
     create() {
-        // Cargamos imagen de fondo
-        const fondo = this.add.image(0, 0, 'fondo');
-        fondo.setOrigin(0, 0);
-        fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  // Ajustamos la imagen al tamaño del fondo
+
+        if(!window.GlobalData.playing){
+            // Cargamos imagen de fondo
+            const fondo = this.add.image(0, 0, 'fondo');
+            fondo.setOrigin(0, 0);
+            fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  // Ajustamos la imagen al tamaño del fondo
+        }        
         
         // Añadimos título
         const titulo = this.add.text(250, 100, 'Ajustes', { fill: '#0f0', fontSize: 75 });
@@ -50,7 +53,11 @@ class Ajustes extends Phaser.Scene {
         salir.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); // Reproduce el sonido de click
             this.scene.stop('Ajustes'); // Detiene la escena de ajustes
-            this.scene.start('MenuInicio'); // Inicia la escena de menú
+            if(window.GlobalData.playing){
+                this.scene.resume('Juego');
+            }else{
+                this.scene.start('MenuInicio'); // Inicia la escena de menú
+            }            
         });
 
         // Botón para reducir el volumen

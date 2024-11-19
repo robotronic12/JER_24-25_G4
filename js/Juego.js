@@ -26,6 +26,8 @@ class Juego extends Phaser.Scene
 
     create ()
     {
+        window.GlobalData.playing = true;
+
         this.add.image(400, 300, 'sky');
 
         this.platforms = this.physics.add.staticGroup();
