@@ -8,9 +8,10 @@
         <!--<link rel="stylesheet" href="../JER_24-25_G4/css/EstiloJuego.css">-->
         <script src="js/MenuInicio.js"></script> <!--HOla wapos-->
         <script src="js/Juego.js"></script>
+        <script src="js/Ajustes.js"></script>
         <!--Hay que introducir aqui los scripts-->
-
     </head>
+
     <body>
         <script>
             // Game configuration
@@ -27,7 +28,8 @@
                         gravity: { y: 10 }
                     }
                 },
-                scene: [MenuInicio, Juego] //añadir las escenas
+                scene: [MenuInicio, Juego, Ajustes] //añadir las escenas
+                
             };
     
             // Create the game instance
