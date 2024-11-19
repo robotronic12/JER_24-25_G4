@@ -7,7 +7,8 @@ class MenuInicio extends Phaser.Scene {
         //Cargo los audios con this.load.audio("path")
 		this.load.audio("select", "assets/musica/click.mp3"); 
         this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
-        
+        //cargamos fondo de título 
+        this.load.image('fondo',"assets/entorno/fondo.png");
         //Cargo los botones
         this.load.image("start_button", "/assets/botones/Jugar.png");
         //this.load.image("help_button", "assets/help-button.svg");
@@ -18,6 +19,8 @@ class MenuInicio extends Phaser.Scene {
 
     create() {
         const hello_text = this.add.text(150, 50, 'Robot Coliseum', { fill: '#0f0', fontSize: 42 })
+        //cargamos imagen de fondo
+        this.add.image(0, 0, 'fondo');
 
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu

@@ -9,7 +9,7 @@ class Juego extends Phaser.Scene
     preload ()
     {
         this.load.setBaseURL('https://cdn.phaserfiles.com/v385');
-        this.load.image('sky', 'src/games/firstgame/assets/sky.png');
+        this.load.image('fondo', '/assets/entorno/fondo.png');
         this.load.image('ground', 'src/games/firstgame/assets/platform.png');
         this.load.image('star', 'src/games/firstgame/assets/star.png');
         this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
@@ -17,7 +17,7 @@ class Juego extends Phaser.Scene
 
     create ()
     {
-        this.add.image(400, 300, 'sky');
+        this.add.image(800, 600, 'fondo');
 
         this.platforms = this.physics.add.staticGroup();
 
