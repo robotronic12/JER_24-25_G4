@@ -6,14 +6,19 @@ class Juego extends Phaser.Scene
 
     cursors;
     aKey;
-    dKey
-    wKey
+    dKey;
+    wKey;
+
+    J1ShootKey;
+    J2ShootKey;
 
     movingPlatform;
     platforms;
-    stars;
+
+    //stars;
     j1;
     j2;
+    bala;
 
     //#region JUGADOR 1
 
@@ -40,13 +45,13 @@ class Juego extends Phaser.Scene
         if (aKey.isDown)
             {
                 this.j1.setVelocityX(-160);
-    
+
                 this.j1.anims.play('left', true);
             }
             else if (dKey.isDown)
             {
                 this.j1.setVelocityX(160);
-    
+
                 this.j1.anims.play('right', true);
             }
             else
@@ -115,6 +120,39 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // OTROS
     ///////////////////////////////////////////////////////////////////////////////////////
+    createBalas()
+    {
+        this.bala.setCollideWorldBounds(false);
+        
+        //Colliders Bala
+        this.physics.add.collider(this.bala, this.j1);
+        this.physics.add.collider(this.bala, this.j2);
+
+        this.bala.setImmovable(true);
+        this.bala.allowGravity(false);
+    }
+
+    shootBala(xPos, yPos, xDir, yDir)
+    {
+        var velocity = 5;
+        this.bala = this.physics.add.sprite(xPos, yPos, 'bala');
+        this.bala.body.allowGravity = false;
+
+        //this.bala.setVelocityX(velocity*Math.abs(Math.cos(xDir)));
+        //this.bala.setVelocityY(velocity*Math.abs(Math.cos(yDir)));
+
+        if(xDir != 0)
+        {
+            this.bala.setVelocity(xDir * velocity, yDir * velocity);
+        }
+        else
+        {
+            this.bala.setVelocity(160 * velocity, yDir * velocity);
+        }
+
+    }
+
+
     createAnimations(){ //Por hacer
         this.anims.create({
            key: 'left',
@@ -155,6 +193,9 @@ class Juego extends Phaser.Scene
         this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
     //collectStar (j1, star)
@@ -173,6 +214,8 @@ class Juego extends Phaser.Scene
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
         this.load.spritesheet('j1', 'assets/jugador/j1.png', { frameWidth: 48, frameHeight: 48 });
         this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
+
+        this.load.spritesheet('bala', 'assets/jugador/j2.png', { frameWidth: 5, frameHeight: 5 });
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -213,6 +256,16 @@ class Juego extends Phaser.Scene
         //Movimiento personajes
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
+
+        //Disparo
+        if(Phaser.Input.Keyboard.JustDown(this.J1ShootKey))
+        {
+            this.shootBala(this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y)
+        }
+        if(Phaser.Input.Keyboard.JustDown(this.J2ShootKey))
+        {
+            this.shootBala(this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
+        }
 
         //Plataformas
         if (this.movingPlatform.x >= 500)
