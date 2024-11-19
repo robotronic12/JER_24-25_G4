@@ -18,9 +18,13 @@ class MenuInicio extends Phaser.Scene {
     }
 
     create() {
-        const hello_text = this.add.text(150, 50, 'Robot Coliseum', { fill: '#0f0', fontSize: 42 })
         //cargamos imagen de fondo
-        this.add.image(0, 0, 'fondo');
+        const fondo = this.add.image(0, 0, 'fondo'); // Creamos el fondo
+        fondo.setOrigin(0, 0);
+        fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  //ajustamos la imagen al tamaño del fondo que es (800x600)
+        //añadimos título
+        const hello_text = this.add.text(150, 50, 'Robot Coliseum', { fill: '#0f0', fontSize: 42 })
+        
 
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
