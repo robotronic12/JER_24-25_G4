@@ -14,18 +14,31 @@ class Juego extends Phaser.Scene
     {
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/platform2.png');
+        this.load.image('player', 'assets/jugador/j1.png'); // Ruta de tu imagen del jugador
+        this.load.image('player2', 'assets/jugador/j2.png'); // Ruta de tu imagen del jugador
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
     create ()
     {
-        
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.image(400, 300, 'sky');
 
+        //jugador
+        this.player = this.physics.add.sprite(100, 300, 'player');
+
+        // Ajustar las propiedades del jugador
+        this.player.setCollideWorldBounds(true); // Evitar que salga del mundo
+        this.player.setBounce(0.2); // Pequeño rebote al colisionar con el suelo
+
+        // Crear las teclas para controlar al jugador
+        this.cursors = this.input.keyboard.createCursorKeys(); // Flechas del teclado
+        //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
 
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        
 
         // platforms.create(600, 400, 'ground');
         // platforms.create(50, 250, 'ground');
@@ -75,19 +88,20 @@ class Juego extends Phaser.Scene
         //    star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         //}
 
-        this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.player, this.movingPlatform);
-        this.physics.add.collider(this.stars, this.platforms);
-        this.physics.add.collider(this.stars, this.movingPlatform);
+        
 
         //this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     }
 
-    /*
+    
     update ()
     {
-
-        const { left, right, up } = this.cursors;
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey))
+            {
+                this.scene.stop('Juego'); //carga la escena de intro
+                this.scene.start('MenuVictoriaJ1'); //carga la escena 
+            }
+       /* const { left, right, up } = this.cursors;
 
         if (left.isDown)
         {
@@ -120,7 +134,7 @@ class Juego extends Phaser.Scene
         else if (this.movingPlatform.x <= 300)
         {
             this.movingPlatform.setVelocityX(50);
-        }
+        }*/
 
     }
 
