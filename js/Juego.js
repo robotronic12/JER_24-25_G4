@@ -137,6 +137,8 @@ class Juego extends Phaser.Scene
         var velocity = 5;
         this.bala = this.physics.add.sprite(xPos, yPos, 'bala');
         this.bala.body.allowGravity = false;
+         //establecemos el tamaño de la bala 
+         this.bala.setScale(2);
 
         //this.bala.setVelocityX(velocity*Math.abs(Math.cos(xDir)));
         //this.bala.setVelocityY(velocity*Math.abs(Math.cos(yDir)));
@@ -219,7 +221,8 @@ class Juego extends Phaser.Scene
         this.load.spritesheet('j1', 'assets/jugador/j1.png', { frameWidth: 48, frameHeight: 48 });
         this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
 
-        this.load.spritesheet('bala', 'assets/jugador/j2.png', { frameWidth: 5, frameHeight: 5 });
+        this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
+       
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +263,7 @@ class Juego extends Phaser.Scene
 
         this.createJ1();
         this.createJ2();
+       
         //Colliders entre los jugadores
         this.physics.add.collider(this.j1, this.j2);
 
