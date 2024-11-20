@@ -286,7 +286,8 @@ class Juego extends Phaser.Scene
         this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
 
         this.load.image('sky', 'assets/entorno/fondo.png');
-        this.load.image('ground', 'assets/entorno/platform2.png');
+        this.load.image('ground', 'assets/entorno/suelo.png');
+        this.load.image('plataforma', 'assets/entorno/plataforma.png');
         this.load.image('player', 'assets/jugador/j1.png'); // Ruta de tu imagen del jugador
         this.load.image('player2', 'assets/jugador/j2.png'); // Ruta de tu imagen del jugador
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
@@ -312,22 +313,28 @@ class Juego extends Phaser.Scene
 
         //para comprobar la Pulsación de space
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.add.image(400, 300, 'sky');
-        
         //Comprobamos que se usa el escape
         this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
+        //Añadimos el cielo
+        this.add.image(400, 300, 'sky');
+        
+        
         //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
 
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        const ground = this.platforms.create(400, 568, 'ground');
+        ground.displayWidth = 810;
+        
+        ground.refreshBody();
         
 
         // platforms.create(600, 400, 'ground');
         // platforms.create(50, 250, 'ground');
         // platforms.create(750, 220, 'ground');
 
-        this.movingPlatform = this.physics.add.image(400, 400, 'ground');
+        this.movingPlatform = this.physics.add.image(400, 400, 'plataforma');
+        this.movingPlatform.setScale(1.2,1);
 
         this.movingPlatform.setImmovable(true);
         this.movingPlatform.body.allowGravity = false;
