@@ -1,3 +1,7 @@
-window.GlobalData = {
-    playing: false,
-};
+var GlobalData = {
+    playing : false,
+}
+
+
+
+

@@ -230,7 +230,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
-        window.GlobalData.playing = true;
+        GlobalData.playing = true;
 
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu

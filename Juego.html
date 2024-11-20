@@ -28,16 +28,13 @@
                         gravity: { y: 320  }
                     }
                 },
-                globals:{
-                    playing: false,
-                },
                 scene: [MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory] //añadir las escenas
             };
     
             // Create the game instance
             const game = new Phaser.Game(config);
-            game.scene.start('MenuInicio');
-    
+            game.scene.start('MenuInicio');   
+            
         </script>    
     </body>
 </html>

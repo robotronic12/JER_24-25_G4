@@ -24,7 +24,7 @@ class MenuInicio extends Phaser.Scene {
 
     create() {
         
-        
+        GlobalData.playing = false;
         //cargamos imagen de fondo
         const fondo = this.add.image(0, 0, 'fondo'); // Creamos el fondo
         fondo.setOrigin(0, 0);

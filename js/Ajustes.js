@@ -21,7 +21,7 @@ class Ajustes extends Phaser.Scene {
 
     create() {
 
-        if(!window.GlobalData.playing){
+        if(!GlobalData.playing){
             // Cargamos imagen de fondo
             const fondo = this.add.image(0, 0, 'fondo');
             fondo.setOrigin(0, 0);
@@ -53,7 +53,7 @@ class Ajustes extends Phaser.Scene {
         salir.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); // Reproduce el sonido de click
             this.scene.stop('Ajustes'); // Detiene la escena de ajustes
-            if(window.GlobalData.playing){
+            if(GlobalData.playing){
                 this.scene.launch('MenuPausa');
             }else{
                 this.scene.start('MenuInicio'); // Inicia la escena de menú

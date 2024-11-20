@@ -45,7 +45,7 @@ class MenuPausa extends Phaser.Scene {
             this.scene.stop('MenuPausa'); 
             this.scene.stop('Juego'); 
             this.scene.start('MenuInicio'); 
-            window.GlobalData.playing = false;
+            GlobalData.playing = false;
         });
 
         this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
