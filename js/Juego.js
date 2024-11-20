@@ -1,3 +1,39 @@
+class Bala extends Phaser.Physics.Arcade.Sprite {
+    constructor(scene, x, y) {
+        super(scene, x, y, 'bala');
+        
+        scene.add.existing(this); // Añadir al sistema de rendering
+        scene.physics.add.existing(this); // Añadir al sistema de físicas
+        
+        this.setCollideWorldBounds(true); // Que colisione con los bordes del mundo
+        this.body.allowGravity = false;  // Sin gravedad por defecto
+
+        this.trailPoints = [];  // Arreglo para almacenar los puntos del trail
+    }
+
+    fire(x, y, velocityX, velocityY) {
+        this.setPosition(x, y);          // Posición inicial
+        this.setActive(true);            // Activar para que esté en el juego
+        this.setVisible(true);           // Hacer visible
+        this.setVelocity(velocityX, velocityY); // Aplicar velocidad
+    }
+
+    update() {
+        // Desactivar si sale de los límites del mundo
+        if (this.x < 0 || this.x > 800 || this.y < 0 || this.y > 600) {
+            this.setActive(false);
+            this.setVisible(false);
+        }
+
+        // Guardar las posiciones de la bala para el trail
+        this.trailPoints.push({ x: this.x, y: this.y });
+        if (this.trailPoints.length > 20) {
+            this.trailPoints.shift();  // Limitar la cantidad de puntos en el trail
+        }
+    }
+}
+
+
 class Juego extends Phaser.Scene
 {
     constructor() {
@@ -18,8 +54,7 @@ class Juego extends Phaser.Scene
     //stars;
     j1;
     j2;
-    bala;
-
+    
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +155,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // OTROS
     ///////////////////////////////////////////////////////////////////////////////////////
-    createBalas()
+    /*createBalas()
     {
         this.bala.setCollideWorldBounds(false);
         
@@ -130,9 +165,9 @@ class Juego extends Phaser.Scene
 
         this.bala.setImmovable(true);
         this.bala.allowGravity(false);
-    }
+    }*/
 
-    shootBala(xPos, yPos, xDir, yDir, xDirWhenInPlace)
+    /*shootBala(xPos, yPos, xDir, yDir, xDirWhenInPlace)
     {
         var velocity = 5;
         this.bala = this.physics.add.sprite(xPos, yPos, 'bala');
@@ -150,6 +185,33 @@ class Juego extends Phaser.Scene
             this.bala.setVelocity(xDirWhenInPlace*160 * velocity, yDir * velocity);
         }
 
+    }*/
+
+    dispararBala(x, y, velocidadX, velocidadY) {
+        const bala = this.balas.get(); // Obtener una bala disponible del grupo
+        if (bala) {
+            bala.fire(x, y, velocidadX, velocidadY); // Configurar la posición y velocidad
+        }
+    }
+
+    trail() {
+        // Limpiar el gráfico antes de dibujar
+        this.trailGraphics.clear();
+
+        // Recorrer todas las balas activas
+        this.balas.getChildren().forEach(bala => {
+            if (bala.trailPoints.length > 1 && bala.active == true) {
+                // Dibujar líneas entre los puntos del trail de cada bala
+                this.trailGraphics.beginPath();
+                this.trailGraphics.moveTo(bala.trailPoints[0].x, bala.trailPoints[0].y);
+
+                for (let i = 1; i < bala.trailPoints.length; i++) {
+                    this.trailGraphics.lineTo(bala.trailPoints[i].x, bala.trailPoints[i].y);
+                }
+
+                this.trailGraphics.strokePath();
+            }
+        });
     }
 
 
@@ -263,6 +325,29 @@ class Juego extends Phaser.Scene
         //Colliders entre los jugadores
         this.physics.add.collider(this.j1, this.j2);
 
+        // Crear un grupo para las balas
+        this.balas = this.physics.add.group({
+            classType: Bala,        // Especificar la clase personalizada
+            maxSize: 10,            // Número máximo de balas activas
+            runChildUpdate: true    // Ejecutar el método `update` en cada bala
+        });
+
+        // Crear el objeto trail, que será el contorno del camino de las balas
+        this.trailGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFF00 } });
+
+        // Colisiones entre balas y jugadores
+        this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
+            bala.setActive(false);
+            bala.setVisible(false);
+            console.log('Jugador 1 golpeado');
+        });
+
+        this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
+            bala.setActive(false);
+            bala.setVisible(false);
+            console.log('Jugador 2 golpeado');
+        });
+
         this.instanceKeyboardKeys();
     }
     
@@ -288,13 +373,20 @@ class Juego extends Phaser.Scene
         this.checkPlayer2Movement();
 
         //Disparo
-        if(Phaser.Input.Keyboard.JustDown(this.J1ShootKey))
-        {
-            this.shootBala(this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y, 1)
+        this.trail();
+        // Disparo del jugador 1
+        if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
+            this.dispararBala(this.j1.x, this.j1.y, 300, 0); // Dirección horizontal derecha
         }
-        if(Phaser.Input.Keyboard.JustDown(this.J2ShootKey))
+
+        // Disparo del jugador 2
+        if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
+            this.dispararBala(this.j2.x, this.j2.y, -300, 0); // Dirección horizontal izquierda
+        }
+
+        if(this.bala != null)
         {
-            this.shootBala(this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y, -1)
+            //this.trail(this.bala.x, this.bala.y);
         }
 
         //Plataformas
