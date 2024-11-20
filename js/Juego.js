@@ -274,6 +274,7 @@ class Juego extends Phaser.Scene
     {
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
             {
+                this.bgMusic.stop();
                 this.scene.stop('Juego'); //carga la escena de intro
                 this.scene.start('MenuVictoriaJ1'); //carga la escena 
         }
