@@ -123,22 +123,29 @@ class Juego extends Phaser.Scene
     createBalas()
     {
         this.bala.setCollideWorldBounds(false);
-        
+    
         //Colliders Bala
-        this.physics.add.collider(this.bala, this.j1);
-        this.physics.add.collider(this.bala, this.j2);
+    }
 
-        this.bala.setImmovable(true);
-        this.bala.allowGravity(false);
+    handleCollision1(bala, player){
+        bala.destroy();
+    }
+
+    handleCollision2(bala, player){
+        bala.destroy();
     }
 
     shootBala(xPos, yPos, xDir, yDir, xDirWhenInPlace)
     {
         var velocity = 5;
-        this.bala = this.physics.add.sprite(xPos, yPos, 'bala');
+        
+        this.bala = this.physics.add.sprite(xPos + xDir*30, yPos + yDir*30, 'bala');
         this.bala.body.allowGravity = false;
-         //establecemos el tamaño de la bala 
-         this.bala.setScale(2);
+        //establecemos el tamaño de la bala 
+        this.bala.setScale(2);
+
+        this.physics.add.collider(this.bala, this.j1, this.handleCollision1, null, this);
+        this.physics.add.collider(this.bala, this.j2, this.handleCollision2, null, this);
 
         //this.bala.setVelocityX(velocity*Math.abs(Math.cos(xDir)));
         //this.bala.setVelocityY(velocity*Math.abs(Math.cos(yDir)));
@@ -151,7 +158,6 @@ class Juego extends Phaser.Scene
         {
             this.bala.setVelocity(xDirWhenInPlace*160 * velocity, yDir * velocity);
         }
-
     }
 
 
