@@ -132,7 +132,7 @@ class Juego extends Phaser.Scene
         this.bala.allowGravity(false);
     }
 
-    shootBala(xPos, yPos, xDir, yDir)
+    shootBala(xPos, yPos, xDir, yDir, xDirWhenInPlace)
     {
         var velocity = 5;
         this.bala = this.physics.add.sprite(xPos, yPos, 'bala');
@@ -149,7 +149,7 @@ class Juego extends Phaser.Scene
         }
         else
         {
-            this.bala.setVelocity(160 * velocity, yDir * velocity);
+            this.bala.setVelocity(xDirWhenInPlace*160 * velocity, yDir * velocity);
         }
 
     }
@@ -294,11 +294,11 @@ class Juego extends Phaser.Scene
         //Disparo
         if(Phaser.Input.Keyboard.JustDown(this.J1ShootKey))
         {
-            this.shootBala(this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y)
+            this.shootBala(this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y, 1)
         }
         if(Phaser.Input.Keyboard.JustDown(this.J2ShootKey))
         {
-            this.shootBala(this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
+            this.shootBala(this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y, -1)
         }
 
         //Plataformas
