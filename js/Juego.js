@@ -304,17 +304,19 @@ class Juego extends Phaser.Scene
     create ()
     {
         GlobalData.playing = true;
+        ////////////Inputs extra//////////////////////////////
+        //para comprobar la Pulsación de space
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        //Comprobamos que se usa el escape
+        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-        //Configuracion de la musica
+        ////////////Configuracion de la musica//////////////////
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
         this.bgMusic.setVolume(0.01); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
-        //para comprobar la Pulsación de space
-        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        //Comprobamos que se usa el escape
-        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+      
 
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
@@ -351,8 +353,14 @@ class Juego extends Phaser.Scene
             classType: Bala,        // Especificar la clase personalizada
             maxSize: 10,            // Número máximo de balas activas
             runChildUpdate: true    // Ejecutar el método `update` en cada bala
+           
         });
+        //variables para el cooldown de la bala
+        this.cooldownBala=500;       //tiempo entre bala y bala en ms (5 seg)
+        this.tiempoUltimoDisparoP1 = 0; // Inicializa el tiempo del último disparo
+        this.tiempoUltimoDisparoP2 = 0; // Inicializa el tiempo del último disparo
 
+            
         // Crear el objeto trail, que será el contorno del camino de las balas
         this.trailGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFF00 } });
 
@@ -395,14 +403,24 @@ class Juego extends Phaser.Scene
 
         //Disparo
         this.trail();
-        // Disparo del jugador 1
+        ////////// Disparo del jugador 1/////////////
+        const currentTime = this.time.now; // Tiempo actual
+        //utilizamos los atributos creados para aplicar cooldown y así limitar las balas/seg
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
-            this.dispararBala(this.j1.x, this.j1.y, 300, 0); // Dirección horizontal derecha
+            
+            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBala){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                this.dispararBala(this.j1.x, this.j1.y, 600, 0); // Dirección horizontal derecha
+                this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+            }
         }
 
         // Disparo del jugador 2
+        
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
-            this.dispararBala(this.j2.x, this.j2.y, -300, 0); // Dirección horizontal izquierda
+            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBala){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                this.dispararBala(this.j2.x, this.j2.y, -600, 0); // Dirección horizontal izquierda
+                this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+            }
         }
 
         if(this.bala != null)
