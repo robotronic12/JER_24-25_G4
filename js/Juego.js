@@ -52,9 +52,15 @@ class Juego extends Phaser.Scene
     platforms;
 
     //stars;
+
+    //Jugador:
     j1;
     j2;
-    
+    bala;
+    vidaLabel1;
+    vidaLabel2;
+    vida1;
+    vida2;
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -166,10 +172,13 @@ class Juego extends Phaser.Scene
 
     handleCollision1(bala, player){
         bala.destroy();
+        this.vida1-=10;
+
     }
 
     handleCollision2(bala, player){
         bala.destroy();
+        this.vida2-=10;
     }
         this.bala.setImmovable(true);
         this.bala.allowGravity(false);
@@ -303,6 +312,9 @@ class Juego extends Phaser.Scene
         this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
+
+        this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
+        this.load.image('vida', 'assets/jugador/Vida.png');
        
     }
 
@@ -401,6 +413,16 @@ class Juego extends Phaser.Scene
         });
 
         this.instanceKeyboardKeys();
+
+        //Marcadores de vida;
+        const recuadro2 = this.add.image(700, 568, 'marcoVida');
+        this.vidaLabel1 = this.add.image(700, 568, 'vida');
+
+        const recuadro1 = this.add.image(100, 568, 'marcoVida');
+        this.vidaLabel2 = this.add.image(100, 568, 'vida');
+
+        this.vida1 = 100
+        this.vida2 = 100
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -409,7 +431,7 @@ class Juego extends Phaser.Scene
     
     update ()
     {
-        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
+        if (this.vida1===0||this.vida2===0) //para comprobar que la pantalla de victoria funciona
             {
                 this.acabarPartida();
         }
@@ -475,6 +497,16 @@ class Juego extends Phaser.Scene
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
         }
+
+        //Cambiar el tamaño y la posición de la barra de vida
+
+        this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
+        var tam1 = this.vidaLabel1.width;
+        this.vidaLabel1.setOrigin(700-((tam1/2)), 568);
+
+        this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
+        var tam2 = this.vidaLabel2.width;
+        this.vidaLabel2.setOrigin(100-((tam2/2)), 568);
 
     }
 
