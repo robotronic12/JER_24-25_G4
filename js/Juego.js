@@ -68,7 +68,8 @@ class Juego extends Phaser.Scene
 
         //Colliders J1
         this.physics.add.collider(this.j1, this.platforms);
-        this.physics.add.collider(this.j1, this.movingPlatform);
+        this.physics.add.collider(this.j1, this.movingPlatform1);
+        this.physics.add.collider(this.j1, this.movingPlatform2);
 
         this.physics.add.overlap(this.j1, this.platforms, this.collectStar, null, this);
     }
@@ -116,7 +117,8 @@ class Juego extends Phaser.Scene
 
         //Colliders J2
         this.physics.add.collider(this.j2, this.platforms);
-        this.physics.add.collider(this.j2, this.movingPlatform);
+        this.physics.add.collider(this.j2, this.movingPlatform1);
+        this.physics.add.collider(this.j2, this.movingPlatform2);
 
         this.physics.add.overlap(this.j2, this.platforms, this.collectStar, null, this);
     }
@@ -272,6 +274,12 @@ class Juego extends Phaser.Scene
         this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
+    acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
+        this.bgMusic.stop();
+        this.scene.stop('Juego'); //carga la escena de intro
+        this.scene.start('MenuVictoriaJ1'); //carga la escena 
+    }
+
     //collectStar (j1, star)
     //{
     //    star.disableBody(true, true);
@@ -324,24 +332,37 @@ class Juego extends Phaser.Scene
         
         //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
-
-        const ground = this.platforms.create(400, 568, 'ground');
-        ground.displayWidth = 810;
+ 
+        //suelo
+        const ground = this.platforms.create(400, 568, 'ground');   //suelo
+        ground.displayWidth = 810;  //nuevo tamaño
+        ground.refreshBody();   //actualizamos hitbox
         
-        ground.refreshBody();
-        
+         this.plat1=this.platforms.create(100, 300, 'plataforma');  //platf izq medio
+         this.plat2=this.platforms.create(700, 300, 'plataforma');  //platf der medio
+         //this.plat3=this.platforms.create(400, 200, 'plataforma');  //platf centro alto
+         this.plat4=this.platforms.create(150, 100, 'plataforma');  //platf centro alto
+         this.plat4.displayWidth = 300;  //cambiamos el tamaño de plat4
+         this.plat4.refreshBody();  //actualizamos la hitbox al nuevo tamaño
 
-        // platforms.create(600, 400, 'ground');
-        // platforms.create(50, 250, 'ground');
-        // platforms.create(750, 220, 'ground');
+        //plataforma movil 1 (abajo)
+        this.movingPlatform1 = this.physics.add.image(400, 400, 'plataforma');   
+        this.movingPlatform1.setScale(1.2,1);
 
-        this.movingPlatform = this.physics.add.image(400, 400, 'plataforma');
-        this.movingPlatform.setScale(1.2,1);
+        this.movingPlatform1.setImmovable(true);
+        this.movingPlatform1.body.allowGravity = false;
+        this.movingPlatform1.setVelocityX(50);
 
-        this.movingPlatform.setImmovable(true);
-        this.movingPlatform.body.allowGravity = false;
-        this.movingPlatform.setVelocityX(50);
+        //plataforma movil 2
+        this.movingPlatform2 = this.physics.add.image(410, 250, 'plataforma');   
+        //this.movingPlatform2.setScale(1.2,1);
 
+        this.movingPlatform2.setImmovable(true);
+        this.movingPlatform2.body.allowGravity = false;
+        this.movingPlatform2.setVelocityY(50);
+
+
+        //jugadores
         this.createJ1();
         this.createJ2();
        
@@ -368,12 +389,14 @@ class Juego extends Phaser.Scene
         this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
             bala.setActive(false);
             bala.setVisible(false);
+            //this.acabarPartida();   //acabamos partida
             console.log('Jugador 1 golpeado');
         });
 
         this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
             bala.setActive(false);
             bala.setVisible(false);
+            //this.acabarPartida();   //acabamos partida
             console.log('Jugador 2 golpeado');
         });
 
@@ -388,9 +411,7 @@ class Juego extends Phaser.Scene
     {
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
             {
-                this.bgMusic.stop();
-                this.scene.stop('Juego'); //carga la escena de intro
-                this.scene.start('MenuVictoriaJ1'); //carga la escena 
+                this.acabarPartida();
         }
 
         if(this.bgMusic.isPaused){
@@ -429,14 +450,24 @@ class Juego extends Phaser.Scene
         }
 
         //Plataformas
-        if (this.movingPlatform.x >= 500)
+        //pataforma móvil 1 (abajo)
+        if (this.movingPlatform1.x >= 500)
         {
-            this.movingPlatform.setVelocityX(-50);
+            this.movingPlatform1.setVelocityX(-50);
         }
-        else if (this.movingPlatform.x <= 300)
+        else if (this.movingPlatform1.x <= 300)
         {
-            this.movingPlatform.setVelocityX(50);
+            this.movingPlatform1.setVelocityX(50);
         }
+        //plataforma móvil 2 (arriba)
+        if (this.movingPlatform2.y >= 250)
+            {
+                this.movingPlatform2.setVelocityY(-50);
+            }
+            else if (this.movingPlatform2.y <= 125)
+            {
+                this.movingPlatform2.setVelocityY(50);
+            }
         
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
