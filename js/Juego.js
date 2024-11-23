@@ -48,6 +48,10 @@ class Juego extends Phaser.Scene
     //Fuerza salto
     fuerzaSaltoJ1;
     fuerzaSaltoJ2;
+
+    //Sonidos
+    recogSonido;
+
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +143,7 @@ class Juego extends Phaser.Scene
         bala.vel = velBala;
         let modul = Math.sqrt(velocidadX * velocidadX + velocidadY * velocidadY);
         if (bala) {
+            this.disparoSonido.play();
             bala.fire(x, y, velocidadX/modul, velocidadY/modul, danio); // Configurar la posición y velocidad
         }
     }
@@ -301,6 +306,7 @@ class Juego extends Phaser.Scene
         console.log(this.danioJ1);
         powerUp.destroy();
         powerUp.collected(this.j1,this.j1,this.j2);
+        this.recogSonido.play();
         console.log(this.danioJ1);
     }
 
@@ -310,6 +316,7 @@ class Juego extends Phaser.Scene
         console.log(this.danioJ2);
         powerUp.destroy();
         powerUp.collected(this.j2,this.j1,this.j2);
+        this.recogSonido.play();
         console.log(this.danioJ2);
     }
 
@@ -337,8 +344,8 @@ class Juego extends Phaser.Scene
     preload ()
     {
         this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
-        this.load.audio("Shoot", "assets/musica/Shoot.mp3"); 
-        this.load.audio("powerUpTake", "assets/musica/PowerUp.mp3"); 
+        this.load.audio('shoot', "assets/musica/Shoot.mp3"); 
+        this.load.audio('powerUpTake', 'assets/musica/PowerUp.mp3'); 
 
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/suelo.png');
@@ -381,9 +388,14 @@ class Juego extends Phaser.Scene
 
         ////////////Configuracion de la musica//////////////////
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
-        this.bgMusic.setVolume(0.01); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
+        this.bgMusic.setVolume(GlobalData.volumen); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
+
+        this.recogSonido = this.sound.add('powerUpTake');
+        this.recogSonido.setVolume(GlobalData.volumen);
+        this.disparoSonido = this.sound.add('shoot');
+        this.disparoSonido.setVolume(GlobalData.volumen);
 
         //danio inicial
         this.danioJ1 = 10;

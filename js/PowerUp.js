@@ -55,10 +55,10 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
         
         if(this.type === 'speedBulletkUp'){
             if(jugador.x==j1.x || jugador.y==j1.y){
-                this.Juego.velBala1 *= 3;
+                this.Juego.velBala1 *= 1.2;
             }
             if(jugador.x==j2.x || jugador.y==j2.y){
-                this.Juego.velBala2 *= 3;
+                this.Juego.velBala2 *= 1.2;
             }
         }
 
