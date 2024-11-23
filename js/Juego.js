@@ -32,6 +32,13 @@ class Juego extends Phaser.Scene
     dañoJ1;
     dañoJ2;
 
+    //Multiples Disparos
+    numeroBalasJ1;
+    numeroBalasJ2;
+
+    //Fuerza salto
+    fuerzaSaltoJ1;
+    fuerzaSaltoJ2;
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +47,7 @@ class Juego extends Phaser.Scene
     createJ1(){
         //creacion de j1 en una pos
         this.j1 = this.physics.add.sprite(100, 450, 'j1');
-
+        this.fuerzaSaltoJ1=-330;
         this.j1.setCollideWorldBounds(true);
 
         //Colliders J1
@@ -65,7 +72,7 @@ class Juego extends Phaser.Scene
             // this.j1.anims.play('turn');
         }
         if (this.wKey.isDown && this.j1.body.touching.down) {
-            this.j1.setVelocityY(-330);
+            this.j1.setVelocityY(this.fuerzaSaltoJ1);
         }
     }
 
@@ -79,7 +86,7 @@ class Juego extends Phaser.Scene
     createJ2(){
         //creacion de J2 en una pos
         this.j2 = this.physics.add.sprite(700, 450, 'j2');
-
+        this.fuerzaSaltoJ2=-330;
         this.j2.setCollideWorldBounds(true);
 
         //Colliders J2
@@ -106,7 +113,7 @@ class Juego extends Phaser.Scene
             // this.j2.anims.play('turn');
         }
         if (up.isDown && this.j2.body.touching.down) {
-            this.j2.setVelocityY(-330);
+            this.j2.setVelocityY(this.fuerzaSaltoJ2);
         }
     }
     
@@ -119,6 +126,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
 
     dispararBala(x, y, velocidadX, velocidadY, daño) {
+        
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
         if (bala) {
             bala.fire(x, y, velocidadX, velocidadY, daño); // Configurar la posición y velocidad
@@ -207,6 +215,19 @@ class Juego extends Phaser.Scene
         });
     }
 
+    curarj1(cura){
+        this.vida1+=cura;
+        if(this.vida1>100){
+            this.vida1=100;
+        }
+    }
+
+    curarj2(cura){
+        this.vida2+=cura;
+        if(this.vida2>100){
+            this.vida2=100;
+        }
+    }
     createColectables(){ //por implementar
         this.stars = this.physics.add.group({
            key: 'star',
@@ -311,7 +332,7 @@ class Juego extends Phaser.Scene
                 x = 400;
                 y = 300;
             break;
-            case 1: 
+            case 2: 
                 x = 200;
                 y = 500;
             break;
@@ -320,7 +341,7 @@ class Juego extends Phaser.Scene
                 y = 300;
             break;
         }
-        this.spawnPowerUp(x,y,PowerUps.moreDamage);
+        this.spawnPowerUp(x,y,PowerUps.multiplesDisparos);
     }
 
     //collectStar (j1, star)
@@ -348,7 +369,10 @@ class Juego extends Phaser.Scene
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
 
-        this.load.image(PowerUps.moreDamage, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreLive, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreDamage, 'assets/powerups/Danio.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreJump, 'assets/powerups/Salto.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.multiplesDisparos, 'assets/powerups/Balas.png', { frameWidth: 10, frameHeight: 10 });
 
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
         this.load.image('vida', 'assets/jugador/Vida.png');       
@@ -376,7 +400,9 @@ class Juego extends Phaser.Scene
 
         this.dañoJ1 = 10;
         this.dañoJ2 = 10;
-
+        this.numeroBalasJ1=1;
+        this.numeroBalasJ2=1;
+        
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
         
@@ -423,7 +449,7 @@ class Juego extends Phaser.Scene
         // Crear un grupo para las balas
         this.balas = this.physics.add.group({
             classType: Bala,        // Especificar la clase personalizada
-            maxSize: 10,            // Número máximo de balas activas
+            maxSize: 30,            // Número máximo de balas activas
             runChildUpdate: true    // Ejecutar el método `update` en cada bala
            
         });
@@ -471,8 +497,13 @@ class Juego extends Phaser.Scene
     
     update ()
     {
-        if (this.vida1===0||this.vida2===0) //para comprobar que la pantalla de victoria funciona
+        if (this.vida2<=0) //para comprobar que la pantalla de victoria funciona
         {
+            GlobalData.ganador=1;
+            this.acabarPartida();
+            return; // Detenemos aquí el ciclo de actualización
+        }else if (this.vida1<=0){
+            GlobalData.ganador=2;
             this.acabarPartida();
             return; // Detenemos aquí el ciclo de actualización
         }
@@ -511,16 +542,25 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
             
             if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                var xVel = this.j1.body.velocity.x;
-                var yVel = this.j1.body.velocity.y;
-                if(Math.abs(xVel) > 1){
-                    this.dispararBala(this.j1.x, this.j1.y, xVel, yVel - 30, this.dañoJ1); // Dirección horizontal derecha
+                for (let i = 0; i < this.numeroBalasJ1; i++) {
+                    var xVel = this.j1.body.velocity.x;
+                    var yVel = this.j1.body.velocity.y;
+                    var balaOfset;
+                    if(i===0){
+                        balaOfset= (-30)
+                    }else if(i%2===0){
+                        balaOfset= (-30) + (i -1) * 10 ;
+                    }else{
+                        balaOfset= (-30)- i * 10 ;
+                    }
+                    if(Math.abs(xVel) > 1){
+                        this.dispararBala(this.j1.x, this.j1.y, xVel, yVel + balaOfset, this.dañoJ1); // Dirección horizontal derecha
+                    }
+                    else{
+                        this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.dañoJ1); // Dirección horizontal derecha
+                    }
+                    this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
                 }
-                else{
-                    this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel - 30, this.dañoJ1); // Dirección horizontal derecha
-                }
-                this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-
                 // console.log('velocityX: ' + xVel);
                 // console.log('velocityY: ' + yVel);
             }
@@ -530,15 +570,23 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
             
             if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                var xVel = this.j2.body.velocity.x;
-                var yVel = this.j2.body.velocity.y;
-                if(Math.abs(xVel) > 1){
-                    this.dispararBala(this.j2.x, this.j2.y, xVel, yVel - 30, this.dañoJ2); // Dirección horizontal derecha
+                for (let i = 0; i < this.numeroBalasJ2; i++) {
+                    var xVel = this.j2.body.velocity.x;
+                    var yVel = this.j2.body.velocity.y;
+                    var balaOfset;
+                    if(i%2===0){
+                        balaOfset= (-30) + i * 10 ;
+                    }else{
+                        balaOfset= (-30)- i * 10 ;
+                    }
+                    if(Math.abs(xVel) > 1){
+                        this.dispararBala(this.j2.x, this.j2.y, xVel, yVel + balaOfset, this.dañoJ2); // Dirección horizontal derecha
+                    }
+                    else{
+                        this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.dañoJ2); // Dirección horizontal derecha
+                    }
+                    this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
                 }
-                else{
-                    this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel - 30, this.dañoJ2); // Dirección horizontal derecha
-                }
-                this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
 
                 // console.log('velocityX: ' + xVel);
                 // console.log('velocityY: ' + yVel);
