@@ -252,7 +252,7 @@ class Juego extends Phaser.Scene
     handleColision1(player,bala) {
         if (this.j1 && this.j1.active) {
             bala.destroy(); // Destruye la bala
-            this.vida1 -= 10;
+            this.vida1 -= bala.dañoBala;
             console.log(this.vida1);
             if (this.vida1 <= 0) {
                 console.log('Jugador 1 eliminado');
@@ -265,7 +265,7 @@ class Juego extends Phaser.Scene
     handleColision2(player,bala) {
         if (this.j2 && this.j2.active) {
             bala.destroy(); // Destruye la bala
-            this.vida2 -= 10;
+            this.vida2 -= bala.dañoBala;
             console.log(this.vida2);
             if (this.vida2 <= 0) {
                 console.log('Jugador 2 eliminado');
@@ -276,7 +276,7 @@ class Juego extends Phaser.Scene
     }
 
     spawnPowerUp(x, y, type) {
-        let powerUp = this.powerups.get(x, y, type); // Usa un objeto del grupo o crea uno nuevo
+        let powerUp = this.powerups.get(x, y, type, this); // Usa un objeto del grupo o crea uno nuevo
         if (powerUp) {
             powerUp.type = type; // Define el tipo de PowerUp
             powerUp.setActive(true).setVisible(true); // Activa y haz visible el PowerUp

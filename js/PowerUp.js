@@ -5,10 +5,11 @@ var PowerUps = {
 }
 
 class PowerUp extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, tipeOfPP) {
+    constructor(scene, x, y, tipeOfPP, juego) {
         super(scene, x, y, tipeOfPP);
         this.type = tipeOfPP;
         this.player;
+        this.Juego = juego;
 
         scene.add.existing(this); // Añadir al sistema de rendering
         scene.physics.add.existing(this); // Añadir al sistema de físicas
@@ -24,22 +25,22 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
     
         if(this.type === 'speedAtkUp'){
             if(jugador==j1)
-                this.cooldownBalaP1*=1.5
+                this.Juego.cooldownBalaP1*=1.5
             if(jugador==j2)
-                this.cooldownBalaP2*=1.5
+                this.Juego.cooldownBalaP2*=1.5
         }
     
         if(this.type === 'moreDamage'){
             console.log('Hola');
             if(jugador.x==j1.x){
                 console.log('HolaJ1');
-                if(this.dañoJ1 < 100){
-                    this.dañoJ1 += 10;
+                if(this.Juego.dañoJ1 < 100){
+                    this.Juego.dañoJ1 += 10;
                 }
             }
             if(jugador.x==j2.x){
-                if(this.dañoJ2 < 100){
-                    this.dañoJ2 +=10;
+                if(this.Juego.dañoJ2 < 100){
+                    this.Juego.dañoJ2 +=10;
                 }
             }
         }
@@ -55,20 +56,20 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
     
         if(this.type === 'speedAtkUp'){
             if(player==j1)
-                this.cooldownBalaP1/=1.5
+                this.Juego.cooldownBalaP1/=1.5
             if(jugador==j2)
-                this.cooldownBalaP2/=1.5
+                this.Juego.cooldownBalaP2/=1.5
         }
     
         if(this.type === 'moreDamage'){
             if(jugador===j1){
-                if(this.dañoJ1<100){
-                    this.dañoJ1-=10;
+                if(this.Juego.dañoJ1<100){
+                    this.Juego.dañoJ1-=10;
                 }
             }
             if(jugador===j2){
-                if(this.dañoJ2<100){
-                    this.dañoJ2-=10;
+                if(this.Juego.dañoJ2<100){
+                    this.Juego.dañoJ2-=10;
                 }
             }
         }
