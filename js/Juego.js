@@ -2,6 +2,8 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'bala');
         
+        this.dañoBala = 10;
+
         scene.add.existing(this); // Añadir al sistema de rendering
         scene.physics.add.existing(this); // Añadir al sistema de físicas
         
@@ -11,11 +13,12 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
         this.trailPoints = [];  // Arreglo para almacenar los puntos del trail
     }
 
-    fire(x, y, velocityX, velocityY) {
+    fire(x, y, velocityX, velocityY, daño) {
         this.setPosition(x, y);          // Posición inicial
         this.setActive(true);            // Activar para que esté en el juego
         this.setVisible(true);           // Hacer visible
         this.setVelocity(velocityX, velocityY); // Aplicar velocidad
+        this.dañoBala = daño;
     }
 
     update() {
@@ -61,6 +64,12 @@ class Juego extends Phaser.Scene
     vidaLabel2;
     vida1;
     vida2;
+
+    //Daño
+    dañoJ1;
+    dañoJ2;
+
+    //
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -168,17 +177,17 @@ class Juego extends Phaser.Scene
         this.bala.setCollideWorldBounds(false);
     
         //Colliders Bala
-    }
+    } 
 
-    handleCollision1(bala, player){
+    handleCollision1(bala, player,){
         bala.destroy();
-        this.vida1-=10;
+        this.vida1-=daño;
 
     }
 
     handleCollision2(bala, player){
         bala.destroy();
-        this.vida2-=10;
+        this.vida2-=daño;
     
         //this.bala.setImmovable(true);
         //this.bala.allowGravity(false);
@@ -210,10 +219,10 @@ class Juego extends Phaser.Scene
 
     }/**/
 
-    dispararBala(x, y, velocidadX, velocidadY) {
+    dispararBala(x, y, velocidadX, velocidadY, dañoJugador) {
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
         if (bala) {
-            bala.fire(x, y, velocidadX, velocidadY); // Configurar la posición y velocidad
+            bala.fire(x, y, velocidadX, velocidadY, dañoJugador); // Configurar la posición y velocidad
         }
     }
 
@@ -326,6 +335,9 @@ class Juego extends Phaser.Scene
 
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
         this.load.image('vida', 'assets/jugador/Vida.png');
+
+        this.dañoJ1 = 10;
+        this.dañoJ2 = 10;
        
     }
 
@@ -334,6 +346,10 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
+        //daño inicial
+        this.dañoJ1 = 10;
+        this.dañoJ2 = 10;
+
         GlobalData.playing = true;
         ////////////Inputs extra//////////////////////////////
         //para comprobar la Pulsación de space
@@ -468,7 +484,7 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
             
             if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                this.dispararBala(this.j1.x, this.j1.y, 600, 0); // Dirección horizontal derecha
+                this.dispararBala(this.j1.x, this.j1.y, 600, 0, dañoJ1); // Dirección horizontal derecha
                 this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
         }
@@ -477,7 +493,7 @@ class Juego extends Phaser.Scene
         
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
             if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                this.dispararBala(this.j2.x, this.j2.y, -600, 0); // Dirección horizontal izquierda
+                this.dispararBala(this.j2.x, this.j2.y, -600, 0, dañoJ2); // Dirección horizontal izquierda
                 this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
         }
