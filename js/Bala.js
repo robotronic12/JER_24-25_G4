@@ -2,7 +2,7 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'bala');
 
-        this.dañoBala = 10;
+        this.dañoBala;
 
         scene.add.existing(this); // Añadir al sistema de rendering
         scene.physics.add.existing(this); // Añadir al sistema de físicas

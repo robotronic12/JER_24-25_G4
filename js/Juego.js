@@ -1,3 +1,5 @@
+
+
 class Juego extends Phaser.Scene
 {
     constructor() {
@@ -16,10 +18,10 @@ class Juego extends Phaser.Scene
     platforms;
 
     //stars;
-
-    //Jugador:
+    //Jugadores
     j1;
     j2;
+    //Jugador:
     bala;
     vidaLabel1;
     vidaLabel2;
@@ -273,6 +275,63 @@ class Juego extends Phaser.Scene
         }
     }
 
+    spawnPowerUp(x, y, type) {
+        let powerUp = this.powerups.get(x, y, type); // Usa un objeto del grupo o crea uno nuevo
+        if (powerUp) {
+            powerUp.type = type; // Define el tipo de PowerUp
+            powerUp.setActive(true).setVisible(true); // Activa y haz visible el PowerUp
+            powerUp.setPosition(x, y); // Ubícalo en las coordenadas específicas
+            powerUp.body.setVelocity(0, 0); // Opcional: inicializa sin velocidad
+            powerUp.setCollideWorldBounds(true);
+    
+            //Colliders
+            this.physics.add.collider(powerUp, this.platforms);
+            this.physics.add.collider(powerUp, this.movingPlatform1);
+            this.physics.add.collider(powerUp, this.movingPlatform2);
+            this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
+            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
+        }
+    }
+
+    handleColision1PU(powerUp, jugador){
+        console.log('J1 coge el PowerUp');
+        console.log(this.dañoJ1);
+        powerUp.destroy();
+        powerUp.collected(this.j1,this.j1,this.j2);
+        console.log(this.dañoJ1);
+    }
+
+    handleColision2PU(powerUp, jugador){
+        console.log('J2 coge el PowerUp');
+        console.log(this.dañoJ2);
+        powerUp.destroy();
+        powerUp.collected(this.j2,this.j1,this.j2);
+        console.log(this.dañoJ2);
+    }
+
+    createPowerUp(){
+        const randomType = Phaser.Utils.Array.GetRandom(Object.values(PowerUps));
+        let x;
+        let y;
+        let numberOfPositions = 2;
+        const ramdomPos = Math.random()*(numberOfPositions - 1 + 1);
+        switch(ramdomPos){
+            case 1: 
+                x = 400;
+                y = 300;
+            break;
+            case 1: 
+                x = 200;
+                y = 500;
+            break;
+            default:
+                x = 400;
+                y = 300;
+            break;
+        }
+        this.spawnPowerUp(x,y,PowerUps.moreDamage);
+    }
+
     //collectStar (j1, star)
     //{
     //    star.disableBody(true, true);
@@ -298,9 +357,10 @@ class Juego extends Phaser.Scene
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
 
+        this.load.image(PowerUps.moreDamage, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
-        this.load.image('vida', 'assets/jugador/Vida.png');
-       
+        this.load.image('vida', 'assets/jugador/Vida.png');       
     }
     //#endregion
     
@@ -402,6 +462,14 @@ class Juego extends Phaser.Scene
 
         this.vida1 = 100
         this.vida2 = 100
+
+        // Crear un grupo para los powerups
+        this.powerups = this.physics.add.group({
+            classType: PowerUp,
+            maxSize: 10,            // Número máximo de powerups activas           
+        });
+
+        this.createPowerUp();
     }
     //#endregion
     
@@ -428,7 +496,7 @@ class Juego extends Phaser.Scene
         
         //para depurar power ups
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) 
-            this.speedAtkUp(this.j1);
+            //this.speedAtkUp(this.j1);
         //Disparo
         this.trail();
         ////////// Disparo del jugador 1/////////////
