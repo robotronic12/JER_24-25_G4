@@ -34,6 +34,7 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
             this.trailPoints.shift();  // Limitar la cantidad de puntos en el trail
         }
     }
+
 }
 
 
@@ -68,8 +69,7 @@ class Juego extends Phaser.Scene
     //Daño
     dañoJ1;
     dañoJ2;
-
-    //
+    
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -89,32 +89,22 @@ class Juego extends Phaser.Scene
         this.physics.add.overlap(this.j1, this.platforms, this.collectStar, null, this);
     }
 
-    checkPlayer1Movement(){
-        const { aKey, dKey, wKey } = this;
-
-        //J1
-        if (aKey.isDown)
-            {
-                this.j1.setVelocityX(-160);
-
-                this.j1.anims.play('left', true);
-            }
-            else if (dKey.isDown)
-            {
-                this.j1.setVelocityX(160);
-
-                this.j1.anims.play('right', true);
-            }
-            else
-            {
-                this.j1.setVelocityX(0);
-        
-                this.j1.anims.play('turn');
-            }
-            if (wKey.isDown && this.j1.body.touching.down)
-            {
-                this.j1.setVelocityY(-330);
-            }
+    checkPlayer1Movement() {
+        if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
+    
+        if (this.aKey.isDown) {
+            this.j1.setVelocityX(-160);
+            this.j1.anims.play('left', true);
+        } else if (this.dKey.isDown) {
+            this.j1.setVelocityX(160);
+            this.j1.anims.play('right', true);
+        } else {
+            this.j1.setVelocityX(0);
+            this.j1.anims.play('turn');
+        }
+        if (this.wKey.isDown && this.j1.body.touching.down) {
+            this.j1.setVelocityY(-330);
+        }
     }
 
     //#endregion
@@ -138,33 +128,26 @@ class Juego extends Phaser.Scene
         this.physics.add.overlap(this.j2, this.platforms, this.collectStar, null, this);
     }
 
-    checkPlayer2Movement(){
+    checkPlayer2Movement() {
+        if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
+    
         const { left, right, up } = this.cursors;
-        
-        //J2
-        if (left.isDown)
-        {
+    
+        if (left.isDown) {
             this.j2.setVelocityX(-160);
-
             this.j2.anims.play('left', true);
-        }
-        else if (right.isDown)
-        {
+        } else if (right.isDown) {
             this.j2.setVelocityX(160);
-
             this.j2.anims.play('right', true);
-        }
-        else
-        {
+        } else {
             this.j2.setVelocityX(0);
-
             this.j2.anims.play('turn');
         }
-        if (up.isDown && this.j2.body.touching.down)
-        {
+        if (up.isDown && this.j2.body.touching.down) {
             this.j2.setVelocityY(-330);
         }
     }
+    
     //#endregion
     
     //#region Otros
@@ -309,6 +292,32 @@ class Juego extends Phaser.Scene
             this.cooldownBalaP2*=1.5
     }
 
+    handleColision1(player,bala) {
+        if (this.j1 && this.j1.active) {
+            bala.destroy(); // Destruye la bala
+            this.vida1 -= 10;
+            console.log(this.vida1);
+            if (this.vida1 <= 0) {
+                console.log('Jugador 1 eliminado');
+                this.j1.setActive(false);
+                this.j1.setVisible(false);
+            }
+        }
+    }
+
+    handleColision2(player,bala) {
+        if (this.j2 && this.j2.active) {
+            bala.destroy(); // Destruye la bala
+            this.vida2 -= 10;
+            console.log(this.vida2);
+            if (this.vida2 <= 0) {
+                console.log('Jugador 2 eliminado');
+                this.j2.setActive(false);
+                this.j2.setVisible(false);
+            }
+        }
+    }
+
     //collectStar (j1, star)
     //{
     //    star.disableBody(true, true);
@@ -427,19 +436,10 @@ class Juego extends Phaser.Scene
         this.colisionsBalas(this.balas, this.j1, this.j2);
 
         // Colisiones entre balas y jugadores
-        //this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
-        //    bala.setActive(false);
-        //    bala.setVisible(false);
-        //    //this.acabarPartida();   //acabamos partida
-        //    console.log('Jugador 1 golpeado');
-        //});
+        this.physics.add.collider(this.balas, this.j1, this.handleColision1, null, this);
 
-        //this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
-        //    bala.setActive(false);
-        //    bala.setVisible(false);
-        //    //this.acabarPartida();   //acabamos partida
-        //    console.log('Jugador 2 golpeado');
-        //});
+        this.physics.add.collider(this.balas, this.j2, this.handleColision2, null, this);
+
 
         this.instanceKeyboardKeys();
 
@@ -461,8 +461,9 @@ class Juego extends Phaser.Scene
     update ()
     {
         if (this.vida1===0||this.vida2===0) //para comprobar que la pantalla de victoria funciona
-            {
-                this.acabarPartida();
+        {
+            this.acabarPartida();
+            return; // Detenemos aquí el ciclo de actualización
         }
 
         if(this.bgMusic.isPaused){
@@ -531,15 +532,13 @@ class Juego extends Phaser.Scene
         }
 
         //Cambiar el tamaño y la posición de la barra de vida
+         this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
+         var tam1 = this.vidaLabel1.width;
+        // this.vidaLabel1.setOrigin(700, 568);
 
-        // this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
-        // var tam1 = this.vidaLabel1.width;
-        // this.vidaLabel1.setOrigin(700-((tam1/2)), 568);
-// 
-        // this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
-        // var tam2 = this.vidaLabel2.width;
-        // this.vidaLabel2.setOrigin(100-((tam2/2)), 568);
-
+         this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
+         var tam2 = this.vidaLabel2.width;
+        // this.vidaLabel2.setOrigin(100, 568);
     }
 
     
