@@ -52,9 +52,15 @@ class Juego extends Phaser.Scene
     platforms;
 
     //stars;
+
+    //Jugador:
     j1;
     j2;
-    
+    bala;
+    vidaLabel1;
+    vidaLabel2;
+    vida1;
+    vida2;
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +74,8 @@ class Juego extends Phaser.Scene
 
         //Colliders J1
         this.physics.add.collider(this.j1, this.platforms);
-        this.physics.add.collider(this.j1, this.movingPlatform);
+        this.physics.add.collider(this.j1, this.movingPlatform1);
+        this.physics.add.collider(this.j1, this.movingPlatform2);
 
         this.physics.add.overlap(this.j1, this.platforms, this.collectStar, null, this);
     }
@@ -116,7 +123,8 @@ class Juego extends Phaser.Scene
 
         //Colliders J2
         this.physics.add.collider(this.j2, this.platforms);
-        this.physics.add.collider(this.j2, this.movingPlatform);
+        this.physics.add.collider(this.j2, this.movingPlatform1);
+        this.physics.add.collider(this.j2, this.movingPlatform2);
 
         this.physics.add.overlap(this.j2, this.platforms, this.collectStar, null, this);
     }
@@ -164,10 +172,13 @@ class Juego extends Phaser.Scene
 
     handleCollision1(bala, player){
         bala.destroy();
+        this.vida1-=10;
+
     }
 
     handleCollision2(bala, player){
         bala.destroy();
+        this.vida2-=10;
     }
         this.bala.setImmovable(true);
         this.bala.allowGravity(false);
@@ -272,6 +283,23 @@ class Juego extends Phaser.Scene
         this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
+    acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
+        this.bgMusic.stop();
+        this.scene.stop('Juego'); //carga la escena de intro
+        this.scene.start('MenuVictoriaJ1'); //carga la escena 
+    }
+    //para power ups
+    speedUp(jugador){
+        jugador.body.velocity.x *= 2;
+    }
+
+    speedAtkUp(jugador){
+        if(jugador==this.j1)
+            this.cooldownBalaP1*=1.5
+        if(jugador==this.j2)
+            this.cooldownBalaP2*=1.5
+    }
+
     //collectStar (j1, star)
     //{
     //    star.disableBody(true, true);
@@ -295,6 +323,9 @@ class Juego extends Phaser.Scene
         this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
+
+        this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
+        this.load.image('vida', 'assets/jugador/Vida.png');
        
     }
 
@@ -304,17 +335,19 @@ class Juego extends Phaser.Scene
     create ()
     {
         GlobalData.playing = true;
+        ////////////Inputs extra//////////////////////////////
+        //para comprobar la Pulsación de space
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        //Comprobamos que se usa el escape
+        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-        //Configuracion de la musica
+        ////////////Configuracion de la musica//////////////////
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
         this.bgMusic.setVolume(0.01); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
-        //para comprobar la Pulsación de space
-        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        //Comprobamos que se usa el escape
-        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+      
 
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
@@ -322,24 +355,37 @@ class Juego extends Phaser.Scene
         
         //creamos plataformas
         this.platforms = this.physics.add.staticGroup();
-
-        const ground = this.platforms.create(400, 568, 'ground');
-        ground.displayWidth = 810;
+ 
+        //suelo
+        const ground = this.platforms.create(400, 568, 'ground');   //suelo
+        ground.displayWidth = 810;  //nuevo tamaño
+        ground.refreshBody();   //actualizamos hitbox
         
-        ground.refreshBody();
-        
+         this.plat1=this.platforms.create(100, 300, 'plataforma');  //platf izq medio
+         this.plat2=this.platforms.create(700, 300, 'plataforma');  //platf der medio
+         //this.plat3=this.platforms.create(400, 200, 'plataforma');  //platf centro alto
+         this.plat4=this.platforms.create(150, 100, 'plataforma');  //platf centro alto
+         this.plat4.displayWidth = 300;  //cambiamos el tamaño de plat4
+         this.plat4.refreshBody();  //actualizamos la hitbox al nuevo tamaño
 
-        // platforms.create(600, 400, 'ground');
-        // platforms.create(50, 250, 'ground');
-        // platforms.create(750, 220, 'ground');
+        //plataforma movil 1 (abajo)
+        this.movingPlatform1 = this.physics.add.image(400, 400, 'plataforma');   
+        this.movingPlatform1.setScale(1.2,1);
 
-        this.movingPlatform = this.physics.add.image(400, 400, 'plataforma');
-        this.movingPlatform.setScale(1.2,1);
+        this.movingPlatform1.setImmovable(true);
+        this.movingPlatform1.body.allowGravity = false;
+        this.movingPlatform1.setVelocityX(50);
 
-        this.movingPlatform.setImmovable(true);
-        this.movingPlatform.body.allowGravity = false;
-        this.movingPlatform.setVelocityX(50);
+        //plataforma movil 2
+        this.movingPlatform2 = this.physics.add.image(410, 250, 'plataforma');   
+        //this.movingPlatform2.setScale(1.2,1);
 
+        this.movingPlatform2.setImmovable(true);
+        this.movingPlatform2.body.allowGravity = false;
+        this.movingPlatform2.setVelocityY(50);
+
+
+        //jugadores
         this.createJ1();
         this.createJ2();
        
@@ -351,8 +397,15 @@ class Juego extends Phaser.Scene
             classType: Bala,        // Especificar la clase personalizada
             maxSize: 10,            // Número máximo de balas activas
             runChildUpdate: true    // Ejecutar el método `update` en cada bala
+           
         });
+        //variables para el cooldown de la bala
+        this.cooldownBalaP1=500;       //tiempo entre bala y bala en ms (5 seg)
+        this.cooldownBalaP2=500;       //tiempo entre bala y bala en ms (5 seg)
+        this.tiempoUltimoDisparoP1 = 0; // Inicializa el tiempo del último disparo
+        this.tiempoUltimoDisparoP2 = 0; // Inicializa el tiempo del último disparo
 
+            
         // Crear el objeto trail, que será el contorno del camino de las balas
         this.trailGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFF00 } });
 
@@ -360,16 +413,28 @@ class Juego extends Phaser.Scene
         this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
             bala.setActive(false);
             bala.setVisible(false);
+            //this.acabarPartida();   //acabamos partida
             console.log('Jugador 1 golpeado');
         });
 
         this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
             bala.setActive(false);
             bala.setVisible(false);
+            //this.acabarPartida();   //acabamos partida
             console.log('Jugador 2 golpeado');
         });
 
         this.instanceKeyboardKeys();
+
+        //Marcadores de vida;
+        const recuadro2 = this.add.image(700, 568, 'marcoVida');
+        this.vidaLabel1 = this.add.image(700, 568, 'vida');
+
+        const recuadro1 = this.add.image(100, 568, 'marcoVida');
+        this.vidaLabel2 = this.add.image(100, 568, 'vida');
+
+        this.vida1 = 100
+        this.vida2 = 100
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -378,11 +443,9 @@ class Juego extends Phaser.Scene
     
     update ()
     {
-        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) //para comprobar que la pantalla de victoria funciona
+        if (this.vida1===0||this.vida2===0) //para comprobar que la pantalla de victoria funciona
             {
-                this.bgMusic.stop();
-                this.scene.stop('Juego'); //carga la escena de intro
-                this.scene.start('MenuVictoriaJ1'); //carga la escena 
+                this.acabarPartida();
         }
 
         if(this.bgMusic.isPaused){
@@ -392,17 +455,30 @@ class Juego extends Phaser.Scene
         //Movimiento personajes
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
-
+        
+        //para depurar power ups
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) 
+            this.speedAtkUp(this.j1);
         //Disparo
         this.trail();
-        // Disparo del jugador 1
+        ////////// Disparo del jugador 1/////////////
+        const currentTime = this.time.now; // Tiempo actual
+        //utilizamos los atributos creados para aplicar cooldown y así limitar las balas/seg
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
-            this.dispararBala(this.j1.x, this.j1.y, 300, 0); // Dirección horizontal derecha
+            
+            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                this.dispararBala(this.j1.x, this.j1.y, 600, 0); // Dirección horizontal derecha
+                this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+            }
         }
 
         // Disparo del jugador 2
+        
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
-            this.dispararBala(this.j2.x, this.j2.y, -300, 0); // Dirección horizontal izquierda
+            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                this.dispararBala(this.j2.x, this.j2.y, -600, 0); // Dirección horizontal izquierda
+                this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+            }
         }
 
         if(this.bala != null)
@@ -411,14 +487,24 @@ class Juego extends Phaser.Scene
         }
 
         //Plataformas
-        if (this.movingPlatform.x >= 500)
+        //pataforma móvil 1 (abajo)
+        if (this.movingPlatform1.x >= 500)
         {
-            this.movingPlatform.setVelocityX(-50);
+            this.movingPlatform1.setVelocityX(-50);
         }
-        else if (this.movingPlatform.x <= 300)
+        else if (this.movingPlatform1.x <= 300)
         {
-            this.movingPlatform.setVelocityX(50);
+            this.movingPlatform1.setVelocityX(50);
         }
+        //plataforma móvil 2 (arriba)
+        if (this.movingPlatform2.y >= 250)
+            {
+                this.movingPlatform2.setVelocityY(-50);
+            }
+            else if (this.movingPlatform2.y <= 125)
+            {
+                this.movingPlatform2.setVelocityY(50);
+            }
         
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
@@ -426,6 +512,16 @@ class Juego extends Phaser.Scene
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
         }
+
+        //Cambiar el tamaño y la posición de la barra de vida
+
+        this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
+        var tam1 = this.vidaLabel1.width;
+        this.vidaLabel1.setOrigin(700-((tam1/2)), 568);
+
+        this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
+        var tam2 = this.vidaLabel2.width;
+        this.vidaLabel2.setOrigin(100-((tam2/2)), 568);
 
     }
 
