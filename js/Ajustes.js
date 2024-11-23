@@ -33,7 +33,7 @@ class Ajustes extends Phaser.Scene {
 
         // Configuración de la música
         this.bgMusic = this.sound.add('background');
-        this.bgMusic.setVolume(0); // Volumen inicial (por ejemplo, 0)
+        this.bgMusic.setVolume(GlobalData.volumen.toFixed(2)); // Volumen inicial (por ejemplo, 0)
         this.bgMusic.loop = true;
         this.bgMusic.play();
 
@@ -42,11 +42,10 @@ class Ajustes extends Phaser.Scene {
         const izq = this.add.image(440, 300, "izq");
         const der = this.add.image(660, 300, "der");
 
-        // Inicializamos el volumen
-        let volumen = 0;
+        
 
         // Creamos el texto del volumen, pero fuera de los eventos
-        let volumenTexto = this.add.text(495, 280, volumen, { fill: '#000', fontSize: 50 });
+        let volumenTexto = this.add.text(495, 280, GlobalData.volumen.toFixed(2), { fill: '#000', fontSize: 50 });
 
         // Botón de volver
         const salir = this.add.image(400, 500, 'volver');
@@ -63,19 +62,19 @@ class Ajustes extends Phaser.Scene {
         // Botón para reducir el volumen
         izq.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); // Reproduce el sonido de click
-            volumen -= 0.01; // Disminuye el volumen
-            if (volumen < 0) volumen = 0; // Aseguramos que el volumen no sea negativo
-            this.bgMusic.setVolume(volumen); // Actualiza el volumen de la música
-            volumenTexto.setText(volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
+            GlobalData.volumen -= 0.01; // Disminuye el volumen
+            if (GlobalData.volumen < 0) GlobalData.volumen = 0; // Aseguramos que el volumen no sea negativo
+            this.bgMusic.setVolume(GlobalData.volumen); // Actualiza el volumen de la música
+            volumenTexto.setText(GlobalData.volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
         });
 
         // Botón para aumentar el volumen
         der.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); // Reproduce el sonido de click
-            volumen += 0.01; // Aumenta el volumen
-            if (volumen > 1) volumen = 1; // Aseguramos que el volumen no sobrepase 1
-            this.bgMusic.setVolume(volumen); // Actualiza el volumen de la música
-            volumenTexto.setText(volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
+            GlobalData.volumen += 0.01; // Aumenta el volumen
+            if (GlobalData.volumen > 1) GlobalData.volumen = 1; // Aseguramos que el volumen no sobrepase 1
+            this.bgMusic.setVolume(GlobalData.volumen); // Actualiza el volumen de la música
+            volumenTexto.setText(GlobalData.volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
         });
 
         // Detenemos la música cuando la escena se cierre

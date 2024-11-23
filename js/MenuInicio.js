@@ -36,7 +36,7 @@ class MenuInicio extends Phaser.Scene {
 
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
-        this.bgMusic.setVolume(0); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
+        this.bgMusic.setVolume(GlobalData.volumen); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
