@@ -296,6 +296,7 @@ class Juego extends Phaser.Scene
     }
 
     handleColision1PU(powerUp, jugador){
+        //this.powerUpTake.play();
         console.log('J1 coge el PowerUp');
         console.log(this.danioJ1);
         powerUp.destroy();
@@ -304,6 +305,7 @@ class Juego extends Phaser.Scene
     }
 
     handleColision2PU(powerUp, jugador){
+        //this.powerUpTake.play();
         console.log('J2 coge el PowerUp');
         console.log(this.danioJ2);
         powerUp.destroy();
@@ -335,6 +337,8 @@ class Juego extends Phaser.Scene
     preload ()
     {
         this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
+        this.load.audio("Shoot", "assets/musica/Shoot.mp3"); 
+        this.load.audio("powerUpTake", "assets/musica/PowerUp.mp3"); 
 
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/suelo.png');
@@ -352,8 +356,10 @@ class Juego extends Phaser.Scene
         this.load.image(PowerUps.moreDamage, 'assets/powerups/Danio.png', { frameWidth: 10, frameHeight: 10 });
         this.load.image(PowerUps.moreJump, 'assets/powerups/Salto.png', { frameWidth: 10, frameHeight: 10 });
         this.load.image(PowerUps.multiplesDisparos, 'assets/powerups/Balas.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.speedAtkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
         this.load.image(PowerUps.speedUp, 'assets/powerups/Velocidad.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedAtkUp, 'assets/powerups/Reloj.png', { frameWidth: 10, frameHeight: 10 });
+        
 
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
         this.load.image('vida', 'assets/jugador/Vida.png');       
@@ -548,6 +554,7 @@ class Juego extends Phaser.Scene
                     var xVel = this.j1.body.velocity.x;
                     var yVel = this.j1.body.velocity.y;
                     var balaOfset;
+                    //this.Shoot.play();
                     if(i===0){
                         balaOfset= (-30)
                     }else if(i%2===0){
@@ -576,6 +583,7 @@ class Juego extends Phaser.Scene
                     var xVel = this.j2.body.velocity.x;
                     var yVel = this.j2.body.velocity.y;
                     var balaOfset;
+                    //this.Shoot.play();
                     if(i%2===0){
                         balaOfset= (-30) + i * 10 ;
                     }else{
