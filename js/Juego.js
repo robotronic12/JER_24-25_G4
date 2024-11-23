@@ -163,7 +163,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // OTROS
     ///////////////////////////////////////////////////////////////////////////////////////
-    /*createBalas()
+    /**/createBalas()
     {
         this.bala.setCollideWorldBounds(false);
     
@@ -179,36 +179,36 @@ class Juego extends Phaser.Scene
     handleCollision2(bala, player){
         bala.destroy();
         this.vida2-=10;
-    }
-        this.bala.setImmovable(true);
-        this.bala.allowGravity(false);
-    }*/
+    
+        //this.bala.setImmovable(true);
+        //this.bala.allowGravity(false);
+    }/**/
 
-    /*shootBala(xPos, yPos, xDir, yDir, xDirWhenInPlace)
+    /**/colisionsBalas(balas, j1, j2)
     {
-        var velocity = 5;
+        //var velocity = 5;
         
-        this.bala = this.physics.add.sprite(xPos + xDir*30, yPos + yDir*30, 'bala');
-        this.bala.body.allowGravity = false;
+        //this.bala = this.physics.add.sprite(xPos + xDir*30, yPos + yDir*30, 'bala');
+        //this.bala.body.allowGravity = false;
         //establecemos el tamaño de la bala 
-        this.bala.setScale(2);
+        //this.bala.setScale(2);
 
-        this.physics.add.collider(this.bala, this.j1, this.handleCollision1, null, this);
-        this.physics.add.collider(this.bala, this.j2, this.handleCollision2, null, this);
+        this.physics.add.collider(balas, j1, this.handleCollision1, null, this);
+        this.physics.add.collider(balas, j2, this.handleCollision2, null, this);
 
         //this.bala.setVelocityX(velocity*Math.abs(Math.cos(xDir)));
         //this.bala.setVelocityY(velocity*Math.abs(Math.cos(yDir)));
 
-        if(xDir != 0)
-        {
-            this.bala.setVelocity(xDir * velocity, yDir * velocity);
-        }
-        else
-        {
-            this.bala.setVelocity(xDirWhenInPlace*160 * velocity, yDir * velocity);
-        }
+        // if(xDir != 0)
+        // {
+        //     this.bala.setVelocity(xDir * velocity, yDir * velocity);
+        // }
+        // else
+        // {
+        //     this.bala.setVelocity(xDirWhenInPlace*160 * velocity, yDir * velocity);
+        // }
 
-    }*/
+    }/**/
 
     dispararBala(x, y, velocidadX, velocidadY) {
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
@@ -408,21 +408,22 @@ class Juego extends Phaser.Scene
             
         // Crear el objeto trail, que será el contorno del camino de las balas
         this.trailGraphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFF00 } });
+        this.colisionsBalas(this.balas, this.j1, this.j2);
 
         // Colisiones entre balas y jugadores
-        this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
-            bala.setActive(false);
-            bala.setVisible(false);
-            //this.acabarPartida();   //acabamos partida
-            console.log('Jugador 1 golpeado');
-        });
+        //this.physics.add.collider(this.balas, this.j1, (bala, j1) => {
+        //    bala.setActive(false);
+        //    bala.setVisible(false);
+        //    //this.acabarPartida();   //acabamos partida
+        //    console.log('Jugador 1 golpeado');
+        //});
 
-        this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
-            bala.setActive(false);
-            bala.setVisible(false);
-            //this.acabarPartida();   //acabamos partida
-            console.log('Jugador 2 golpeado');
-        });
+        //this.physics.add.collider(this.balas, this.j2, (bala, j2) => {
+        //    bala.setActive(false);
+        //    bala.setVisible(false);
+        //    //this.acabarPartida();   //acabamos partida
+        //    console.log('Jugador 2 golpeado');
+        //});
 
         this.instanceKeyboardKeys();
 
@@ -515,13 +516,13 @@ class Juego extends Phaser.Scene
 
         //Cambiar el tamaño y la posición de la barra de vida
 
-        this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
-        var tam1 = this.vidaLabel1.width;
-        this.vidaLabel1.setOrigin(700-((tam1/2)), 568);
-
-        this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
-        var tam2 = this.vidaLabel2.width;
-        this.vidaLabel2.setOrigin(100-((tam2/2)), 568);
+        // this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
+        // var tam1 = this.vidaLabel1.width;
+        // this.vidaLabel1.setOrigin(700-((tam1/2)), 568);
+// 
+        // this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
+        // var tam2 = this.vidaLabel2.width;
+        // this.vidaLabel2.setOrigin(100-((tam2/2)), 568);
 
     }
 
