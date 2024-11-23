@@ -340,18 +340,18 @@ class Juego extends Phaser.Scene
         switch(ramdomPos){
             case 0: 
                 x = 400;
-                y = 300;
+                y = 0;
             break;
             case 2: 
                 x = 200;
-                y = 400;
+                y = 0;
             break;
             default:
-                x = 400;
-                y = 300;
+                x = 300;
+                y = 0;
             break;
         }
-        this.spawnPowerUp(x,y,PowerUps.multiplesDisparos);
+        this.spawnPowerUp(x,y,PowerUps.randomType);
     }
 
     //collectStar (j1, star)
@@ -511,9 +511,6 @@ class Juego extends Phaser.Scene
             classType: PowerUp,
             maxSize: 10,            // Número máximo de powerups activas           
         });
-
-        this.createPowerUp();
-        this.createPowerUp();
     }
     //#endregion
     
@@ -524,6 +521,8 @@ class Juego extends Phaser.Scene
     
     update ()
     {
+        const interval = setInterval(this.createPowerUp, 10 * 1000);//*1000 porque son milisegundos.
+
         if (this.vida2<=0) //para comprobar que la pantalla de victoria funciona
         {
             GlobalData.ganador=1;

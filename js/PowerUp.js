@@ -1,11 +1,11 @@
 var PowerUps = {
     speedUp: 'speedUp',
     speedAtkUp: 'speedAtkUp',
-    moreDamage: 'moreDamage',
-    speedBulletkUp: 'speedBulletkUp',
-    moreJump: 'moreJump',
-    moreLive: 'moreLive',
-    multiplesDisparos: 'multiplesDisparos',
+    moreDamage: 'moreDamage',//
+    speedBulletkUp: 'speedBulletkUp',//
+    moreJump: 'moreJump',//
+    moreLive: 'moreLive',//
+    multiplesDisparos: 'multiplesDisparos',//
 }
 
 class PowerUp extends Phaser.Physics.Arcade.Sprite {
