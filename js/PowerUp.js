@@ -3,6 +3,9 @@ var PowerUps = {
     speedAtkUp: 'speedAtkUp',
     moreDamage: 'moreDamage',
     speedBulletkUp: 'speedBulletkUp',
+    moreJump: 'moreJump',
+    moreLive: 'moreLive',
+    multiplesDisparos: 'multiplesDisparos',
 }
 
 class PowerUp extends Phaser.Physics.Arcade.Sprite {
@@ -58,6 +61,33 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
                 this.Juego.velBala2 *= 3;
             }
         }
+
+        if(this.type === 'moreJump'){
+            if(jugador.x==j1.x){
+                this.Juego.fuerzaSaltoJ1*=1.2;
+            }
+            if(jugador.x==j2.x){
+                this.Juego.fuerzaSaltoJ2*=1.2;
+            }
+        }
+
+        if(this.type === 'moreLive'){
+            if(jugador===j1){
+                this.Juego.curarj1(30);
+            }
+            if(jugador===j2){
+                this.Juego.curarj2(30);
+            }
+                
+        }
+        if(this.type === 'multiplesDisparos'){
+            if(jugador===j1){
+                this.Juego.numeroBalasJ1+=2;
+            }
+            if(jugador===j2){
+                this.Juego.numeroBalasJ2+=2;
+            }
+        }
     }
 
     crearMini(){        
@@ -89,7 +119,6 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
             if(jugador==j2)
                 this.Juego.cooldownBalaP2/=1.5
         }
-    
         if(this.type === 'moreDamage'){
             if(jugador===j1){
                 if(this.Juego.dañoJ1<100){
@@ -102,7 +131,5 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         }
-
-        if(this.type === 'speedBulletkUp'){}
     }
 }
