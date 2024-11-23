@@ -1,40 +1,3 @@
-class Bala extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
-        super(scene, x, y, 'bala');
-        
-        scene.add.existing(this); // Añadir al sistema de rendering
-        scene.physics.add.existing(this); // Añadir al sistema de físicas
-        
-        this.setCollideWorldBounds(true); // Que colisione con los bordes del mundo
-        this.body.allowGravity = false;  // Sin gravedad por defecto
-
-        this.trailPoints = [];  // Arreglo para almacenar los puntos del trail
-    }
-
-    fire(x, y, velocityX, velocityY) {
-        this.setPosition(x, y);          // Posición inicial
-        this.setActive(true);            // Activar para que esté en el juego
-        this.setVisible(true);           // Hacer visible
-        this.setVelocity(velocityX, velocityY); // Aplicar velocidad
-    }
-
-    update() {
-        // Desactivar si sale de los límites del mundo
-        if (this.x < 0 || this.x > 800 || this.y < 0 || this.y > 600) {
-            this.setActive(false);
-            this.setVisible(false);
-        }
-
-        // Guardar las posiciones de la bala para el trail
-        this.trailPoints.push({ x: this.x, y: this.y });
-        if (this.trailPoints.length > 20) {
-            this.trailPoints.shift();  // Limitar la cantidad de puntos en el trail
-        }
-    }
-
-}
-
-
 class Juego extends Phaser.Scene
 {
     constructor() {
@@ -62,6 +25,10 @@ class Juego extends Phaser.Scene
     vidaLabel2;
     vida1;
     vida2;
+
+    //Daño
+    dañoJ1;
+    dañoJ2;
 
     //#region JUGADOR 1
 
@@ -148,6 +115,8 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // OTROS
     ///////////////////////////////////////////////////////////////////////////////////////
+
+    //Balas
     /*createBalas()
     {
         this.bala.setCollideWorldBounds(false);
@@ -195,10 +164,10 @@ class Juego extends Phaser.Scene
 
     }*/
 
-    dispararBala(x, y, velocidadX, velocidadY) {
+    dispararBala(x, y, velocidadX, velocidadY, daño) {
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
         if (bala) {
-            bala.fire(x, y, velocidadX, velocidadY); // Configurar la posición y velocidad
+            bala.fire(x, y, velocidadX, velocidadY, daño); // Configurar la posición y velocidad
         }
     }
 
@@ -258,6 +227,7 @@ class Juego extends Phaser.Scene
         }
     }
 
+    //Teclas
     instanceKeyboardKeys(){
         this.cursors = this.input.keyboard.createCursorKeys();
         this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -268,22 +238,14 @@ class Juego extends Phaser.Scene
         this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
+    //Final
     acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
         this.bgMusic.stop();
         this.scene.stop('Juego'); //carga la escena de intro
         this.scene.start('MenuVictoriaJ1'); //carga la escena 
     }
-    //para power ups
-    speedUp(jugador){
-        jugador.body.velocity.x *= 2;
-    }
 
-    speedAtkUp(jugador){
-        if(jugador==this.j1)
-            this.cooldownBalaP1*=1.5
-        if(jugador==this.j2)
-            this.cooldownBalaP2*=1.5
-    }
+    //Para power ups
 
     handleColision1(player,bala) {
         if (this.j1 && this.j1.active) {
@@ -316,7 +278,8 @@ class Juego extends Phaser.Scene
     //    star.disableBody(true, true);
     //}
     //#endregion
-
+    
+    //#region Preload
     ///////////////////////////////////////////////////////////////////////////////////////
     // PRELOAD
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -339,7 +302,9 @@ class Juego extends Phaser.Scene
         this.load.image('vida', 'assets/jugador/Vida.png');
        
     }
-
+    //#endregion
+    
+    //#region Create
     ///////////////////////////////////////////////////////////////////////////////////////
     // CREATE
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +323,8 @@ class Juego extends Phaser.Scene
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
-      
+        this.dañoJ1 = 10;
+        this.dañoJ2 = 10;
 
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
@@ -437,7 +403,9 @@ class Juego extends Phaser.Scene
         this.vida1 = 100
         this.vida2 = 100
     }
+    //#endregion
     
+    //#region Update    
     ///////////////////////////////////////////////////////////////////////////////////////
     // UPDATE
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -469,7 +437,7 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
             
             if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                this.dispararBala(this.j1.x, this.j1.y, 600, 0); // Dirección horizontal derecha
+                this.dispararBala(this.j1.x, this.j1.y, 600, 0, this.dañoJ1); // Dirección horizontal derecha
                 this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
         }
@@ -478,7 +446,7 @@ class Juego extends Phaser.Scene
         
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
             if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                this.dispararBala(this.j2.x, this.j2.y, -600, 0); // Dirección horizontal izquierda
+                this.dispararBala(this.j2.x, this.j2.y, -600, 0, this.dañoJ2); // Dirección horizontal izquierda
                 this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
         }
