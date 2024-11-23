@@ -1,29 +1,38 @@
 class Bala extends Phaser.Physics.Arcade.Sprite {
+    
     constructor(scene, x, y) {
         super(scene, x, y, 'bala');
 
-        this.dañoBala;
-
+        this.dañoBala
+        
         scene.add.existing(this); // Añadir al sistema de rendering
         scene.physics.add.existing(this); // Añadir al sistema de físicas
 
         this.setCollideWorldBounds(true); // Que colisione con los bordes del mundo
-        this.body.allowGravity = false; // Sin gravedad por defecto
+        this.body.allowGravity = false;  // Sin gravedad por defecto
 
-        this.trailPoints = []; // Arreglo para almacenar los puntos del trail
+        this.trailPoints = [];  // Arreglo para almacenar los puntos del trail
+
+        this.vel = 5;
     }
 
     fire(x, y, velocityX, velocityY, daño) {
-        this.setPosition(x, y); // Posición inicial
-        this.setActive(true); // Activar para que esté en el juego
-        this.setVisible(true); // Hacer visible
-        this.setVelocity(velocityX, velocityY); // Aplicar velocidad
+        this.trailPoints = [];
+
         this.dañoBala = daño;
+
+        this.setPosition(x, y);          // Posición inicial
+        this.setActive(true);            // Activar para que esté en el juego
+        this.setVisible(true);           // Hacer visible
+        
+        this.setVelocity(this.vel*velocityX, this.vel*velocityY);
     }
 
     update() {
         // Desactivar si sale de los límites del mundo
-        if (this.x < 0 || this.x > 800 || this.y < 0 || this.y > 600) {
+        if (this.x < -100 || this.x > 900 || this.y < -100 || this.y > 700) {
+            this.trailPoints = [];
+
             this.setActive(false);
             this.setVisible(false);
         }
@@ -31,7 +40,8 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
         // Guardar las posiciones de la bala para el trail
         this.trailPoints.push({ x: this.x, y: this.y });
         if (this.trailPoints.length > 20) {
-            this.trailPoints.shift(); // Limitar la cantidad de puntos en el trail
+            this.trailPoints.shift();  // Limitar la cantidad de puntos en el trail
         }
     }
+
 }
