@@ -42,13 +42,13 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
             console.log('Hola');
             if(jugador.x==j1.x || jugador.y==j1.y){
                 console.log('HolaJ1');
-                if(this.Juego.dañoJ1 < 100){
-                    this.Juego.dañoJ1 += 10;
+                if(this.Juego.danioJ1 < 100){
+                    this.Juego.danioJ1 += 10;
                 }
             }
             if(jugador.x==j2.x || jugador.y==j2.y){
-                if(this.Juego.dañoJ2 < 100){
-                    this.Juego.dañoJ2 +=10;
+                if(this.Juego.danioJ2 < 100){
+                    this.Juego.danioJ2 +=10;
                 }
             }
         }
@@ -90,19 +90,21 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    crearMini(){        
-        if(this.player == this.Juego.j1){
-            this.verMini = this.Juego.add.image(20 + this.Juego.vidaLabel1.x + 20 * this.Juego.j1PUs - 
-                (this.Juego.vidaLabel1.width/2), this.Juego.vidaLabel1.y - 25, this.type);
-            this.verMini.setScale(0.25);
-            this.Juego.j1PUs++;
+    crearMini(){  
+        if(this.type !== PowerUps.moreLive){
+            if(this.player == this.Juego.j1){
+                this.verMini = this.Juego.add.image(20 + this.Juego.vidaLabel1.x + 20 * this.Juego.j1PUs - 
+                    (this.Juego.vidaLabel1.width/2), this.Juego.vidaLabel1.y - 25, this.type);
+                this.verMini.setScale(0.25);
+                this.Juego.j1PUs++;
+            }      
+            if(this.player == this.Juego.j2){
+                this.Juego.j2PUs++;
+                this.verMini = this.Juego.add.image(this.Juego.vidaLabel2.x - 20 * this.Juego.j2PUs + 
+                    (this.Juego.vidaLabel2.width/2), this.Juego.vidaLabel2.y - 25, this.type);
+                this.verMini.setScale(0.25);
+            }
         }      
-        if(this.player == this.Juego.j2){
-            this.Juego.j2PUs++;
-            this.verMini = this.Juego.add.image(this.Juego.vidaLabel2.x - 20 * this.Juego.j2PUs + 
-                (this.Juego.vidaLabel2.width/2), this.Juego.vidaLabel2.y - 25, this.type);
-            this.verMini.setScale(0.25);
-        }
     }
 
     reverse(j1, j2){
@@ -121,13 +123,13 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
         }
         if(this.type === 'moreDamage'){
             if(jugador===j1){
-                if(this.Juego.dañoJ1<100){
-                    this.Juego.dañoJ1-=10;
+                if(this.Juego.danioJ1<100){
+                    this.Juego.danioJ1-=10;
                 }
             }
             if(jugador===j2){
-                if(this.Juego.dañoJ2<100){
-                    this.Juego.dañoJ2-=10;
+                if(this.Juego.danioJ2<100){
+                    this.Juego.danioJ2-=10;
                 }
             }
         }
