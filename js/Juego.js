@@ -19,14 +19,23 @@ class Juego extends Phaser.Scene
     //Jugadores
     j1;
     j2;
+    j1PUs;
+    j2PUs;
+
     //Jugador:
     bala;
+
     vidaLabel1;
     vidaLabel2;
     vida1;
     vida2;
+
     lastJ1Vel;
     lastJ2Vel;
+    velocidadJ1;
+    velocidadJ2;
+    velBala1;
+    velBala2;
     
     //Daño
     dañoJ1;
@@ -55,10 +64,10 @@ class Juego extends Phaser.Scene
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
     
         if (this.aKey.isDown) {
-            this.j1.setVelocityX(-160);
+            this.j1.setVelocityX(-this.velocidadJ1);
             // this.j1.anims.play('left', true);
         } else if (this.dKey.isDown) {
-            this.j1.setVelocityX(160);
+            this.j1.setVelocityX(this.velocidadJ1);
             // this.j1.anims.play('right', true);
         } else {
             this.j1.setVelocityX(0);
@@ -96,10 +105,10 @@ class Juego extends Phaser.Scene
         const { left, right, up } = this.cursors;
     
         if (left.isDown) {
-            this.j2.setVelocityX(-160);
+            this.j2.setVelocityX(-this.velocidadJ2);
             // this.j2.anims.play('left', true);
         } else if (right.isDown) {
-            this.j2.setVelocityX(160);
+            this.j2.setVelocityX(this.velocidadJ2);
             // this.j2.anims.play('right', true);
         } else {
             this.j2.setVelocityX(0);
@@ -118,10 +127,12 @@ class Juego extends Phaser.Scene
     // BALAS
     ///////////////////////////////////////////////////////////////////////////////////////
 
-    dispararBala(x, y, velocidadX, velocidadY, daño) {
+    dispararBala(x, y, velocidadX, velocidadY, daño, velBala) {
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
+        bala.vel = velBala;
+        let modul = Math.sqrt(velocidadX * velocidadX + velocidadY * velocidadY);
         if (bala) {
-            bala.fire(x, y, velocidadX, velocidadY, daño); // Configurar la posición y velocidad
+            bala.fire(x, y, velocidadX/modul, velocidadY/modul, daño); // Configurar la posición y velocidad
         }
     }
 
@@ -301,26 +312,26 @@ class Juego extends Phaser.Scene
     }
 
     createPowerUp(){
-        const randomType = Phaser.Utils.Array.GetRandom(Object.values(PowerUps));
+        let randomType = Phaser.Utils.Array.GetRandom(Object.values(PowerUps));
         let x;
         let y;
         let numberOfPositions = 2;
-        const ramdomPos = Math.random()*(numberOfPositions - 1 + 1);
+        let ramdomPos = Math.floor(Math.random()*(numberOfPositions));
         switch(ramdomPos){
-            case 1: 
+            case 0: 
                 x = 400;
                 y = 300;
             break;
             case 1: 
                 x = 200;
-                y = 500;
+                y = 400;
             break;
             default:
                 x = 400;
                 y = 300;
             break;
         }
-        this.spawnPowerUp(x,y,PowerUps.moreDamage);
+        this.spawnPowerUp(x,y,PowerUps.speedBulletkUp);
     }
 
     //collectStar (j1, star)
@@ -348,7 +359,7 @@ class Juego extends Phaser.Scene
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
 
-        this.load.image(PowerUps.moreDamage, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
 
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
         this.load.image('vida', 'assets/jugador/Vida.png');       
@@ -374,8 +385,21 @@ class Juego extends Phaser.Scene
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
+        //Daño inicial
         this.dañoJ1 = 10;
         this.dañoJ2 = 10;
+
+        //Velocidad inicial
+        this.velocidadJ1 = 160;
+        this.velocidadJ2 = 160;
+
+        //Velocidad bala
+        this.velBala1 = 700;
+        this.velBala2 = 700;
+        
+        //Velocidad bala
+        this.j1PUs = 0;
+        this.j2PUs = 0;
 
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
@@ -446,10 +470,10 @@ class Juego extends Phaser.Scene
 
         //Marcadores de vida;
         const recuadro2 = this.add.image(700, 568, 'marcoVida');
-        this.vidaLabel1 = this.add.image(700, 568, 'vida');
+        this.vidaLabel2 = this.add.image(700, 568, 'vida');
 
         const recuadro1 = this.add.image(100, 568, 'marcoVida');
-        this.vidaLabel2 = this.add.image(100, 568, 'vida');
+        this.vidaLabel1 = this.add.image(100, 568, 'vida');
 
         this.vida1 = 100
         this.vida2 = 100
@@ -460,6 +484,7 @@ class Juego extends Phaser.Scene
             maxSize: 10,            // Número máximo de powerups activas           
         });
 
+        this.createPowerUp();
         this.createPowerUp();
     }
     //#endregion
@@ -485,9 +510,6 @@ class Juego extends Phaser.Scene
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
         
-        //para depurar power ups
-        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) 
-            this.speedAtkUp(this.j1);
         //Disparo
         this.trail();
         
@@ -514,10 +536,10 @@ class Juego extends Phaser.Scene
                 var xVel = this.j1.body.velocity.x;
                 var yVel = this.j1.body.velocity.y;
                 if(Math.abs(xVel) > 1){
-                    this.dispararBala(this.j1.x, this.j1.y, xVel, yVel - 30, this.dañoJ1); // Dirección horizontal derecha
+                    this.dispararBala(this.j1.x, this.j1.y, xVel, yVel - 30, this.dañoJ1, this.velBala1); // Dirección horizontal derecha
                 }
                 else{
-                    this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel - 30, this.dañoJ1); // Dirección horizontal derecha
+                    this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || this.velocidadJ1, yVel - 30, this.dañoJ1, this.velBala1); // Dirección horizontal derecha
                 }
                 this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
 
@@ -533,10 +555,10 @@ class Juego extends Phaser.Scene
                 var xVel = this.j2.body.velocity.x;
                 var yVel = this.j2.body.velocity.y;
                 if(Math.abs(xVel) > 1){
-                    this.dispararBala(this.j2.x, this.j2.y, xVel, yVel - 30, this.dañoJ2); // Dirección horizontal derecha
+                    this.dispararBala(this.j2.x, this.j2.y, xVel, yVel - 30, this.dañoJ2, this.velBala2); // Dirección horizontal derecha
                 }
                 else{
-                    this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel - 30, this.dañoJ2); // Dirección horizontal derecha
+                    this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -this.velocidadJ2, yVel - 30, this.dañoJ2, this.velBala2); // Dirección horizontal derecha
                 }
                 this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
 
@@ -574,11 +596,11 @@ class Juego extends Phaser.Scene
 
         //Cambiar el tamaño y la posición de la barra de vida
 
-         this.vidaLabel1.displayWidth = ((this.vida2) / 100) * 180;
+         this.vidaLabel1.displayWidth = ((this.vida1) / 100) * 180;
          var tam1 = this.vidaLabel1.width;
         // this.vidaLabel1.setOrigin(700, 568);
 
-         this.vidaLabel2.displayWidth = ((this.vida1)/ 100) * 180;
+         this.vidaLabel2.displayWidth = ((this.vida2)/ 100) * 180;
          var tam2 = this.vidaLabel2.width;
         // this.vidaLabel2.setOrigin(100, 568);
 
