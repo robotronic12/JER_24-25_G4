@@ -288,6 +288,17 @@ class Juego extends Phaser.Scene
         this.scene.stop('Juego'); //carga la escena de intro
         this.scene.start('MenuVictoriaJ1'); //carga la escena 
     }
+    //para power ups
+    speedUp(jugador){
+        jugador.body.velocity.x *= 2;
+    }
+
+    speedAtkUp(jugador){
+        if(jugador==this.j1)
+            this.cooldownBalaP1*=1.5
+        if(jugador==this.j2)
+            this.cooldownBalaP2*=1.5
+    }
 
     //collectStar (j1, star)
     //{
@@ -389,7 +400,8 @@ class Juego extends Phaser.Scene
            
         });
         //variables para el cooldown de la bala
-        this.cooldownBala=500;       //tiempo entre bala y bala en ms (5 seg)
+        this.cooldownBalaP1=500;       //tiempo entre bala y bala en ms (5 seg)
+        this.cooldownBalaP2=500;       //tiempo entre bala y bala en ms (5 seg)
         this.tiempoUltimoDisparoP1 = 0; // Inicializa el tiempo del último disparo
         this.tiempoUltimoDisparoP2 = 0; // Inicializa el tiempo del último disparo
 
@@ -443,7 +455,10 @@ class Juego extends Phaser.Scene
         //Movimiento personajes
         this.checkPlayer1Movement();
         this.checkPlayer2Movement();
-
+        
+        //para depurar power ups
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) 
+            this.speedAtkUp(this.j1);
         //Disparo
         this.trail();
         ////////// Disparo del jugador 1/////////////
@@ -451,7 +466,7 @@ class Juego extends Phaser.Scene
         //utilizamos los atributos creados para aplicar cooldown y así limitar las balas/seg
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
             
-            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBala){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 this.dispararBala(this.j1.x, this.j1.y, 600, 0); // Dirección horizontal derecha
                 this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
@@ -460,7 +475,7 @@ class Juego extends Phaser.Scene
         // Disparo del jugador 2
         
         if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
-            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBala){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 this.dispararBala(this.j2.x, this.j2.y, -600, 0); // Dirección horizontal izquierda
                 this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
             }
