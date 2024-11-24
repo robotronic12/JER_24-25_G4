@@ -134,7 +134,7 @@ Esta es la pantalla de inicio del juego a partir de la cual se pueden accederr a
 (botones, sonidos y transiciones al resto de escenas), también a partir de esta escena se puede salir del juego opción que cerrará la ventana del juego. En cuanto 
 al resto de opciones a realizar se podrá ir al menú de opciones que permite configurar las opciones del juego y jugar al juego lo que llevará al jugador a la pantalla 
 In-Game.
-&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image.png)
+<div align="center">![alt text](assets/ReadMe/image.png)</div>
 
 #### Ajustes
 Dentro de esta pantalla habrá solo 2 opciones: salir al menú de inicio y configurar el volumen del juego mediante los botones con flechas, el volumen se mantendrá para 
