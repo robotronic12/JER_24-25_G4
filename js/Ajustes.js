@@ -26,15 +26,21 @@ class Ajustes extends Phaser.Scene {
             const fondo = this.add.image(0, 0, 'fondo');
             fondo.setOrigin(0, 0);
             fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  // Ajustamos la imagen al tamaño del fondo
-            // Configuración de la música
-            this.bgMusic = this.sound.add('background');
-            this.bgMusic.setVolume(GlobalData.volumen.toFixed(2)); // Volumen inicial (por ejemplo, 0)
-            this.bgMusic.loop = true;
-            this.bgMusic.play();
         }        
         
+        // Configuración de la música
+        this.bgMusic = this.sound.add('background');
+        this.bgMusic.setVolume(GlobalData.volumen.toFixed(2)); // Volumen inicial (por ejemplo, 0)
+        this.bgMusic.loop = true;
+        this.bgMusic.play();
+        
         // Añadimos título
-        const titulo = this.add.text(250, 100, 'Ajustes', { fill: '#0f0', fontSize: 75 });
+        const titulo = this.add.text(250, 100, 'Ajustes', { 
+            fontFamily: 'Poppins', 
+            fontSize: '75px',
+            color: '#ffffff', 
+            fontStyle: 'bold' 
+        });
 
 
         const b_volumen = this.add.image(250, 300, "volumen");
@@ -51,12 +57,16 @@ class Ajustes extends Phaser.Scene {
         const salir = this.add.image(400, 500, 'volver');
         salir.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); // Reproduce el sonido de click
-            this.scene.stop('Ajustes'); // Detiene la escena de ajustes
-            if(GlobalData.playing){
+            if(GlobalData.playing == true){
+                console.log('Hola');
                 this.scene.launch('MenuPausa');
-            }else{
+            }
+            else{
+                console.log('Hola');
                 this.scene.start('MenuInicio'); // Inicia la escena de menú
-            }            
+            }          
+            console.log('Hola wapo');  
+            this.scene.stop('Ajustes'); // Detiene la escena de ajustes
         });
 
         // Botón para reducir el volumen

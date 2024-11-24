@@ -152,11 +152,15 @@ class Juego extends Phaser.Scene
         }
     
         //Colliders
-        this.physics.add.collider(bala, this.platforms);
-        this.physics.add.collider(bala, this.movingPlatform1);
-        this.physics.add.collider(bala, this.movingPlatform2);
+        this.physics.add.collider(bala, this.platforms, this.handleBounce, null, this);
+        this.physics.add.collider(bala, this.movingPlatform1, this.handleBounce, null, this);
+        this.physics.add.collider(bala, this.movingPlatform2, this.handleBounce, null, this);
         this.physics.add.collider(bala, this.j1, this.handleColision1PU, null, this);    
         this.physics.add.collider(bala, this.j2, this.handleColision2PU, null, this);
+    }
+
+    handleBounce(bala, plataforma){
+        bala.body.velocity.y = -bala.body.velocity.y;
     }
 
     trail() {
@@ -514,7 +518,7 @@ class Juego extends Phaser.Scene
         });
 
         this.time.addEvent({
-            delay: 5000,        // Milisegundos
+            delay: 10000,        // Milisegundos
             callback: () => {
                 this.createPowerUp();
             },
@@ -535,6 +539,9 @@ class Juego extends Phaser.Scene
         if(GlobalData.volumenCambiado === true){
             this.bgMusic.setVolume(GlobalData.volumen);
             GlobalData.volumenCambiado = false;
+        }
+        if(GlobalData.playing === false){            
+            GlobalData.playing = true;
         }
 
         if (this.vida2<=0) //para comprobar que la pantalla de victoria funciona

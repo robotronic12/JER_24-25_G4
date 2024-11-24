@@ -9,6 +9,7 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this); // Añadir al sistema de físicas
 
         this.setCollideWorldBounds(true); // Que colisione con los bordes del mundo
+
         this.body.allowGravity = false;  // Sin gravedad por defecto
 
         this.trailPoints = [];  // Arreglo para almacenar los puntos del trail

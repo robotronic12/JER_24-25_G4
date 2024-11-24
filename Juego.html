@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="css/EstiloJuego.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
         <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"> </script>        
 
         <script src="js/MenuInicio.js"></script> <!--HOla wapos-->
@@ -15,6 +18,9 @@
     </head>
 
     <body>  
+        <h1>
+            Robot Coliseum
+        </h1>
         <script>
             // Game configuration
             const config = {
@@ -26,7 +32,7 @@
                 physics: {
                     default: 'arcade',
                     arcade: {
-                        debug: true,
+                        debug: false,
                         gravity: { y: 320  }
                     }
                 },

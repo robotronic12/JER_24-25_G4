@@ -25,9 +25,19 @@ class menu_final_j1victory extends Phaser.Scene {
         //fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  //ajustamos la imagen al tamaño del fondo que es (800x600)
         //añadimos título
         if(GlobalData.ganador===1){
-            const textoGanador1 = this.add.text(175, 100, 'Ganador: Jugador 1', { fill: '#0f0', fontSize: 42 })
+            const textoGanador1 = this.add.text(175, 100, 'Ganador: Jugador 1', { 
+                fontFamily: 'Poppins', 
+                fontSize: '42px',
+                color: '#ffffff', 
+                fontStyle: 'bold'
+            })
         }else if(GlobalData.ganador===2){
-            const textoGanador2 = this.add.text(175, 100, 'Ganador: Jugador 2', { fill: '#0f0', fontSize: 42 })
+            const textoGanador2 = this.add.text(175, 100, 'Ganador: Jugador 2', { 
+                fontFamily: 'Poppins', 
+                fontSize: '42px',
+                color: '#ffffff', 
+                fontStyle: 'bold' 
+            })
         }
         
         const start_button = this.add.image(400, 300, "start_button")

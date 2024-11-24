@@ -30,7 +30,12 @@ class MenuInicio extends Phaser.Scene {
         fondo.setOrigin(0, 0);
         fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  //ajustamos la imagen al tamaño del fondo que es (800x600)
         //añadimos título
-        const titulo = this.add.text(150, 75, 'Robot Coliseum', { fill: '#0f0', fontSize: 60})
+        const titulo = this.add.text(150, 75, 'Robot Coliseum', {            
+                fontFamily: 'Poppins', 
+                fontSize: '60px',
+                color: '#ffffff', 
+                fontStyle: 'bold'
+        })
         const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#0f0', fontSize: 20 })
         const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#0f0', fontSize: 20 })
 
@@ -43,6 +48,7 @@ class MenuInicio extends Phaser.Scene {
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
+                GlobalData.playing = true;
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuInicio'); //carga la escena de intro
                 this.scene.start('Juego'); //carga la escena de game
