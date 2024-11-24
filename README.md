@@ -119,27 +119,27 @@ lista de escenas del juego).
 Ya que por ahora solo se ha desarroyado un multijugador local, no podemos implementar el imput de los jugadores como se desea, así que se han tocado un poco las teclas que estos van a usar.
 Para el movimiento, se usará para el Jugador1, A y D para el movimiento lateral hacia la izquierda y derecha respectivamente, W para saltar y S para disparar.
 De forma paralela, le Jugador2 Se mieve con las flechas izquierda y derecha para el movimiento lateral, la flecha de arriba para saltar y la de abajo para disparar.
-![alt text](assets/jugador/j1.png)
-![alt text](assets/jugador/j2.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/jugador/j1.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/jugador/j2.png)
 
 #### Balas
 Las balas que disparan los jugadores son la forma en la que uno derrota al otro. Estas están compuestas por un sprite de bala y una estela que sigue su trayectoria, haciendo más facil su visivilidad.
 
 #### Power Ups
 Los Power Ups son mejoras que los jugadores pueden recoger para hacerse más poderosos. Hacen cosas como Aumentar la velocidad del jugador, de la bala, darle más daño, curar, aumentar el salto y disparar multiples balas a la vez
-![alt text](assets/powerups/Danio.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/powerups/Danio.png)
 
 #### MenuInicio 
 Esta es la pantalla de inicio del juego a partir de la cual se pueden accederr al resto de pantallas, sobre todo se gestionan los recursos referentes al menú de inicio
 (botones, sonidos y transiciones al resto de escenas), también a partir de esta escena se puede salir del juego opción que cerrará la ventana del juego. En cuanto 
 al resto de opciones a realizar se podrá ir al menú de opciones que permite configurar las opciones del juego y jugar al juego lo que llevará al jugador a la pantalla 
 In-Game.
-![alt text](assets/ReadMe/image.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image.png)
 
 #### Ajustes
 Dentro de esta pantalla habrá solo 2 opciones: salir al menú de inicio y configurar el volumen del juego mediante los botones con flechas, el volumen se mantendrá para 
 el resto de escenas mediante el uso de una variable global implementada en Globals.js.
-![alt text](assets/ReadMe/image-1.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image-1.png)
 
 #### Juego
 Dentro de la pantalla de juego porán jugar 2 personas al juego mediante los siguientes controles:
@@ -150,18 +150,18 @@ velocidad de este en el momento de disparar permitiendo así al jugador disparar
 cielo y les darán ventajas como: velocidad de movimiento o ataque, rapidez de bala, disparo múltiple etc. Una vez un jugador mate al otro se transicionará a la pantalla
 de victoria mostrando cuál es el jugador ganador.
 También se podrá pausar el juego mediante la tecla escape lo que transicionará a la escena de pausa. 
-![alt text](assets/ReadMe/image-4.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image-4.png)
 
 #### Pantalla Pausa
 En esta pantalla se podrán hacer 3 cosas: gestionar las opciones del juego (ir a pantalla de ajustes con referencia a pausa para poder retornar), reanudar la partida 
 (volvemos a la pantalla de juego) y salir al menú de inicio (retornamos a la pantalla de inicio).
-![alt text](assets/ReadMe/image-2.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image-2.png)
 
 #### Pantalla Victoria
 Una vez uno de los jugadores derrote al otro se transicionará a esta pantalla, dependiendo de que jugador mate a quién se guardará un resultado en la variable global 
 jugadorGanador lo que determinará el texto de felicitaciones (Victoria J1/J2), una vez mostrado el texto la única opción a realizar es el retorno al menú de inicio 
 mediante pulsar el único boton en pantalla.
-![alt text](assets/ReadMe/image-3.png)
+&nbsp;&nbsp;&nbsp;&nbsp;![alt text](assets/ReadMe/image-3.png)
 
 #### Globals
 En este script se han creado una serie de variables comunes/necesarias en varias escenas para así poder mantener/variar valores, variables como volumenJuego o jugadorGanador
