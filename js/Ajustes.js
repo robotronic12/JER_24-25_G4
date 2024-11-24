@@ -26,16 +26,16 @@ class Ajustes extends Phaser.Scene {
             const fondo = this.add.image(0, 0, 'fondo');
             fondo.setOrigin(0, 0);
             fondo.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);  // Ajustamos la imagen al tamaño del fondo
+            // Configuración de la música
+            this.bgMusic = this.sound.add('background');
+            this.bgMusic.setVolume(GlobalData.volumen.toFixed(2)); // Volumen inicial (por ejemplo, 0)
+            this.bgMusic.loop = true;
+            this.bgMusic.play();
         }        
         
         // Añadimos título
         const titulo = this.add.text(250, 100, 'Ajustes', { fill: '#0f0', fontSize: 75 });
 
-        // Configuración de la música
-        this.bgMusic = this.sound.add('background');
-        this.bgMusic.setVolume(GlobalData.volumen.toFixed(2)); // Volumen inicial (por ejemplo, 0)
-        this.bgMusic.loop = true;
-        this.bgMusic.play();
 
         const b_volumen = this.add.image(250, 300, "volumen");
         const base = this.add.image(550, 300, "base");
@@ -66,6 +66,7 @@ class Ajustes extends Phaser.Scene {
             if (GlobalData.volumen < 0) GlobalData.volumen = 0; // Aseguramos que el volumen no sea negativo
             this.bgMusic.setVolume(GlobalData.volumen); // Actualiza el volumen de la música
             volumenTexto.setText(GlobalData.volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
+            GlobalData.volumenCambiado = true;
         });
 
         // Botón para aumentar el volumen
@@ -75,6 +76,7 @@ class Ajustes extends Phaser.Scene {
             if (GlobalData.volumen > 1) GlobalData.volumen = 1; // Aseguramos que el volumen no sobrepase 1
             this.bgMusic.setVolume(GlobalData.volumen); // Actualiza el volumen de la música
             volumenTexto.setText(GlobalData.volumen.toFixed(2)); // Actualiza el texto con el nuevo volumen
+            GlobalData.volumenCambiado = true;
         });
 
         // Detenemos la música cuando la escena se cierre
