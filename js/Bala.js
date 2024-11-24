@@ -37,6 +37,13 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
             this.setVisible(false);
         }
 
+        if(Math.abs(this.body.velocity.x) <= 100){
+            this.trailPoints = [];
+
+            this.setActive(false);
+            this.setVisible(false);
+        }
+
         // Guardar las posiciones de la bala para el trail
         this.trailPoints.push({ x: this.x, y: this.y });
         if (this.trailPoints.length > 20) {

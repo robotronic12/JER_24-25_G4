@@ -76,9 +76,11 @@ class Juego extends Phaser.Scene
     
         if (this.aKey.isDown) {
             this.j1.setVelocityX(-this.velocidadJ1);
+            this.j1.setFlipX(false);
             // this.j1.anims.play('left', true);
         } else if (this.dKey.isDown) {
             this.j1.setVelocityX(this.velocidadJ1);
+            this.j1.setFlipX(true);
             // this.j1.anims.play('right', true);
         } else {
             this.j1.setVelocityX(0);
@@ -117,9 +119,11 @@ class Juego extends Phaser.Scene
     
         if (left.isDown) {
             this.j2.setVelocityX(-this.velocidadJ2);
+            this.j2.setFlipX(false);
             // this.j2.anims.play('left', true);
         } else if (right.isDown) {
             this.j2.setVelocityX(this.velocidadJ2);
+            this.j2.setFlipX(true);
             // this.j2.anims.play('right', true);
         } else {
             this.j2.setVelocityX(0);
@@ -146,6 +150,13 @@ class Juego extends Phaser.Scene
             this.disparoSonido.play();
             bala.fire(x, y, velocidadX/modul, velocidadY/modul, danio); // Configurar la posición y velocidad
         }
+    
+        //Colliders
+        this.physics.add.collider(bala, this.platforms);
+        this.physics.add.collider(bala, this.movingPlatform1);
+        this.physics.add.collider(bala, this.movingPlatform2);
+        this.physics.add.collider(bala, this.j1, this.handleColision1PU, null, this);    
+        this.physics.add.collider(bala, this.j2, this.handleColision2PU, null, this);
     }
 
     trail() {
@@ -456,6 +467,8 @@ class Juego extends Phaser.Scene
         //jugadores
         this.createJ1();
         this.createJ2();
+
+        this.j1.setFlipX(true);
        
         //Colliders entre los jugadores
         this.physics.add.collider(this.j1, this.j2);
