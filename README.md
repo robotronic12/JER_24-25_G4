@@ -15,6 +15,7 @@ Julio Hornos Rodriguez
 Francisco Peña caldito
 
 ## Índice
+#### Índice
 #### Introducción
 #### Concepto de juego
 #### Género del juego
