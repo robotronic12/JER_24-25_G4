@@ -15,24 +15,24 @@ Julio Hornos Rodriguez
 Francisco Peña caldito
 
 ## Índice
-#### Índice
-#### Introducción
-#### Concepto de juego
-#### Género del juego
-#### Propósito y público objetivo
-#### Modelo de negocio y plataformas
-#### Estilo visual
-#### Licencia
-#### Mecánicas
-#### Movimiento y salto
-#### Disparo
-#### Power-Ups
-#### Narrativa
-#### Música
-#### Niveles
-#### Diseño de interfaces
-#### Arte y concept art
-#### Inspiraciones del juego
+ Índice
+ Introducción
+ Concepto de juego
+ Género del juego
+ Propósito y público objetivo
+ Modelo de negocio y plataformas
+ Estilo visual
+ Licencia
+ Mecánicas
+ Movimiento y salto
+ Disparo
+ Power-Ups
+ Narrativa
+ Música
+ Niveles
+ Diseño de interfaces
+ Arte y concept art
+ Inspiraciones del juego
 
 
 
