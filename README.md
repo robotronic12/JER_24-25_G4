@@ -84,7 +84,7 @@ Move or die,
 Rounds,
 Stick fight
 
-# Desarrollo de la parte 2 de la práctica
+# Desarrollo de Multijugador Local
 ## Juego: Robot Coliseum
 
 Esta es la memoria sobre como se ha avanzado y desarrollado nuestro juego Robot Coliseum a lo largo de la parte 2 práctica. Se explicarán entre otras cosas el progreso 
@@ -95,7 +95,7 @@ Antes de implementar nada, se volvió a ver las decisiones tomadas en el GDD par
 y partes del juego eran asumibles para terminar un prototipo funcional y estético. Una vez reflexionadas estas cuestiones se separó las tareas a nivel de arte y a nivel de 
 programación que serían realizadas de manera variada por todos los integrantes del grupo.
 
-### Parte de Arte
+### Arte
 En la parte artística se ha diseñado y desarrollado toda parte estética relacionada con el juego para poder obtener un resultado estético y acorde con la narrativa y contexto
 del juego, se ha separado entre diseños a nivel de UI y Elementos In-Game.
 
@@ -105,16 +105,25 @@ Los elementos a desarrollar en cuanto al In-Game han sido: personajes (diseño y
 
 Todos los elementos han sido realizados usando las siguientes herramientas: Krita y Photopea.
 
-### Parte de Música
+### Música
 En el juego se ha usado efectos de sonido y música en su mayoría sacada de internet con el objetivo de hacer más único e inmersivo el juego y controlada su gestión mediante
 programación en los distintos scripts del proyecto.
 
-### Parte de programación 
+### Programación y Código 
 La parte más amplia del proyecto ha sido la parte implementable, se ha desarrollado mediante el uso de la librería Phaser 3 en conjunto con un html donde se aloja
 nuestro juego y a su vez se declaran las características básicas del juego (tecnología de renderizado usada, tamaño de pantalla, color de fondo, tipo de físicas y 
 lista de escenas del juego )
 
-En total se han implementado 6 escenas (scripts) cada una con sus funcionalidades únicas y su propia gestión de menus.
+#### Jugadores
+Ya que por ahora solo se ha desarroyado un multijugador local, no podemos implementar el imput de los jugadores como se desea, así que se han tocado un poco las teclas que estos van a usar.
+Para el movimiento, se usará para el Jugador1, A y D para el movimiento lateral hacia la izquierda y derecha respectivamente, W para saltar y S para disparar.
+De forma paralela, le Jugador2 Se mieve con las flechas izquierda y derecha para el movimiento lateral, la flecha de arriba para saltar y la de abajo para disparar.
+
+#### Balas
+Las balas que disparan los jugadores son la forma en la que uno derrota al otro. Estas están compuestas por un sprite de bala y una estela que sigue su trayectoria, haciendo más facil su visivilidad.
+
+#### Power Ups
+Los Power Ups son mejoras que los jugadores pueden recoger para hacerse más poderosos. Hacen cosas como Aumentar la velocidad del jugador, de la bala, darle más daño, curar, aumentar el salto y disparar multiples balas a la vez
 
 #### MenuInicio 
 Esta es la pantalla de inicio del juego a partir de la cual se pueden accederr al resto de pantallas, sobre todo se gestionan los recursos referentes al menú de inicio
