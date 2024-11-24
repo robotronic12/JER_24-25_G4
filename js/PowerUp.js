@@ -15,6 +15,8 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
         this.player;
         this.Juego = juego;
 
+        this.setScale(0.5);
+
         scene.add.existing(this); // Añadir al sistema de rendering
         scene.physics.add.existing(this); // Añadir al sistema de físicas
 

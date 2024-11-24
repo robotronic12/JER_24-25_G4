@@ -59,7 +59,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     createJ1(){
         //creacion de j1 en una pos
-        this.j1 = this.physics.add.sprite(100, 450, 'j1');
+        this.j1 = this.physics.add.sprite(147, 450, 'j1');
         this.fuerzaSaltoJ1=-330;
         this.j1.setCollideWorldBounds(true);
 
@@ -338,7 +338,7 @@ class Juego extends Phaser.Scene
     //#endregion
     
     //#region Preload
-    ///////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////¡/////////////////////////////////////////////////
     // PRELOAD
     ///////////////////////////////////////////////////////////////////////////////////////
     preload ()
@@ -350,11 +350,11 @@ class Juego extends Phaser.Scene
         this.load.image('sky', 'assets/entorno/fondo.png');
         this.load.image('ground', 'assets/entorno/suelo.png');
         this.load.image('plataforma', 'assets/entorno/plataforma.png');
-        this.load.image('player', 'assets/jugador/j1.png'); // Ruta de tu imagen del jugador
-        this.load.image('player2', 'assets/jugador/j2.png'); // Ruta de tu imagen del jugador
+        this.load.image('player', 'assets/jugador/PersonajesA.png'); // Ruta de tu imagen del jugador
+        this.load.image('player2', 'assets/jugador/PersonajesR.png'); // Ruta de tu imagen del jugador
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
-        this.load.spritesheet('j1', 'assets/jugador/j1.png', { frameWidth: 48, frameHeight: 48 });
-        this.load.spritesheet('j2', 'assets/jugador/j2.png', { frameWidth: 48, frameHeight: 48 });
+        this.load.spritesheet('j1', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
+        this.load.spritesheet('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
 
@@ -519,6 +519,10 @@ class Juego extends Phaser.Scene
 
     update ()
     {
+        if(GlobalData.volumenCambiado === true){
+            this.bgMusic.setVolume(GlobalData.volumen);
+            GlobalData.volumenCambiado = false;
+        }
 
         if (this.vida2<=0) //para comprobar que la pantalla de victoria funciona
         {
