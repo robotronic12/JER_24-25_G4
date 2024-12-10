@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class User {
     private String username;
     private String password;
-    private long lastSeen;
+    private long lastseen;
 
     @JsonCreator
     public User( @JsonProperty("username")  String user, @JsonProperty("password")  String pass, long lastSeen ){
         username = user;
         password = pass;
-        lastSeen = lastSeen;
+        lastseen = lastSeen;
     }
 
     public String getUsername(){
@@ -20,7 +20,7 @@ public class User {
     }
 
     public long getLastSeen(){
-        return this.lastSeen;
+        return this.lastseen;
     }
 
     public String getPassword(){

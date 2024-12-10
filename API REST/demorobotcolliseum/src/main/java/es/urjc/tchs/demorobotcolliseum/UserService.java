@@ -1,13 +1,13 @@
 package es.urjc.tchs.demorobotcolliseum;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import es.urjc.tchs.demorobotcolliseum
 
-import com.fasterxml.jackson.datatype.jdk8.OptionalSerializer;
 
 @Service
 public class UserService {
@@ -41,12 +41,26 @@ public class UserService {
     //     }
     // }
     
-    public  Optional<User> getUser(String name){
+    public  User getUser(String name) throws IOException{
         var readLock = lock.readLock();
         readLock.lock();
 
         try{
-            userDAO.getAllUsers()
+            List<User> users = userDAO.getAllUsers();
+            users.forEach((user)->{
+                
+            }
+            );
+
+            for (User user : users) {
+                if(user.getUsername()== name){
+                    return user;
+                }
+            }
+            return null;
+
+        }finally{
+            readLock.unlock();
         }
 
     }
@@ -59,7 +73,7 @@ public class UserService {
         // optional/*.map(null) */.orElseGet(null);//El map permite hacer algo
         try{
             boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
-            var optional =  Optional.of(newUser);
+            //var optional =  Optional.of(newUser);
 
             return added;
             
@@ -72,7 +86,7 @@ public class UserService {
     }
 
     public boolean deleteUser (String username){
-        var writeLock = lock.writeLock()
+        var writeLock = lock.writeLock();
         writeLock.lock();
         try{            
             return this.userDAO.deleteUser(username);
@@ -80,9 +94,4 @@ public class UserService {
             writeLock.unlock();
         }
     }
-
-    // public User registUser(User newUser){
-    //     this.userDAO.updateUser(newUser);
-    //     return Optional.of(newUser);
-    // }
 }
