@@ -1,0 +1,8 @@
+Los integrantes del equipo somos:
+Alba Poza Vela
+Alberto Palomino Montañez
+Francisco Peña Caldito
+Julio Hornos Rodríguez
+
+La URL de nuestro repositorio de GitHub es:
+https://github.com/robotronic12/JER_24-25_G4.git
