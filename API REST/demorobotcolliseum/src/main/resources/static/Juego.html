@@ -14,6 +14,8 @@
         <script src="js/Bala.js"></script>
         <script src="js/PowerUp.js"></script>
         <script src="js/menu_final_j1victory.js"></script>
+        <script src="js/MenuLogin.js"></script>
+        <script src="js/UsuariosActivos.js"></script>
         <!--Hay que introducir aqui los scripts-->
     </head>
 
@@ -36,12 +38,15 @@
                         gravity: { y: 320  }
                     }
                 },
-                scene: [MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory] //añadir las escenas
+                dom: {
+                    createContainer: true
+                },
+                scene: [MenuLogin,MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, UsuariosActivos] //añadir las escenas
             };
     
             // Create the game instance
             const game = new Phaser.Game(config);
-            game.scene.start('MenuInicio');   
+            game.scene.start('MenuLogin');   
             
         </script>    
     </body>
