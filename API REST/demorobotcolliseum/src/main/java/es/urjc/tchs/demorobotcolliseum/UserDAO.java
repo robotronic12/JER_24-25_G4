@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,31 +36,37 @@ public class UserDAO {
         this.usersPath = usersPath; //Asignamos la ruta a nuestra clase.
     }
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    // @Autowired
+    // private ObjectMapper objectMapper;
 
-    public List<User> getAllUsers() throws IOException {
+    public List<User> getAllUsers(){
         var objectMapper = new ObjectMapper();
 
         Path path = Paths.get(usersPath);
 
         // Use Stream API to map files directly to User objects and collect them into a
-        // list
-        return Files.list(path) // List all files in the directory //Es un string de datos
-                .filter(Files::isRegularFile) // Ensure that only files are processed
-                .filter(file -> file.toString().endsWith(".json")) // Only consider .json files
-                //Con :file -> file.toString().endsWith(".json") nos quedamos únicamente con los archivos que terminan en .json.
-                .map(file -> {//Map aplica la función a todos los elementos de la lista. No usamos for porque así se puede hacer en paralelo.
-                    try {
-                        // Read the content of the JSON file and convert it to a User object
-                        return objectMapper.readValue(file.toFile(), User.class);//Se puede poner this.class para que fuera generico
-                    } catch (IOException e) {
-                        e.printStackTrace(); // Handle the error appropriately
-                        return null; // Return null in case of an error (could be handled differently)
-                    }
-                })
-                .filter(user -> user != null) // Filter out any null values in case of errors
-                .collect(Collectors.toList()); // Collect the results into a List
+       try{
+         // list
+         return Files.list(path) // List all files in the directory //Es un string de datos
+         .filter(Files::isRegularFile) // Ensure that only files are processed
+         .filter(file -> file.toString().endsWith(".json")) // Only consider .json files
+         //Con :file -> file.toString().endsWith(".json") nos quedamos únicamente con los archivos que terminan en .json.
+         .map(file -> {//Map aplica la función a todos los elementos de la lista. No usamos for porque así se puede hacer en paralelo.
+             try {
+                 // Read the content of the JSON file and convert it to a User object
+                 return objectMapper.readValue(file.toFile(), User.class);//Se puede poner this.class para que fuera generico
+             } catch (IOException e) {
+                 e.printStackTrace(); // Handle the error appropriately
+                 return null; // Return null in case of an error (could be handled differently)
+             }
+         })
+         .filter(user -> user != null) // Filter out any null values in case of errors
+         .collect(Collectors.toList()); // Collect the results into a List
+       }
+       catch(IOException nopath){
+        nopath.printStackTrace();
+        return new ArrayList<>();
+       }
     }
 
     // Method to update the User in the JSON file
@@ -97,5 +105,24 @@ public class UserDAO {
             e.printStackTrace();
             return false; // Error occurred while deleting the file
         }
+    }
+
+    public Optional<User> getUser(String username) {
+        try {
+            // Construct the file path dynamically based on the username
+            String filePath = this.usersPath + "/" + username + ".json";
+            File file = new File(filePath);
+
+            if (file.exists()) {
+                var objectMapper = new ObjectMapper();
+
+                // Write the updated User object back to the file
+                var user = objectMapper.readValue(file, User.class);
+                return Optional.of(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 }

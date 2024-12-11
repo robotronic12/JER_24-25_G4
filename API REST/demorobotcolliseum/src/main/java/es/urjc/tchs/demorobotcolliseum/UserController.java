@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -45,6 +47,7 @@ public class UserController {
         return user.map((x)->ResponseEntity.ok(new UserDTO(x))).orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    //Permite crear un usuario, lo devuelve por que queremos pero no hace falta.
     @PostMapping("/")
     public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
 
@@ -58,13 +61,20 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{username}/password")
+    public String actuliceUser(@PathVariable String username, @RequestBody User user) throws IOException {
+        
+        
+        return entity;
+    }
+
     @DeleteMapping
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) throws IOException{
         //this.userDAO.deleteUser(username);
         boolean delete = this.userService.deleteUser(username);
         if(delete){
             this.userService.deleteUser(username);
-            Optional<User> user = Optional.ofNullable(this.userService.getUser(username));
+            Optional<User> user = this.userService.getUser(username);
 
             if(user.isPresent()){
                 UserDTO userDTO = new UserDTO(user.get());
