@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Usuario;
 
 public class UserDTO {
     

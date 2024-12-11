@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Usuario;
 
 import java.util.List;
 import java.util.Optional;
@@ -96,11 +96,22 @@ public class UserService {
         }
     }
 
-    // public Optional<User> updateLastSeen(){
+    public boolean updateLastSeen (String username){
+        var writeLock = lock.writeLock();
+        writeLock.lock();
+        try{
+            Optional<User> user = this.userDAO.getUser(username);
+            if(user.isPresent()){
+                user.get().setLastSeen();
+                return true;
+            }
+            return false;
+        }finally{
+            writeLock.unlock();
+        }
+    }
 
-    // }
-
-    public List<User> getActiveUsers(long when){
+    public List<User> getActiveUsers(){
 
         var readLock = lock.readLock();
         readLock.lock();

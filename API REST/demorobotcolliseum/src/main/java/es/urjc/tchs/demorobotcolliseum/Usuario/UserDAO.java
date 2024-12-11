@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Usuario;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // //Import en tiempo de ejecucion no existen los tipos genéricos así que puede dar problemas
 
 @Repository
-public class UserDAO {
+public class UserDAO { //Data Array Object
     // Note: This is a very very simplified version of a DAO.
     // DAOs should be interfaces implemented by concrete repository implementations
     // Also, in spring we should use Hibernate or similar which simplifies 
@@ -35,9 +35,6 @@ public class UserDAO {
     public UserDAO(String usersPath) {
         this.usersPath = usersPath; //Asignamos la ruta a nuestra clase.
     }
-
-    // @Autowired
-    // private ObjectMapper objectMapper;
 
     public List<User> getAllUsers(){
         var objectMapper = new ObjectMapper();

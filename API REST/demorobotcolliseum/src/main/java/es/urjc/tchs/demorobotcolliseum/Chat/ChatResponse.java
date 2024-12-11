@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Chat;
 
 import java.util.List;
 

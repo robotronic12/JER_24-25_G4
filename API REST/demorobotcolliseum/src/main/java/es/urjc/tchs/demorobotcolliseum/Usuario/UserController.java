@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Usuario;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 
+
 @RestController
 @RequestMapping("/api/users")//Todas las peticiones a estos dos paths vienen aquí
 
@@ -32,20 +33,17 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String username) throws IOException{
-        // var allUsers = this.userDAO.getAllUsers();
-        // for(var user: allUsers){
-        //     if(user.getUsername().equals(username)){
-        //         return ResponseEntity.ok(user);
-        //     }
-        // }
-        //return ResponseEntity.ok(new User(username, "my password"));
-
-        Optional<User> user = Optional.ofNullable(this.userService.getUser(username));
+        Optional<User> user = (this.userService.getUser(username));
 
         //con el traspaso de user a userDTO hago que el usuario no pueda acceder a info que no quiero que se vea.
-        //return user.map((user)-> ResponseEntity.ok(new UserDTO(user))).orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         return user.map((x)->ResponseEntity.ok(new UserDTO(x))).orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @GetMapping("/activeUsers")
+    public int getNumberOfActiveUsers() {
+        return this.userService.getActiveUsers().size();
+    }
+    
 
     //Permite crear un usuario, lo devuelve por que queremos pero no hace falta.
     @PostMapping("/")
@@ -61,26 +59,29 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{username}/password")
-    public String actuliceUser(@PathVariable String username, @RequestBody User user) throws IOException {
+    @PutMapping("/{username}/user")
+    public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) throws IOException {
+        Optional<User> usu = this.userService.getUser(username);
         
-        
-        return entity;
+        if(usu.isPresent()){
+            usu.get().setUsername(user.getUsername());
+            usu.get().setPassword(user.getPassword());
+            UserDTO userDTO = (new UserDTO(usu.get()));
+            return ResponseEntity.ok(userDTO);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) throws IOException{
-        //this.userDAO.deleteUser(username);
         boolean delete = this.userService.deleteUser(username);
         if(delete){
-            this.userService.deleteUser(username);
             Optional<User> user = this.userService.getUser(username);
-
             if(user.isPresent()){
+                this.userService.deleteUser(username);
                 UserDTO userDTO = new UserDTO(user.get());
                 return ResponseEntity.ok(userDTO);
             }
-
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }

@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum;
+package es.urjc.tchs.demorobotcolliseum.Chat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
-    private final List<MessageOnChat> messages = new ArrayList<>();
-    private final AtomicInteger lastId = new AtomicInteger(0);
-
 
     @GetMapping()
     public ChatResponse getMessages(@RequestParam(defaultValue = "0") int since) {
@@ -44,3 +41,12 @@ public class ChatController {
         }
     }
 }
+
+/*
+ * Funciones que va a tener que implementar el chat:
+ * 
+ * getRecentChats()
+ * 
+ * postMenssage()
+ * 
+ */

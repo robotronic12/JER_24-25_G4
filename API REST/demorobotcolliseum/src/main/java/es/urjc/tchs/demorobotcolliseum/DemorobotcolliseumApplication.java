@@ -4,6 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import es.urjc.tchs.demorobotcolliseum.Usuario.UserDAO;
+import es.urjc.tchs.demorobotcolliseum.Usuario.UserService;
+
 @SpringBootApplication
 public class DemorobotcolliseumApplication {
 
