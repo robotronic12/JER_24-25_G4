@@ -36,7 +36,10 @@
                         gravity: { y: 320  }
                     }
                 },
-                scene: [MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory] //añadir las escenas
+                dom: {
+                    createContainer: true
+                },
+                scene: [MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, MenuLogin, UsuariosActivos] //añadir las escenas
             };
     
             // Create the game instance

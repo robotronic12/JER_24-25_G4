@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DemorobotcolliseumApplication<demorobotcolliseum>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "es.urjc.tchs.demorobotcolliseum.DemorobotcolliseumApplication",
+            "projectName": "demorobotcolliseum",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
