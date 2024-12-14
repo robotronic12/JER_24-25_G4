@@ -8,12 +8,14 @@ class Juego extends Phaser.Scene
     aKey;
     dKey;
     wKey;
+    chatKey;
 
     J1ShootKey;
     J2ShootKey;
 
     movingPlatform;
     platforms;
+
 
     //stars;
     //Jugadores
@@ -52,6 +54,9 @@ class Juego extends Phaser.Scene
     //Sonidos
     recogSonido;
 
+    //Chat
+    isInChat;
+
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -73,22 +78,23 @@ class Juego extends Phaser.Scene
 
     checkPlayer1Movement() {
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
-    
-        if (this.aKey.isDown) {
-            this.j1.setVelocityX(-this.velocidadJ1);
-            this.j1.setFlipX(false);
-            // this.j1.anims.play('left', true);
-        } else if (this.dKey.isDown) {
-            this.j1.setVelocityX(this.velocidadJ1);
-            this.j1.setFlipX(true);
-            // this.j1.anims.play('right', true);
-        } else {
-            this.j1.setVelocityX(0);
-            // this.j1.anims.play('turn');
-        }
-        if (this.wKey.isDown && this.j1.body.touching.down) {
-            this.j1.setVelocityY(this.fuerzaSaltoJ1);
-        }
+        
+            if (this.aKey.isDown) {
+                this.j1.setVelocityX(-this.velocidadJ1);
+                this.j1.setFlipX(false);
+                // this.j1.anims.play('left', true);
+            } else if (this.dKey.isDown) {
+                this.j1.setVelocityX(this.velocidadJ1);
+                this.j1.setFlipX(true);
+                // this.j1.anims.play('right', true);
+            } else {
+                this.j1.setVelocityX(0);
+                // this.j1.anims.play('turn');
+            }
+            if (this.wKey.isDown && this.j1.body.touching.down) {
+                this.j1.setVelocityY(this.fuerzaSaltoJ1);
+            }
+        
     }
 
     //#endregion
@@ -116,7 +122,7 @@ class Juego extends Phaser.Scene
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
         const { left, right, up } = this.cursors;
-    
+        
         if (left.isDown) {
             this.j2.setVelocityX(-this.velocidadJ2);
             this.j2.setFlipX(false);
@@ -260,6 +266,10 @@ class Juego extends Phaser.Scene
 
         this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+
+        
     }
 
     //Final
@@ -583,6 +593,7 @@ class Juego extends Phaser.Scene
 
 
         ////////// Disparo del jugador 1/////////////
+
         if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
             
             if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
@@ -637,7 +648,7 @@ class Juego extends Phaser.Scene
                 // console.log('velocityY: ' + yVel);
             }
         }
-
+        
         //Plataformas
         //pataforma móvil 1 (abajo)
         if (this.movingPlatform1.x >= 500)
@@ -658,9 +669,10 @@ class Juego extends Phaser.Scene
                 this.movingPlatform2.setVelocityY(50);
             }
         
+        
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
-            this.bgMusic.pause(); //que deje de sonar           
+            this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
         }
@@ -674,5 +686,25 @@ class Juego extends Phaser.Scene
          this.vidaLabel2.displayWidth = ((this.vida2)/ 100) * 180;
          var tam2 = this.vidaLabel2.width;
         // this.vidaLabel2.setOrigin(100, 568);
-    }    
+
+        //Abrir chat
+        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+            //Quito los controles
+            
+            this.scene.launch('Chat'); 
+            this.scene.bringToTop('Chat');
+        }
+    }  
+    
+    // Deshabilita las teclas
+    disableControls() {
+        this.isInChat = true;
+
+    }
+
+    // Habilita las teclas
+    enableControls() {
+        this.isInChat = false;
+    }
+    
 }

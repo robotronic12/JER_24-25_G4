@@ -5,7 +5,7 @@ class Chat extends Phaser.Scene {
 
     preload() {
         //Cargo el html
-        this.load.html('registro', 'text/chat.html');
+        this.load.html('chat', 'text/chat.html');
     }
 
     create() {     
@@ -13,24 +13,25 @@ class Chat extends Phaser.Scene {
         
         const text = this.add.text(10, 10, 'Chat', { color: 'white', fontFamily: 'Arial', fontSize: '32px '});
         //Añado el html
-        const element = this.add.dom(800, 600).createFromCache('registro');
+        const element = this.add.dom(800, 600).createFromCache('chat');
         element.addListener('click');
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM
-
-        element.on('click', function (event)
-        {
-            if (event.target.name === 'send-button')
-            {
-                const inputField = this.getChildByName('chat-input');
+        console.log("esquizofrenia")
+        
+        element.on('click', (event) => {
+            if (event.target.name === 'send-button') {
+                const inputField = document.getElementById('chat-input');  // Accede al input por ID
                 const messagesContainer = document.getElementById('messages');
-
-                if (inputField.value.trim() !== '') {
+                console.log("has clickado")
+                if (inputField && inputField.value.trim() !== '') {
                     const userInput = inputField.value.trim();
                     // Agrega el mensaje del usuario al chat
                     addMessageToChat(messagesContainer, 'You', userInput, 'user');
+        
+                    // Limpiar el campo de entrada después de enviar el mensaje
+                    inputField.value = '';  
                 }
-
-                // Función para añadir mensajes al contenedor del chat
+        
                 function addMessageToChat(container, username, message, type) {
                     const messageDiv = document.createElement('div');
                     messageDiv.className = `message ${type}`;
@@ -45,15 +46,20 @@ class Chat extends Phaser.Scene {
                     messageDiv.appendChild(usernameSpan);
                     messageDiv.appendChild(textSpan);
                     container.appendChild(messageDiv);
-                    container.scrollTop = container.scrollHeight;
+                    container.scrollTop = container.scrollHeight;  // Hacer scroll al final
                 }
             }
-            
         });
-
+        
+        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     }
     update() {
-
+        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+            
+            this.scene.stop('Chat'); //carga la escena de intro
+            this.scene.resume('Juego'); //carga la escena de game
+        }
     } 
+
 
 }

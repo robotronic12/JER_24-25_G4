@@ -17,7 +17,7 @@ class MenuLogin extends Phaser.Scene {
         const element = this.add.dom(400, 350).createFromCache('registro');
         element.addListener('click');
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM
-       
+        
         element.on('click', function (event)
         {
             if (event.target.name === 'loginButton')
@@ -76,7 +76,7 @@ class MenuLogin extends Phaser.Scene {
 
     }
     update() {
-
+        
     } 
 
 }
