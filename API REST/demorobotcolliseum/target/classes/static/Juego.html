@@ -16,6 +16,7 @@
         <script src="js/menu_final_j1victory.js"></script>
         <script src="js/MenuLogin.js"></script>
         <script src="js/UsuariosActivos.js"></script>
+        <script src="js/Chat.js"></script>
         <!--Hay que introducir aqui los scripts-->
     </head>
 
@@ -41,12 +42,12 @@
                 dom: {
                     createContainer: true
                 },
-                scene: [MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, MenuLogin, UsuariosActivos] //añadir las escenas
+                scene: [MenuLogin,MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, UsuariosActivos, Chat] //añadir las escenas
             };
     
             // Create the game instance
             const game = new Phaser.Game(config);
-            game.scene.start('MenuInicio');   
+            game.scene.start('Chat');   
             
         </script>    
     </body>
