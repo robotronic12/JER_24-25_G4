@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    @GetMapping()
-    public ChatResponse getMessages(@RequestParam(defaultValue = "0") int since) {
-        List<String> newMessages = new ArrayList<>();
-        int latestId = since;
+    // @GetMapping()
+    // public ChatResponse getMessages(@RequestParam(defaultValue = "0") int since) {
+    //     List<String> newMessages = new ArrayList<>();
+    //     int latestId = since;
 
-        synchronized (messages) {
-            for (MessageOnChat msg : messages) {
-                if (msg.getId() > since) {
-                    newMessages.add(msg.getText());
-                    latestId = msg.getId();
-                }
-            }
-        }
+    //     synchronized (messages) {
+    //         for (MessageOnChat msg : messages) {
+    //             if (msg.getId() > since) {
+    //                 newMessages.add(msg.getText());
+    //                 latestId = msg.getId();
+    //             }
+    //         }
+    //     }
 
-        return new ChatResponse(newMessages, latestId);
-    }
+    //     return new ChatResponse(newMessages, latestId);
+    // }
 
-    @PostMapping
-    public void postMessage(@RequestParam String message) {
-        synchronized (messages) {
-            messages.add(new MessageOnChat(lastId.incrementAndGet(), message));
-            if (messages.size() > 50) {
-                messages.remove(0); // Keep only the last 50 messages
-            }
-        }
-    }
+    // @PostMapping
+    // public void postMessage(@RequestParam String message) {
+    //     synchronized (messages) {
+    //         messages.add(new MessageOnChat(lastId.incrementAndGet(), message));
+    //         if (messages.size() > 50) {
+    //             messages.remove(0); // Keep only the last 50 messages
+    //         }
+    //     }
+    // }
 }
 
 /*

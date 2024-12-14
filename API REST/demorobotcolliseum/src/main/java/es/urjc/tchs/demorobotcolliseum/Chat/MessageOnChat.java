@@ -9,5 +9,5 @@ public record MessageOnChat (int id, String text, String username){
         return text;
     }
 
-    public String getUserName
+    // public String getUserName
 }
