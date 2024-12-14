@@ -42,8 +42,7 @@ class MenuLogin extends Phaser.Scene {
                     })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Error en la autenticación, usuario no encontrado');
-                            console.log('usuario no se ha encontrado o no existe');
+                            throw new Error('Error en la autenticación, usuario no creado');
                         }
                         return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
                     })

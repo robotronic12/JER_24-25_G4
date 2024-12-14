@@ -42,12 +42,12 @@
                 dom: {
                     createContainer: true
                 },
-                scene: [MenuLogin,MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, UsuariosActivos, Chat] //añadir las escenas
+                scene: [MenuLogin,MenuInicio, Juego, Ajustes, MenuPausa, menu_final_j1victory, UsuariosActivos,Chat] //añadir las escenas
             };
     
             // Create the game instance
             const game = new Phaser.Game(config);
-            game.scene.start('Chat');   
+            game.scene.start('MenuLogin');   
             
         </script>    
     </body>

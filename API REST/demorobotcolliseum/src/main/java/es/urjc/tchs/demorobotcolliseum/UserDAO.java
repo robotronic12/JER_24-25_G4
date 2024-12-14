@@ -1,4 +1,4 @@
-package es.urjc.tchs.demorobotcolliseum.Usuario;
+package es.urjc.tchs.demorobotcolliseum;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.urjc.tchs.demorobotcolliseum.Usuario.User;
 
 // List<T> a = new ArrayList<T>();
 // a.add(new String());//Aquí no pasa nada 
