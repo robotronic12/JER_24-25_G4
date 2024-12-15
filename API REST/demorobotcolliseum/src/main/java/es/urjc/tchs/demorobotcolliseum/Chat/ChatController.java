@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +34,13 @@ public class ChatController {
         if (msg.isPresent()) {
             return ResponseEntity.ok(chatService.getMessages(since).get());
         }
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping
-    public void postMessage(@RequestParam String message) {
-        chatService.addMessage(message);
+    @PostMapping("/{username}/chat")
+    public void postMessage(@PathVariable String username, @RequestParam String message) {
+        chatService.addMessage(username, message);
     }
 }
 
