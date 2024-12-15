@@ -8,12 +8,14 @@ class Juego extends Phaser.Scene
     aKey;
     dKey;
     wKey;
+    chatKey;
 
     J1ShootKey;
     J2ShootKey;
 
     movingPlatform;
     platforms;
+
 
     //stars;
     //Jugadores
@@ -72,8 +74,9 @@ class Juego extends Phaser.Scene
     }
 
     checkPlayer1Movement() {
+        if (GlobalData.isInChat) return;
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
-    
+        
         if (this.aKey.isDown) {
             this.j1.setVelocityX(-this.velocidadJ1);
             this.j1.setFlipX(false);
@@ -89,6 +92,36 @@ class Juego extends Phaser.Scene
         if (this.wKey.isDown && this.j1.body.touching.down) {
             this.j1.setVelocityY(this.fuerzaSaltoJ1);
         }
+
+        ////////// Disparo del jugador 1/////////////
+        if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
+            
+            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                for (let i = 0; i < this.numeroBalasJ1; i++) {
+                    var xVel = this.j1.body.velocity.x;
+                    var yVel = this.j1.body.velocity.y;
+                    var balaOfset;
+                    //this.Shoot.play();
+                    if(i===0){
+                        balaOfset= (-30)
+                    }else if(i%2===0){
+                        balaOfset= (-30) + (i -1) * 10 ;
+                    }else{
+                        balaOfset= (-30)- i * 10 ;
+                    }
+                    if(Math.abs(xVel) > 1){
+                        this.dispararBala(this.j1.x, this.j1.y, xVel, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
+                    }
+                    else{
+                        this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
+                    }
+                    this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+                }
+                // console.log('velocityX: ' + xVel);
+                // console.log('velocityY: ' + yVel);
+            }
+        }
+        
     }
 
     //#endregion
@@ -113,10 +146,11 @@ class Juego extends Phaser.Scene
     }
 
     checkPlayer2Movement() {
+        if (GlobalData.isInChat) return;
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
         const { left, right, up } = this.cursors;
-    
+        
         if (left.isDown) {
             this.j2.setVelocityX(-this.velocidadJ2);
             this.j2.setFlipX(false);
@@ -131,6 +165,33 @@ class Juego extends Phaser.Scene
         }
         if (up.isDown && this.j2.body.touching.down) {
             this.j2.setVelocityY(this.fuerzaSaltoJ2);
+        }
+
+        ////////// Disparo del jugador 2/////////////
+        if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
+            
+            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+                for (let i = 0; i < this.numeroBalasJ2; i++) {
+                    var xVel = this.j2.body.velocity.x;
+                    var yVel = this.j2.body.velocity.y;
+                    var balaOfset;
+                    //this.Shoot.play();
+                    if(i%2===0){
+                        balaOfset= (-30) + i * 10 ;
+                    }else{
+                        balaOfset= (-30)- i * 10 ;
+                    }
+                    if(Math.abs(xVel) > 1){
+                        this.dispararBala(this.j2.x, this.j2.y, xVel, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
+                    }
+                    else{
+                        this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
+                    }
+                    this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+                }
+                // console.log('velocityX: ' + xVel);
+                // console.log('velocityY: ' + yVel);
+            }
         }
     }
     
@@ -260,6 +321,10 @@ class Juego extends Phaser.Scene
 
         this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
+        
     }
 
     //Final
@@ -577,67 +642,7 @@ class Juego extends Phaser.Scene
         if (Math.abs(this.j2.body.velocity.x) > 10) {
             this.lastJ2Vel = this.j2.body.velocity.x;
         }
-
         
-        
-
-
-        ////////// Disparo del jugador 1/////////////
-        if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
-            
-            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ1; i++) {
-                    var xVel = this.j1.body.velocity.x;
-                    var yVel = this.j1.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i===0){
-                        balaOfset= (-30)
-                    }else if(i%2===0){
-                        balaOfset= (-30) + (i -1) * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j1.x, this.j1.y, xVel, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
-
-        ////////// Disparo del jugador 2/////////////
-        if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
-            
-            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ2; i++) {
-                    var xVel = this.j2.body.velocity.x;
-                    var yVel = this.j2.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i%2===0){
-                        balaOfset= (-30) + i * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j2.x, this.j2.y, xVel, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
-
         //Plataformas
         //pataforma móvil 1 (abajo)
         if (this.movingPlatform1.x >= 500)
@@ -658,9 +663,10 @@ class Juego extends Phaser.Scene
                 this.movingPlatform2.setVelocityY(50);
             }
         
+        
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
-            this.bgMusic.pause(); //que deje de sonar           
+            this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
         }
@@ -674,5 +680,15 @@ class Juego extends Phaser.Scene
          this.vidaLabel2.displayWidth = ((this.vida2)/ 100) * 180;
          var tam2 = this.vidaLabel2.width;
         // this.vidaLabel2.setOrigin(100, 568);
-    }    
+
+        //Abrir chat
+        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+            //Quito los controles
+            
+            this.scene.launch('Chat'); 
+            this.scene.bringToTop('Chat');
+
+            GlobalData.isInChat = true;
+        }
+    }
 }

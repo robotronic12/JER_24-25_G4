@@ -51,13 +51,13 @@ class Chat extends Phaser.Scene {
             }
         });
         
-        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
             
             this.scene.stop('Chat'); //carga la escena de intro
-            this.scene.resume('Juego'); //carga la escena de game
+            GlobalData.isInChat = false;
         }
     } 
 
