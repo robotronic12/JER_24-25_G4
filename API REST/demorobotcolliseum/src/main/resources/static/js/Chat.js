@@ -25,11 +25,12 @@ class Chat extends Phaser.Scene {
                 console.log("has clickado")
                 if (inputField && inputField.value.trim() !== '') {
                     const userInput = inputField.value.trim();
-                    // Agrega el mensaje del usuario al chat
-                    addMessageToChat(messagesContainer, 'You', userInput, 'user');
-        
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
+                    // Agrega el mensaje del usuario al chat
+                    addMessageToChat(messagesContainer, 'You', userInput, 'user');
+
+
                 }
         
                 function addMessageToChat(container, username, message, type) {
@@ -74,7 +75,7 @@ class Chat extends Phaser.Scene {
             }
         });
         
-        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
