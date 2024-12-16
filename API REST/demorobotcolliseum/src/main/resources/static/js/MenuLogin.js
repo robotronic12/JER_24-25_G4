@@ -6,6 +6,7 @@ class MenuLogin extends Phaser.Scene {
     preload() {
         //Cargo el html
         this.load.html('registro', 'text/login.html');
+       
     }
 
     create() {   
@@ -23,14 +24,28 @@ class MenuLogin extends Phaser.Scene {
         
         element.on('click', function (event)
         {
-            if (event.target.name === 'registerButton'){
+            if (event.target.name === 'registerButton'&&registro_pantalla===false){
                 registro_pantalla=true;
-                //text.setText('Registrate poniendo usuario y contraseña');
+                
             }
-            if(registro_pantalla=true){
+            if(registro_pantalla===true){
                 text.setText('Registrate poniendo usuario y contraseña');
+                document.getElementById('username').innerText = 'Registrarse';
+                document.getElementById('password').innerText = '¿Ya tiene usuario? Logueate';
+                if (event.target.name === 'registerButton'&&registro_pantalla===true){
+                    //cambiamos al menu loggin
+                    registro_pantalla=false;    //reseteamos estado menus
+                    text.setText('Logueate para jugar');  
+                    document.getElementById('username').innerText = 'Login';
+                    document.getElementById('password').innerText = '¿No tienes usuario? Registrate';
+                    
+                }
+                else if (event.target.name === 'loginButton'&&registro_pantalla===true){
+                    //petición de registro de nuevo usuario
+                    console.log('registro de nuevo usuario');
+                }
             }
-            if (event.target.name === 'loginButton')
+            if (event.target.name === 'loginButton'&&registro_pantalla==false)
             {
                 const inputUsername = this.getChildByName('username');
                 const inputPassword = this.getChildByName('password');
