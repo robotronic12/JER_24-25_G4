@@ -24,6 +24,7 @@
 
         button {
             padding: 8px 16px;
+            margin-bottom: 10px;
             font-size: 16px;
             background-color: #007bff;
             color: white;
@@ -38,13 +39,15 @@
 </head>
 <body>
     <form>
-        <label for="username">Username:</label>
+        <label for="username">Usuario:</label>
         <input type="text" id="username" name="username" placeholder="Introduzca nombre">
         
-        <label for="password">Password:</label>
+        <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" placeholder="Introduzca contraseña">
         
-        <button type="button" name="loginButton">Login</button>
+        <button type="button" name="loginButton" id="submit">Login</button>
+        <div></div>
+        <button type="button" name="registerButton" id="changeScreen">¿No tienes usuario? Registrate</button>
     </form>
 </body>
 </html>
