@@ -272,6 +272,7 @@ class Juego extends Phaser.Scene
             console.log(GlobalData.isInChat)
             //Quito los controles
             this.recogSonido.play();
+            //this.input.keyboard.eneable=false;
             this.scene.launch('Chat'); 
             this.scene.bringToTop('Chat');
 
