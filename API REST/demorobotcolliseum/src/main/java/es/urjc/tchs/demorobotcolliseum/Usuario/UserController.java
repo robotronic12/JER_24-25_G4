@@ -40,9 +40,13 @@ public class UserController {
     }
 
     @GetMapping("/activeUsers")
-    public int getNumberOfActiveUsers() {
+    public ResponseEntity<IntClass> getNumberOfActiveUsers() {
         Long time = (long) 10000;
-        return this.userService.getActiveUsers(time).size();
+        int users = this.userService.getActiveUsers(time).size();
+        return ResponseEntity.ok(new IntClass(users));
+    }
+
+    private record IntClass(int conectedusers) {
     }
     
 
@@ -61,20 +65,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public boolean loginUser(@RequestBody User user) {
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
 
         boolean exist = this.userService.login(user.getUsername(),user.getPassword());
-        return exist;
+        if(exist) return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{username}/user")
-    public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) throws IOException {
-        Optional<User> usu = this.userService.getUser(username);
-        this.userService.updateLastSeen(username);
-        
-        if(usu.isPresent()){
-            usu.get().setUsername(user.getUsername());
-            usu.get().setPassword(user.getPassword());
+    public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) {
+        Optional<User> usu = this.userService.modifyUser(username, user);
+        if(usu.isPresent()){            
             UserDTO userDTO = (new UserDTO(usu.get()));
             return ResponseEntity.ok(userDTO);
         }
@@ -82,7 +83,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) throws IOException{
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) {
         boolean delete = this.userService.deleteUser(username);
         if(delete){
             Optional<User> user = this.userService.getUser(username);

@@ -26,6 +26,8 @@ public class UserService {
     public UserService(UserDAO userdAO){
         this.userDAO = userdAO;
         this.lock = new ReentrantReadWriteLock();
+        this.usersAct = new ConcurrentHashMap<>();
+        this.usersLog = new ArrayList<>();
     }
     
     public boolean login(String username, String password){
@@ -62,23 +64,34 @@ public class UserService {
         }
     }
 
-
+    public Optional<User> modifyUser(String username, User user){
+        Optional<User> usu = this.getUser(username);
+        this.updateLastSeen(username);
+        
+        if(usu.isPresent()){
+            usu.get().copiaProfunda(user);
+            return Optional.of(usu.get());
+        }
+        return Optional.empty();
+    }
 
 
     public boolean registerUser(User newUser){
         var writeLock = lock.writeLock();//Al ser de escritura solo bloquea si está escribiendo.
         writeLock.lock();//Hay que desbloquearlo después. Lo bueno es que en java cuando no se usa lo descarta.
-
+        Optional<User> us = getUser(newUser.getUsername());
         // optional/*.map(null) */.orElseGet(null);//El map permite hacer algo
         try{
-            boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
-            if(added) {
-                this.usersAct.put(newUser.getUsername(), System.currentTimeMillis());
-                this.usersLog.add(newUser.getUsername());
+            if(us.isPresent()){
+                boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
+                if(added) {
+                    this.usersAct.put(newUser.getUsername(), System.currentTimeMillis());
+                    this.usersLog.add(newUser.getUsername());
+                    return added;
+                }
             }
             //Si lo hacemos con una estructura de datos podemos comproar si esta con esta y luego hay que actualizarla si se crea.
-
-            return added;
+            return false;
         }finally{
             writeLock.unlock();//Cuando termina lo desbloquea
         }
