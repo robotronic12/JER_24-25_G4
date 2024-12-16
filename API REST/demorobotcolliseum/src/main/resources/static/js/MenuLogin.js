@@ -6,73 +6,103 @@ class MenuLogin extends Phaser.Scene {
     preload() {
         //Cargo el html
         this.load.html('registro', 'text/login.html');
-       
+
     }
 
-    create() {   
+    create() {
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM  
         const scene = this;
         //creamos el estado del menú para cambiar entre menu_login y menu_registro
-        var registro_pantalla=false; //de normal a false ya que empezamos en el menu de login
+        var registro_pantalla = false; //de normal a false ya que empezamos en el menu de login
         //pausamos el menu inicio hasta que no ha terminado de logearse
         this.scene.pause('MenuInicio');
-        const text = this.add.text(10, 10, 'Logueate para jugar', { color: 'white', fontFamily: 'Arial', fontSize: '32px '});
+        //texto dentro del formulario
+        const textFormulario = this.add.text(10, 10, 'Logueate para jugar', { color: 'white', fontFamily: 'Arial', fontSize: '32px ' });
         //Añado el html
-        const element = this.add.dom(400, 350).createFromCache('registro');
-        element.addListener('click');
-        
-        
-        element.on('click', function (event)
-        {
-            if (event.target.name === 'registerButton'&&registro_pantalla===false){
-                registro_pantalla=true;
-                
+        const elementDOM = this.add.dom(400, 350).createFromCache('registro');
+        //element.addListener('click');
+
+        var submitButton = elementDOM.getChildByID('submit');
+        var ChangeButton = elementDOM.getChildByID('changeScreen');
+        const actualizarFormulario = function () {
+            if (registro_pantalla) {
+                textFormulario.setText('Registrate poniendo usuario y contraseña');
+                elementDOM.getChildByID('submit').innerText = 'Registrarse';
+                elementDOM.getChildByID('changeScreen').innerText = '¿Ya tiene usuario? Logueate';
             }
-            if(registro_pantalla===true){
-                text.setText('Registrate poniendo usuario y contraseña');
-                document.getElementById('username').innerText = 'Registrarse';
-                document.getElementById('password').innerText = '¿Ya tiene usuario? Logueate';
-                if (event.target.name === 'registerButton'&&registro_pantalla===true){
-                    //cambiamos al menu loggin
-                    registro_pantalla=false;    //reseteamos estado menus
-                    text.setText('Logueate para jugar');  
-                    document.getElementById('username').innerText = 'Login';
-                    document.getElementById('password').innerText = '¿No tienes usuario? Registrate';
-                    
-                }
-                else if (event.target.name === 'loginButton'&&registro_pantalla===true){
-                    //petición de registro de nuevo usuario
-                    console.log('registro de nuevo usuario');
-                }
+            else {
+                textFormulario.setText('Logueate para jugar');
+                elementDOM.getChildByID('submit').innerText = 'Login';
+                elementDOM.getChildByID('changeScreen').innerText = '¿No tienes usuario? Registrate';
             }
-            if (event.target.name === 'loginButton'&&registro_pantalla==false)
-            {
-                const inputUsername = this.getChildByName('username');
-                const inputPassword = this.getChildByName('password');
-    
-                if (inputUsername.value !== '' && inputPassword.value !== '')
-                {
-                    this.removeListener('click');
-                    element.setVisible(false);
-                    const user = {
-                        username: "testuser", // Asigna el valor deseado.
-                        password: "mypassword", // Asigna el valor deseado.
-                       
-                    };
-                    
-                    //Aqui irian las peticiones ajax 
-                    //INTENTO DE PETICIONES
-                    
-                    fetch('/api/users/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(user)
-                    })
+        }
+        ChangeButton.addEventListener('click', () => {
+            registro_pantalla = !registro_pantalla;
+            actualizarFormulario();
+        });
+        submitButton.addEventListener('click', () => {
+            //para los datos del usuario
+
+            const inputUsername = elementDOM.getChildByID('username');
+            const inputPassword = elementDOM.getChildByID('password');
+            if (inputUsername.value === '' || inputPassword.value === '') {
+                //parpadea el texto
+                elementDOM.scene.tweens.add({ targets: textFormulario, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
+                return;
+            }
+            if (registro_pantalla) {
+                //protocolo de registro de usuario
+
+
+                //no matamos la página 
+                const user = {
+                    username: "testuser", // Asigna el valor deseado.
+                    password: "mypassword", // Asigna el valor deseado.
+
+                };
+
+                fetch('/api/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(user)
+                })
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error en la autenticación, error al registrar usuario');
+                        }
+                        registro_pantalla = false;    //vamos a la pantalla de login
+                        return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
+                    })
+                    .then(data => {
+                        console.log('Respuesta del servidor:', data);
+                        console.log('Usuario registrado con éxito');
+                        // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Mostrar mensaje de error al usuario
+                    });
+            }
+
+            else {
+                const user = {
+                    username: "testuser", // Asigna el valor deseado.
+                    password: "mypassword", // Asigna el valor deseado.
+
+                };
+
+                fetch('/api/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(user)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error petición de login no disponible');
                         }
                         return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
                     })
@@ -85,28 +115,72 @@ class MenuLogin extends Phaser.Scene {
                         console.error('Error:', error);
                         // Mostrar mensaje de error al usuario
                     });
-                    
-                    
-                    text.setText(`Bienvenido ${inputUsername.value}`);
-                    
-                    
-                    //this.time.delayedCall(3000, () => {
-                        scene.scene.stop('MenuLogin'); 
-                        scene.scene.start('MenuInicio'); 
-                    //}); 
-                }
-                else
-                {
-                    //  parpadeo para cuando no hay texto en el login
-                    this.scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
-                }
+                //comparamos si existe el usuario
+                //if (usuarioLoginGood) {//si se loguea correctamente matamos la página ya que iniciamos sesión
+                    elementDOM.removeListener('click');
+                    elementDOM.setVisible(false);
+                //}
+                /*else {
+                    //usuario no logueado correctamente
+                    console.log();
+                }*/
+
+
             }
-            
         });
+
+        /* element.on('click', function (event) {
+             if (event.target.name === 'registerButton' && registro_pantalla === false) {
+                 registro_pantalla = true;
+                 text.setText('Registrate poniendo usuario y contraseña');
+                 document.getElementById('username').innerText = 'Registrarse';
+                 document.getElementById('password').innerText = '¿Ya tiene usuario? Logueate';
+             }
+             else if (registro_pantalla === true) {
+ 
+                 if (event.target.name === 'registerButton' && registro_pantalla === true) {
+                     //cambiamos al menu loggin
+                     registro_pantalla = false;    //reseteamos estado menus
+                     text.setText('Logueate para jugar');
+                     document.getElementById('username').innerText = 'Login';
+                     document.getElementById('password').innerText = '¿No tienes usuario? Registrate';
+ 
+                 }
+                 else if (event.target.name === 'loginButton' && registro_pantalla === true) {
+                     //petición de registro de nuevo usuario
+                     console.log('registro de nuevo usuario');
+                 }
+             }
+             if (event.target.name === 'loginButton' && registro_pantalla == false) {
+ 
+ 
+ 
+ 
+                 //Aqui irian las peticiones ajax 
+                 //INTENTO DE PETICIONES
+ 
+ 
+ 
+ 
+                 text.setText(`Bienvenido ${inputUsername.value}`);
+ 
+ 
+                 //this.time.delayedCall(3000, () => {
+                 scene.scene.stop('MenuLogin');
+                 scene.scene.start('MenuInicio');
+                 //}); 
+             }
+             else {
+                 //  parpadeo para cuando no hay texto en el login
+                 
+             }
+         }
+ 
+ });*/
 
     }
     update() {
-        
-    } 
+
+    }
 
 }
