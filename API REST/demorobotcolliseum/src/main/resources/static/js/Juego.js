@@ -269,15 +269,17 @@ class Juego extends Phaser.Scene
         if(GlobalData.isInChat) return;
         
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+            console.log(GlobalData.isInChat)
             //Quito los controles
             this.recogSonido.play();
             this.scene.launch('Chat'); 
             this.scene.bringToTop('Chat');
 
             GlobalData.isInChat = true;
+            console.log(GlobalData.isInChat)
         }
     }
-
+    
     //#endregion
 
     //#region Otros
@@ -622,6 +624,7 @@ class Juego extends Phaser.Scene
 
     update ()
     {
+        
         if(GlobalData.volumenCambiado === true){
             this.bgMusic.setVolume(GlobalData.volumen);
             GlobalData.volumenCambiado = false;
@@ -704,7 +707,7 @@ class Juego extends Phaser.Scene
 
         //Abrir chat
 
-        checkChat();
+        this.checkChat();
         
     }
 }
