@@ -2,44 +2,46 @@ package es.urjc.tchs.demorobotcolliseum.Chat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import es.urjc.tchs.demorobotcolliseum.Usuario.UserService;
 
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    // @GetMapping()
-    // public ChatResponse getMessages(@RequestParam(defaultValue = "0") int since) {
-    //     List<String> newMessages = new ArrayList<>();
-    //     int latestId = since;
+    @Autowired //Dice que lo siguiente puede ser inyectado
+    private ChatService chatService;
+    public ChatController(ChatService c){
+        this.chatService = c;
+    }
 
-    //     synchronized (messages) {
-    //         for (MessageOnChat msg : messages) {
-    //             if (msg.getId() > since) {
-    //                 newMessages.add(msg.getText());
-    //                 latestId = msg.getId();
-    //             }
-    //         }
-    //     }
+    @GetMapping()
+    public ResponseEntity<ChatResponse> getMessages(@RequestParam(defaultValue = "0") int since) {
+        Optional<ChatResponse> msg = chatService.getMessages(since);
+        if (msg.isPresent()) {
+            return ResponseEntity.ok(chatService.getMessages(since).get());
+        }
 
-    //     return new ChatResponse(newMessages, latestId);
-    // }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
-    // @PostMapping
-    // public void postMessage(@RequestParam String message) {
-    //     synchronized (messages) {
-    //         messages.add(new MessageOnChat(lastId.incrementAndGet(), message));
-    //         if (messages.size() > 50) {
-    //             messages.remove(0); // Keep only the last 50 messages
-    //         }
-    //     }
-    // }
+    @PostMapping("/{username}/chat")
+    public void postMessage(@PathVariable String username, @RequestParam String message) {
+        chatService.addMessage(username, message);
+    }
 }
 
 /*

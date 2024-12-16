@@ -1,6 +1,18 @@
 package es.urjc.tchs.demorobotcolliseum.Chat;
 
-public record MessageOnChat (int id, String text, String username){
+import io.micrometer.common.util.internal.logging.WarnThenDebugLogger;
+
+public class MessageOnChat{
+    int id;
+    String user;
+    String text;
+
+    MessageOnChat(int id, String username, String message){
+        this.id = id;
+        this.user = username;
+        this.text = message;
+    }
+
     public int getId() {
         return id;
     }

@@ -684,7 +684,7 @@ class Juego extends Phaser.Scene
         //Abrir chat
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
             //Quito los controles
-            
+            this.recogSonido.play();
             this.scene.launch('Chat'); 
             this.scene.bringToTop('Chat');
 
