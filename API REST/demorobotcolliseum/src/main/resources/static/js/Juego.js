@@ -271,6 +271,7 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
             //Quito los controles
             this.recogSonido.play();
+            //this.input.keyboard.eneable=false;
             this.scene.launch('Chat'); 
             this.scene.bringToTop('Chat');
 
@@ -305,6 +306,17 @@ class Juego extends Phaser.Scene
            frameRate: 10,
            repeat: -1
         });
+    }
+
+    checkPause(){
+        if(GlobalData.isInChat) return;
+        
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+            this.scene.pause('Juego');
+            this.bgMusic.pause();         
+            this.scene.launch('MenuPausa'); 
+            this.scene.bringToTop('MenuPausa');
+        }
     }
 
     curarj1(cura){
@@ -676,21 +688,15 @@ class Juego extends Phaser.Scene
         }
         //plataforma móvil 2 (arriba)
         if (this.movingPlatform2.y >= 250)
-            {
-                this.movingPlatform2.setVelocityY(-50);
-            }
-            else if (this.movingPlatform2.y <= 125)
-            {
-                this.movingPlatform2.setVelocityY(50);
-            }
-        
-        
-        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
-            this.scene.pause('Juego');
-            this.bgMusic.pause();         
-            this.scene.launch('MenuPausa'); 
-            this.scene.bringToTop('MenuPausa');
+        {
+            this.movingPlatform2.setVelocityY(-50);
         }
+        else if (this.movingPlatform2.y <= 125)
+        {
+            this.movingPlatform2.setVelocityY(50);
+        }
+        
+        this.checkPause();
 
         //Cambiar el tamaño y la posición de la barra de vida
 
@@ -704,7 +710,7 @@ class Juego extends Phaser.Scene
 
         //Abrir chat
 
-        checkChat();
+        this.checkChat();
         
     }
 }

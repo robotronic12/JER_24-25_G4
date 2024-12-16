@@ -108,7 +108,7 @@ class MenuLogin extends Phaser.Scene {
                     })
                     .then(data => {
                         console.log('Respuesta del servidor:', data);
-                        console.log('Usuario logeado con éxito');
+                        console.log('Usuario creado con éxito');
                         // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
                     })
                     .catch(error => {
