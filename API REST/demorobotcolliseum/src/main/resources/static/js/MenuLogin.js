@@ -32,13 +32,12 @@ class MenuLogin extends Phaser.Scene {
                     const user = {
                         username: "testuser", // Asigna el valor deseado.
                         password: "mypassword", // Asigna el valor deseado.
-                        lastseen: "00:00:00" // Opcional: genera el tiempo actual en formato HH:mm:ss.
                     };
                     
                     //Aqui irian las peticiones ajax 
                     //INTENTO DE PETICIONES
                     
-                    fetch('http://localhost:8080/api/users/', {
+                    fetch('/api/users/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -53,7 +52,7 @@ class MenuLogin extends Phaser.Scene {
                     })
                     .then(data => {
                         console.log('Respuesta del servidor:', data);
-                        console.log('Usuario logeado con éxito');
+                        console.log('Usuario creado con éxito');
                         // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
                     })
                     .catch(error => {
