@@ -20,6 +20,7 @@ public class UserService {
 
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
     private ConcurrentHashMap<String, Long> usersAct; //Esto complica las cosas porque me crea una nueva extrutura.
+    private ArrayList<String> usersLog;
 
 
     public UserService(UserDAO userdAO){
@@ -36,7 +37,8 @@ public class UserService {
                 return false;
             }
             if(user.isPresent()){
-                this.usersAct.put(username, System.currentTimeMillis());
+                this.usersLog.add(username);
+                this.updateLastSeen(username);
                 return user.get().getPassword().equals(password); 
             }
             return false;
@@ -53,15 +55,8 @@ public class UserService {
         try{
             //List<User> users = userDAO.getAllUsers();
             //Si tenemos extructuras de datos solo hay que pillar el que sea de la misma.
-
-            // for (User user : users) {
-            //     if(user.getUsername()== name){
-            //         return Optional.of(user);
-            //     }
-            // }
             Optional<User> user= userDAO.getUser(name);
             return user;
-            //(users.values().stream().filter(usu -> usu.getUsername().equals(name)).findAny());
         }finally{
             readLock.unlock();
         }
@@ -77,14 +72,13 @@ public class UserService {
         // optional/*.map(null) */.orElseGet(null);//El map permite hacer algo
         try{
             boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
+            if(added) {
+                this.usersAct.put(newUser.getUsername(), System.currentTimeMillis());
+                this.usersLog.add(newUser.getUsername());
+            }
             //Si lo hacemos con una estructura de datos podemos comproar si esta con esta y luego hay que actualizarla si se crea.
-            //var optional =  Optional.of(newUser);
 
             return added;
-            
-            // return optional;
-            // return Optional.empty();
-
         }finally{
             writeLock.unlock();//Cuando termina lo desbloquea
         }
@@ -93,8 +87,16 @@ public class UserService {
     public boolean deleteUser (String username){
         var writeLock = lock.writeLock();
         writeLock.lock();
-        try{            
-            return this.userDAO.deleteUser(username);
+        try{     
+            if(this.usersLog.contains(username)&&this.usersLog.contains(username)){
+                boolean delete =this.userDAO.deleteUser(username);
+                if(delete){
+                    this.usersAct.remove(username);
+                    this.usersLog.remove(username);
+                }
+                return delete;
+            }       
+            return false;
         }finally{
             writeLock.unlock();
         }
@@ -125,6 +127,10 @@ public class UserService {
             
             if (entry.getValue() > (currentTimeMillis - threshold)) {
                 connected.add(entry.getKey());
+            }
+            
+            if (entry.getValue() < (currentTimeMillis - threshold)) {
+                this.usersAct.remove(entry.getKey());
             }
         }
         

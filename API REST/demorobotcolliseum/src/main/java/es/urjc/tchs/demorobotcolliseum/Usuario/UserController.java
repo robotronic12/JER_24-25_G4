@@ -70,6 +70,7 @@ public class UserController {
     @PutMapping("/{username}/user")
     public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) throws IOException {
         Optional<User> usu = this.userService.getUser(username);
+        this.userService.updateLastSeen(username);
         
         if(usu.isPresent()){
             usu.get().setUsername(user.getUsername());

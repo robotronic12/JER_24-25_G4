@@ -23,12 +23,6 @@ public class DemorobotcolliseumApplication {
 		SpringApplication.run(DemorobotcolliseumApplication.class, args);
 	}
 
-	// @Bean
-	// //Esto no lo vamos a llamar nosostros pero lo hace Spring
-	// public UserDAO getUserDAO(String usersPath){
-	// 	return new UserDAO(usersPath);
-	// }
-
 	@Bean
 	public UserService getUserService(UserDAO userDAO){ //Tiene dependencias entonces no lo puede hacer hasta que crea el userDAO
 		return new UserService(userDAO);
@@ -38,4 +32,10 @@ public class DemorobotcolliseumApplication {
 		return new ChatService(chatDAO);
 	}
 	//En este caso estamos trabajado 
+
+	// @Bean
+	// //Esto no lo vamos a llamar nosostros pero lo hace Spring
+	// public UserDAO getUserDAO(String usersPath){
+	// 	return new UserDAO(usersPath);
+	// }
 }

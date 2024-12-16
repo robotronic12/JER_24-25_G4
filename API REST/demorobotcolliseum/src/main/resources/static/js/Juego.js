@@ -704,7 +704,7 @@ class Juego extends Phaser.Scene
 
         //Abrir chat
 
-        checkChat();
+        this.checkChat();
         
     }
 }
