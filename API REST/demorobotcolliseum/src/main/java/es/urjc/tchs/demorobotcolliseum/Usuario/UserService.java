@@ -25,6 +25,7 @@ public class UserService {
     public UserService(UserDAO userdAO){
         this.userDAO = userdAO;
         this.lock = new ReentrantReadWriteLock();
+        usersAct = new ConcurrentHashMap<>(); 
     }
     
     public boolean login(String username, String password){

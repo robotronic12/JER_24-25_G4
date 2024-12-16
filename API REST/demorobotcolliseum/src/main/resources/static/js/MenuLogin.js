@@ -43,8 +43,8 @@ class MenuLogin extends Phaser.Scene {
         submitButton.addEventListener('click', () => {
             //para los datos del usuario
 
-            const inputUsername = elementDOM.getChildByID('username');
-            const inputPassword = elementDOM.getChildByID('password');
+            const inputUsername = elementDOM.getChildByID('username').value;
+            const inputPassword = elementDOM.getChildByID('password').value;
             if (inputUsername.value === '' || inputPassword.value === '') {
                 //parpadea el texto
                 elementDOM.scene.tweens.add({ targets: textFormulario, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
@@ -56,8 +56,8 @@ class MenuLogin extends Phaser.Scene {
 
                 //no matamos la página 
                 const user = {
-                    username: "testuser", // Asigna el valor deseado.
-                    password: "mypassword", // Asigna el valor deseado.
+                    username: inputUsername, // Asigna el valor deseado.
+                    password: inputPassword, // Asigna el valor deseado.
 
                 };
 
@@ -73,6 +73,7 @@ class MenuLogin extends Phaser.Scene {
                             throw new Error('Error en la autenticación, error al registrar usuario');
                         }
                         registro_pantalla = false;    //vamos a la pantalla de login
+                        actualizarFormulario();
                         return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
                     })
                     .then(data => {
@@ -84,16 +85,17 @@ class MenuLogin extends Phaser.Scene {
                         console.error('Error:', error);
                         // Mostrar mensaje de error al usuario
                     });
+                    
             }
 
-            else {
+            else {  //login de usuario
                 const user = {
-                    username: "testuser", // Asigna el valor deseado.
-                    password: "mypassword", // Asigna el valor deseado.
+                    username: inputUsername, // Asigna el valor deseado.
+                    password: inputPassword, // Asigna el valor deseado.
 
                 };
 
-                fetch('/api/users/', {
+                fetch('/api/users/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -104,21 +106,19 @@ class MenuLogin extends Phaser.Scene {
                         if (!response.ok) {
                             throw new Error('Error petición de login no disponible');
                         }
-                        return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
+                        elementDOM.removeListener('click');
+                        elementDOM.setVisible(false);
+                        this.scene.stop('MenuLogin');   
+                        this.scene.start('MenuInicio');
                     })
-                    .then(data => {
-                        console.log('Respuesta del servidor:', data);
-                        console.log('Usuario creado con éxito');
-                        // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
-                    })
+                    
                     .catch(error => {
                         console.error('Error:', error);
                         // Mostrar mensaje de error al usuario
                     });
                 //comparamos si existe el usuario
                 //if (usuarioLoginGood) {//si se loguea correctamente matamos la página ya que iniciamos sesión
-                    elementDOM.removeListener('click');
-                    elementDOM.setVisible(false);
+                   
                 //}
                 /*else {
                     //usuario no logueado correctamente
