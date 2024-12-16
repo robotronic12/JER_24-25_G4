@@ -259,6 +259,27 @@ class Juego extends Phaser.Scene
 
     //#endregion
 
+    //#region Chat
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // CHAT
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    checkChat(){
+        if(GlobalData.isInChat) return;
+        
+        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+            //Quito los controles
+            this.recogSonido.play();
+            this.scene.launch('Chat'); 
+            this.scene.bringToTop('Chat');
+
+            GlobalData.isInChat = true;
+        }
+    }
+
+    //#endregion
+
     //#region Otros
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -682,13 +703,8 @@ class Juego extends Phaser.Scene
         // this.vidaLabel2.setOrigin(100, 568);
 
         //Abrir chat
-        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
-            //Quito los controles
-            this.recogSonido.play();
-            this.scene.launch('Chat'); 
-            this.scene.bringToTop('Chat');
 
-            GlobalData.isInChat = true;
-        }
+        checkChat();
+        
     }
 }
