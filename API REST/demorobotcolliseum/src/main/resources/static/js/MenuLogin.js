@@ -6,33 +6,35 @@ class MenuLogin extends Phaser.Scene {
     preload() {
         //Cargo el html
         this.load.html('registro', 'text/login.html');
+        this.load.image('fondo', "assets/entorno/fondo.png");
 
     }
 
     create() {
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM  
         const scene = this;
+        
+        const fondo = this.add.image(400, 400, 'fondo'); // Creamos el fondo
         //creamos el estado del menú para cambiar entre menu_login y menu_registro
         var registro_pantalla = false; //de normal a false ya que empezamos en el menu de login
         //pausamos el menu inicio hasta que no ha terminado de logearse
         this.scene.pause('MenuInicio');
         //texto dentro del formulario
-        const textFormulario = this.add.text(10, 10, 'Logueate para jugar', { color: 'white', fontFamily: 'Arial', fontSize: '32px ' });
+        const textFormulario = this.add.text(10, 15, 'Logueate para jugar', { color: 'white', fontFamily: 'Poppins', fontSize: '32px ',stroke: 'black',strokeThickness: 3  });
         //Añado el html
         const elementDOM = this.add.dom(400, 350).createFromCache('registro');
         //element.addListener('click');
-
         var submitButton = elementDOM.getChildByID('submit');
         var ChangeButton = elementDOM.getChildByID('changeScreen');
         const actualizarFormulario = function () {
             if (registro_pantalla) {
                 textFormulario.setText('Registrate poniendo usuario y contraseña');
-                elementDOM.getChildByID('submit').innerText = 'Registrarse';
+                elementDOM.getChildByID('submit').innerText = 'REGISTRATE';
                 elementDOM.getChildByID('changeScreen').innerText = '¿Ya tiene usuario? Logueate';
             }
             else {
                 textFormulario.setText('Logueate para jugar');
-                elementDOM.getChildByID('submit').innerText = 'Login';
+                elementDOM.getChildByID('submit').innerText = 'INICIAR SESION';
                 elementDOM.getChildByID('changeScreen').innerText = '¿No tienes usuario? Registrate';
             }
         }
@@ -109,7 +111,7 @@ class MenuLogin extends Phaser.Scene {
                         elementDOM.removeListener('click');
                         elementDOM.setVisible(false);
                         this.scene.stop('MenuLogin');   
-                        this.scene.start('MenuInicio');
+                        this.scene.start('Juego');
                     })
                     
                     .catch(error => {
