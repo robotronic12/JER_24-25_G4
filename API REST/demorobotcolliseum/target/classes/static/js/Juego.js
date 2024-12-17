@@ -108,7 +108,7 @@ class Juego extends Phaser.Scene
         ////////// Disparo del jugador 1/////////////
         if (this.keyStates.s) {
             
-            if(currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+            if(this.currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 for (let i = 0; i < this.numeroBalasJ1; i++) {
                     var xVel = this.j1.body.velocity.x;
                     var yVel = this.j1.body.velocity.y;
@@ -127,7 +127,7 @@ class Juego extends Phaser.Scene
                     else{
                         this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
                     }
-                    this.tiempoUltimoDisparoP1=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+                    this.tiempoUltimoDisparoP1=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
                 }
                 // console.log('velocityX: ' + xVel);
                 // console.log('velocityY: ' + yVel);
@@ -182,7 +182,7 @@ class Juego extends Phaser.Scene
         ////////// Disparo del jugador 2/////////////
         if (this.keyStates.arrowdown) {
             
-            if(currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
+            if(this.currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 for (let i = 0; i < this.numeroBalasJ2; i++) {
                     var xVel = this.j2.body.velocity.x;
                     var yVel = this.j2.body.velocity.y;
@@ -199,7 +199,7 @@ class Juego extends Phaser.Scene
                     else{
                         this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
                     }
-                    this.tiempoUltimoDisparoP2=currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
+                    this.tiempoUltimoDisparoP2=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
                 }
                 // console.log('velocityX: ' + xVel);
                 // console.log('velocityY: ' + yVel);
@@ -689,7 +689,7 @@ class Juego extends Phaser.Scene
         //Disparo
         this.trail();
         
-        currentTime = this.time.now; // Tiempo actual
+        this.currentTime = this.time.now; // Tiempo actual
 
         if (Math.abs(this.j1.body.velocity.x) > 10) {
             this.lastJ1Vel = this.j1.body.velocity.x;

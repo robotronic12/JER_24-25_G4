@@ -86,16 +86,16 @@ class Chat extends Phaser.Scene {
                             'Content-Type': 'application/json'
                         },
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la petición al servidor');
-                        }
-                        return response.json(); // Si el servidor devuelve JSON
-                    })
-                    .then(data => {
-                        console.log('Respuesta del servidor:', data);
-                        // Aquí puedes manejar la respuesta del servidor
-                    })
+                    // .then(response => {
+                    //     if (!response.ok) {
+                    //         throw new Error('Error en la petición al servidor');
+                    //     }
+                    //     return response.json(); // Si el servidor devuelve JSON
+                    // })
+                    // .then(data => {
+                    //     console.log('Respuesta del servidor:', data);
+                    //     // Aquí puedes manejar la respuesta del servidor
+                    // })
                     .catch(error => {
                         console.error('Error:', error);
                         // Aquí puedes manejar errores
