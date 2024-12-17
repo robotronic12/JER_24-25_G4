@@ -555,6 +555,8 @@ class Juego extends Phaser.Scene
 
         //Añadimos el cielo
         this.add.image(400, 300, 'sky');
+
+        //this.scene.start('EstadoServidor');
         
         
         //creamos plataformas
@@ -646,6 +648,7 @@ class Juego extends Phaser.Scene
             callbackScope: this,
             loop: true          // Se repite indefinidamente
         });
+        
     }
     //#endregion
     
