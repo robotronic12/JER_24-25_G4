@@ -4,6 +4,59 @@ class SeleccionJugador1 extends Phaser.Scene {
 
     }
     color1;
+
+    sendColor(){
+        var username = usuario.username;
+
+        const user = {
+            username : usuario.username,
+            password : usuario.password,
+            color1 : usuario.color1,
+            color2 : usuario.color2
+        }
+        console.log(username);
+
+        fetch('/api/users/actualize', {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(user),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la peticion al servidor');
+            }
+            return response.json(); // Si el servidor devuelve JSON
+        })
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            console.log('Color = ', usuario.color1);
+            // Aquí puedes manejar la respuesta del servidor
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Aquí puedes manejar errores
+        });
+        // var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
+        // var game = this
+
+        // Usa jQuery para hacer una solicitud AJAX
+        // $.ajax({
+        //     url: url,
+        //     method: 'GET',
+        //     success: function(response) {
+        //         // Procesa la respuesta del servidor
+        //         // Actualiza el juego con los datos recibidos
+        //         let data = JSON.stringify(response)
+        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('Error en la solicitud AJAX:', error);
+        //     }
+        // });
+    }
+
     preload() {
         //Cargo los audios con this.load.audio("path")
         this.load.audio("select", "assets/musica/click.mp3");
@@ -99,6 +152,7 @@ class SeleccionJugador1 extends Phaser.Scene {
                 titulo.setColor('#0000ff'); // Cambia a rojo
                 crearSeleccionadoText(50, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -112,6 +166,7 @@ class SeleccionJugador1 extends Phaser.Scene {
                 titulo.setColor('#00ff00');
                 crearSeleccionadoText(245, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -124,6 +179,7 @@ class SeleccionJugador1 extends Phaser.Scene {
                 titulo.setColor('#ffa500');
                 crearSeleccionadoText(440, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -136,6 +192,7 @@ class SeleccionJugador1 extends Phaser.Scene {
                 titulo.setColor('#ff0000'); // Cambia a rojo
                 crearSeleccionadoText(635, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });

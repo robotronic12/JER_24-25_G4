@@ -39,9 +39,10 @@ public class UserController {
         return user.map((x)->ResponseEntity.ok(new UserDTO(x))).orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping("/activeUsers")
-    public ResponseEntity<Integer> getNumberOfActiveUsers() {
+    @GetMapping("/activeUsers/{username}")
+    public ResponseEntity<IntClass> getNumberOfActiveUsers(@PathVariable String username) {
         Long time = (long) 10000;
+        this.userService.updateLastSeen(username);//Esto es para que actualice la actividad del usuario.
         int users = this.userService.getActiveUsers(time).size();
         return ResponseEntity.ok(users);
     }
@@ -73,9 +74,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @PutMapping("/{username}/user")
-    public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) {
-        Optional<User> usu = this.userService.modifyUser(username, user);
+    @PutMapping("/actualize")
+    public ResponseEntity<UserDTO> actuliceUser(@RequestBody User user) {
+        Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
         if(usu.isPresent()){            
             UserDTO userDTO = (new UserDTO(usu.get()));
             return ResponseEntity.ok(userDTO);

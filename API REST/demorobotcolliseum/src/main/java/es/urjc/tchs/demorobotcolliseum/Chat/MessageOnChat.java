@@ -6,6 +6,11 @@ public class MessageOnChat{
     String user;
     String text;
 
+    MessageOnChat(){
+        this.id = 0;
+        this.text = " ";
+        this.user = " ";
+    }
     MessageOnChat(int id, String username, String message){
         this.id = id;
         this.user = username;

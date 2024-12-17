@@ -7,9 +7,9 @@ class Chat extends Phaser.Scene {
     timeSpan;
 
     cargarMensajes(){
-        const since = 3;
-        var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
-        var game = this
+        const since = 0;
+        // var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
+        // var game = this
 
         // Usa jQuery para hacer una solicitud AJAX
         // $.ajax({
@@ -75,7 +75,7 @@ class Chat extends Phaser.Scene {
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    addMessageToChat(messagesContainer, GlobalData.usuarioActivo, userInput, 'user');
+                    addMessageToChat(messagesContainer, usuario.username, userInput, 'user');
 
                     this.cargarMensajes();
                 }
@@ -101,6 +101,7 @@ class Chat extends Phaser.Scene {
                         headers: {
                             'Content-Type': 'application/json'
                         },
+                        data: JSON.stringify(user),
                     })
                     // .then(response => {
                     //     if (!response.ok) {

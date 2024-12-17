@@ -56,15 +56,8 @@ class MenuLogin extends Phaser.Scene {
             }
             if (registro_pantalla) {  //protocolo de registro de usuario
                 
-
-
-                //no matamos la página 
-                const user = {
-                    username: inputUsername, // Asigna el valor deseado.
-                    password: inputPassword, // Asigna el valor deseado.
-                    color1: colorC1,
-                    color2: colorC2,
-                };
+                usuario.username = inputUsername;
+                usuario.password = inputPassword;
 
                 fetch('/api/users/', {
                     method: 'POST',
@@ -94,19 +87,16 @@ class MenuLogin extends Phaser.Scene {
             }
 
             else {  //login de usuario
-                const user = {
-                    username: inputUsername, // Asigna el valor deseado.
-                    password: inputPassword, // Asigna el valor deseado.
-                    color1: colorC1,
-                    color2: colorC2,
-                };
+                
+                usuario.username = inputUsername;
+                usuario.password = inputPassword;
 
                 fetch('/api/users/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(user)
+                    body: JSON.stringify(usuario)
                 })
                     .then(response => {
                         if (!response.ok) {
