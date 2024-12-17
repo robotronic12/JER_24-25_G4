@@ -41,7 +41,8 @@ public class UserController {
 
     @GetMapping("/activeUsers")
     public int getNumberOfActiveUsers() {
-        return this.userService.getActiveUsers().size();
+        Long time = (long) 10000;
+        return this.userService.getActiveUsers(time).size();
     }
     
 
@@ -57,6 +58,13 @@ public class UserController {
         else{
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
+
+    @PostMapping("/login")
+    public boolean loginUser(@RequestBody User user) {
+
+        boolean exist = this.userService.login(user.getUsername(),user.getPassword());
+        return exist;
     }
 
     @PutMapping("/{username}/user")

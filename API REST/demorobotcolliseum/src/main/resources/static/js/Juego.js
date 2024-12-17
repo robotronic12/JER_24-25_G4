@@ -310,6 +310,17 @@ class Juego extends Phaser.Scene
         });
     }
 
+    checkPause(){
+        if(GlobalData.isInChat) return;
+        
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+            this.scene.pause('Juego');
+            this.bgMusic.pause();         
+            this.scene.launch('MenuPausa'); 
+            this.scene.bringToTop('MenuPausa');
+        }
+    }
+
     curarj1(cura){
         this.vida1+=cura;
         if(this.vida1>100){
@@ -680,21 +691,15 @@ class Juego extends Phaser.Scene
         }
         //plataforma móvil 2 (arriba)
         if (this.movingPlatform2.y >= 250)
-            {
-                this.movingPlatform2.setVelocityY(-50);
-            }
-            else if (this.movingPlatform2.y <= 125)
-            {
-                this.movingPlatform2.setVelocityY(50);
-            }
-        
-        
-        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
-            this.scene.pause('Juego');
-            this.bgMusic.pause();         
-            this.scene.launch('MenuPausa'); 
-            this.scene.bringToTop('MenuPausa');
+        {
+            this.movingPlatform2.setVelocityY(-50);
         }
+        else if (this.movingPlatform2.y <= 125)
+        {
+            this.movingPlatform2.setVelocityY(50);
+        }
+        
+        this.checkPause();
 
         //Cambiar el tamaño y la posición de la barra de vida
 

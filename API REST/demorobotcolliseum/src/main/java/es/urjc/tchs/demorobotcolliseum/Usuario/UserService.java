@@ -1,9 +1,10 @@
 package es.urjc.tchs.demorobotcolliseum.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,13 @@ public class UserService {
     private final UserDAO userDAO;//El final lo que hace es que si hay cambios da error
 
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
-    //private ConcurrentMap<String, User> users; //Esto complica las cosas porque me crea una nueva extrutura.
+    private ConcurrentHashMap<String, Long> usersAct; //Esto complica las cosas porque me crea una nueva extrutura.
 
 
     public UserService(UserDAO userdAO){
         this.userDAO = userdAO;
         this.lock = new ReentrantReadWriteLock();
+        usersAct = new ConcurrentHashMap<>(); 
     }
     
     public boolean login(String username, String password){
@@ -35,6 +37,7 @@ public class UserService {
                 return false;
             }
             if(user.isPresent()){
+                this.usersAct.put(username, System.currentTimeMillis());
                 return user.get().getPassword().equals(password); 
             }
             return false;
@@ -102,9 +105,8 @@ public class UserService {
         var writeLock = lock.writeLock();
         writeLock.lock();
         try{
-            Optional<User> user = this.userDAO.getUser(username);
-            if(user.isPresent()){
-                user.get().setLastSeen();
+            if(this.usersAct.containsKey(username)){
+                this.usersAct.put(username, System.currentTimeMillis());
                 return true;
             }
             return false;
@@ -113,29 +115,45 @@ public class UserService {
         }
     }
 
-    public List<User> getActiveUsers(){
+   
+    public List<String> getActiveUsers(long threshold) {
 
-        var readLock = lock.readLock();
-        readLock.lock();
+        List<String> connected = new ArrayList<>();
 
-        List<User> usuariosAct;
-        
-        long timeOfWait = 10;
-        //List<User> users = userDAO.getAllUsers();
+        long currentTimeMillis = System.currentTimeMillis();
 
-        try{
-            usuariosAct =  userDAO.getAllUsers().stream().filter(user -> user.getLastSeen() <= timeOfWait).collect(Collectors.toList());
-            return usuariosAct;
-        }finally{
-            readLock.unlock();
+        for (var entry: this.usersAct.entrySet()) {
+            
+            if (entry.getValue() > (currentTimeMillis - threshold)) {
+                connected.add(entry.getKey());
+            }
         }
-
+        
+        return connected;        
     }
 }
 
 
 
+ // public List<User> getActiveUsers(){
 
+    //     var readLock = lock.readLock();
+    //     readLock.lock();
+
+    //     List<User> usuariosAct;
+        
+    //     long timeOfWait = 10;
+    //     //List<User> users = userDAO.getAllUsers();
+
+    //     try{
+    //         usuariosAct =  userDAO.getAllUsers().stream().filter(user -> user.getLastSeen() <= timeOfWait).collect(Collectors.toList());
+    //         return usuariosAct;
+
+    //     }finally{
+    //         readLock.unlock();
+    //     }
+
+    // }
 
     // public boolean/*Optional<User> */registerUser(User newUser){
     //     var readLock = lock.readLock(); //Bloquea si está leyendo o escribiendo
