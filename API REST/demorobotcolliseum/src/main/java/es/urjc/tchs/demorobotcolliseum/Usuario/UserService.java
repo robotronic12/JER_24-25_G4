@@ -20,14 +20,14 @@ public class UserService {
 
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
     private ConcurrentHashMap<String, Long> usersAct; //Esto complica las cosas porque me crea una nueva extrutura.
-    private ArrayList<String> usersLog;
+    //private ArrayList<String> usersLog;
 
 
     public UserService(UserDAO userdAO){
         this.userDAO = userdAO;
         this.lock = new ReentrantReadWriteLock();
         this.usersAct = new ConcurrentHashMap<>();
-        this.usersLog = new ArrayList<>();
+        //this.usersLog = new ArrayList<>();
     }
     
     public boolean login(String username, String password){
@@ -36,7 +36,7 @@ public class UserService {
         try{
             var user = this.userDAO.getUser(username); //Bien
             if(user.isPresent() && user.get().getPassword().equals(password)){
-                this.usersLog.add(username);
+                //this.usersLog.add(username);
                 this.updateLastSeen(username); //Está mal
                 return true; 
             }
@@ -83,7 +83,7 @@ public class UserService {
                 boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
                 if(added) {
                     this.usersAct.put(newUser.getUsername(), System.currentTimeMillis());
-                    this.usersLog.add(newUser.getUsername());
+                    //this.usersLog.add(newUser.getUsername());
                 }
                 return added;
             }
@@ -98,15 +98,16 @@ public class UserService {
         var writeLock = lock.writeLock();
         writeLock.lock();
         try{     
-            if(this.usersLog.contains(username)&&this.usersLog.contains(username)){
+            //if(this.usersLog.contains(username)&&this.usersLog.contains(username))
+            {
                 boolean delete =this.userDAO.deleteUser(username);
                 if(delete){
                     this.usersAct.remove(username);
-                    this.usersLog.remove(username);
+                    //this.usersLog.remove(username);
                 }
                 return delete;
             }       
-            return false;
+            //return false;
         }finally{
             writeLock.unlock();
         }
@@ -131,9 +132,9 @@ public class UserService {
                 connected.add(entry.getKey());
             }
             
-            if (entry.getValue() < (currentTimeMillis - threshold)) {
-                this.usersAct.remove(entry.getKey());
-            }
+            // if (entry.getValue() < (currentTimeMillis - threshold)) {
+            //     this.usersAct.remove(entry.getKey());
+            // }
         }
         
         return connected;        

@@ -23,10 +23,15 @@ public class ChatController {
     }
 
     @GetMapping()
-    public ResponseEntity<ChatResponse> getMessages(@RequestParam(defaultValue = "0") int since) {
-        Optional<ChatResponse> msg = chatService.getMessages(since);
+    public ResponseEntity<String> getMessages(@RequestParam(defaultValue = "0") int since) {
+        Optional<String[]> msg = chatService.getLastMessages(since);
         if (msg.isPresent()) {
-            return ResponseEntity.ok(chatService.getMessages(since).get());
+            StringBuilder sb = new StringBuilder();
+            for (String s : msg.get()) {
+                sb.append(s).append(" ");
+            }
+            String combinado = sb.toString().trim();
+            return ResponseEntity.ok(combinado);//chatService.getLastMessages(since)
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

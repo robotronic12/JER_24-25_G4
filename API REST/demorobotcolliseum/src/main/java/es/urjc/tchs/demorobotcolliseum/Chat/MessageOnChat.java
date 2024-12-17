@@ -1,5 +1,6 @@
 package es.urjc.tchs.demorobotcolliseum.Chat;
 
+
 public class MessageOnChat{
     int id;
     String user;

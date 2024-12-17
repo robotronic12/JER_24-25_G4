@@ -3,6 +3,51 @@ class Chat extends Phaser.Scene {
         super({ key: 'Chat' });
     }
 
+    mensajes;
+    timeSpan;
+
+    cargarMensajes(){
+        const since = 3;
+        var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
+        var game = this
+
+        // Usa jQuery para hacer una solicitud AJAX
+        // $.ajax({
+        //     url: url,
+        //     method: 'GET',
+        //     success: function(response) {
+        //         // Procesa la respuesta del servidor
+        //         // Actualiza el juego con los datos recibidos
+        //         let data = JSON.stringify(response)
+        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('Error en la solicitud AJAX:', error);
+        //     }
+        // });
+
+        fetch(`/api/chat?since=${since}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la peticion al servidor');
+            }
+            return response.json(); // Si el servidor devuelve JSON
+        })
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            // Aquí puedes manejar la respuesta del servidor
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Aquí puedes manejar errores
+        });
+    }
+
     preload() {
         //Cargo el html
         this.load.html('chat', 'text/chat.html');
@@ -17,6 +62,8 @@ class Chat extends Phaser.Scene {
         element.addListener('click');
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM
         console.log("esquizofrenia")
+
+        this.mensajes = [];
         
         element.on('click', (event) => {
             if (event.target.name === 'send-button') {
@@ -28,9 +75,9 @@ class Chat extends Phaser.Scene {
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    addMessageToChat(messagesContainer, 'You', userInput, 'user');
+                    addMessageToChat(messagesContainer, GlobalData.usuarioActivo, userInput, 'user');
 
-
+                    this.cargarMensajes();
                 }
         
                 function addMessageToChat(container, username, message, type) {
@@ -49,33 +96,32 @@ class Chat extends Phaser.Scene {
                     container.appendChild(messageDiv);
                     container.scrollTop = container.scrollHeight;  // Hacer scroll al final
 
-                    fetch('http://localhost:8080/api/chat', {
+                    fetch(`/api/chat/${username}/chat?message=${message}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ inputUsername, inputPassword })
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la autenticación, usuario no creado');
-                        }
-                        return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
-                    })
-                    .then(data => {
-                        console.log('Respuesta del servidor:', data);
-                        console.log('Usuario logeado con éxito');
-                        // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
-                    })
+                    // .then(response => {
+                    //     if (!response.ok) {
+                    //         throw new Error('Error en la petición al servidor');
+                    //     }
+                    //     return response.json(); // Si el servidor devuelve JSON
+                    // })
+                    // .then(data => {
+                    //     console.log('Respuesta del servidor:', data);
+                    //     // Aquí puedes manejar la respuesta del servidor
+                    // })
                     .catch(error => {
                         console.error('Error:', error);
-                        // Mostrar mensaje de error al usuario
+                        // Aquí puedes manejar errores
                     });
+                    
                 }
             }
         });
         
-        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
@@ -84,6 +130,5 @@ class Chat extends Phaser.Scene {
             GlobalData.isInChat = false;
         }
     } 
-
 
 }
