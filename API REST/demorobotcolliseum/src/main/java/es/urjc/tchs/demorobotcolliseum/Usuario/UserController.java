@@ -74,9 +74,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @PutMapping("/{username}/user")
-    public ResponseEntity<UserDTO> actuliceUser(@PathVariable String username, @RequestBody User user) {
-        Optional<User> usu = this.userService.modifyUser(username, user);
+    @PutMapping("/actualize")
+    public ResponseEntity<UserDTO> actuliceUser(@RequestBody User user) {
+        Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
         if(usu.isPresent()){            
             UserDTO userDTO = (new UserDTO(usu.get()));
             return ResponseEntity.ok(userDTO);

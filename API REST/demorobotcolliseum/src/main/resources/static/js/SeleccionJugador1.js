@@ -7,12 +7,21 @@ class SeleccionJugador1 extends Phaser.Scene {
 
     sendColor(){
         var username = usuario.username;
-        fetch(`/api/users/${username}/user`, {
-            method: 'PUT',
+
+        const user = {
+            username : usuario.username,
+            password : usuario.password,
+            color1 : usuario.color1,
+            color2 : usuario.color2
+        }
+        console.log(username);
+
+        fetch('/api/users/actualize', {
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
-            data:JSON.stringify(usuario),
+            data: JSON.stringify(user),
         })
         .then(response => {
             if (!response.ok) {
@@ -29,6 +38,23 @@ class SeleccionJugador1 extends Phaser.Scene {
             console.error('Error:', error);
             // Aquí puedes manejar errores
         });
+        // var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
+        // var game = this
+
+        // Usa jQuery para hacer una solicitud AJAX
+        // $.ajax({
+        //     url: url,
+        //     method: 'GET',
+        //     success: function(response) {
+        //         // Procesa la respuesta del servidor
+        //         // Actualiza el juego con los datos recibidos
+        //         let data = JSON.stringify(response)
+        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('Error en la solicitud AJAX:', error);
+        //     }
+        // });
     }
 
     preload() {
