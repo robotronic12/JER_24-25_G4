@@ -13,7 +13,7 @@ import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
 
 public class ChatService {
-    private final List<MessageOnChat> messages = new ArrayList<>();
+    private final List<MessageOnChat> messages;
     private final AtomicInteger lastId = new AtomicInteger(0);
     private final ChatDAO chatDAO;//El final lo que hace es que si hay cambios da error
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
@@ -21,6 +21,7 @@ public class ChatService {
     public ChatService(ChatDAO chatDAO){
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
+        this.messages = this.chatDAO.getAllchats();
     }
 
     // public List<String>

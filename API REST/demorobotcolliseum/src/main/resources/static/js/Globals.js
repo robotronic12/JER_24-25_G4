@@ -4,8 +4,14 @@ var GlobalData = {
     volumenCambiado : false,
     ganador : 0,
     isInChat : false,
-    user : " "
 }
+
+const usuario = {
+    username: " ", // Asigna el valor deseado.
+    password: " ", // Asigna el valor deseado.
+    color1: 0,
+    color2: 0,
+};
 
 
 

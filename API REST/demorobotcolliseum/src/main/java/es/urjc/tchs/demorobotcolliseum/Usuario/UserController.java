@@ -39,9 +39,10 @@ public class UserController {
         return user.map((x)->ResponseEntity.ok(new UserDTO(x))).orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping("/activeUsers")
-    public ResponseEntity<IntClass> getNumberOfActiveUsers() {
+    @GetMapping("/activeUsers/{username}")
+    public ResponseEntity<IntClass> getNumberOfActiveUsers(@PathVariable String username) {
         Long time = (long) 10000;
+        this.userService.updateLastSeen(username);//Esto es para que actualice la actividad del usuario.
         int users = this.userService.getActiveUsers(time).size();
         return ResponseEntity.ok(new IntClass(users));
     }

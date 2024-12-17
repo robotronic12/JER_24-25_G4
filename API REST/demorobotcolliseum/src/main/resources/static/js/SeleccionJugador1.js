@@ -4,6 +4,33 @@ class SeleccionJugador1 extends Phaser.Scene {
 
     }
     color1;
+
+    sendColor(){
+        var username = usuario.username;
+        fetch(`/api/users/${username}/user`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:JSON.stringify(usuario),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la peticion al servidor');
+            }
+            return response.json(); // Si el servidor devuelve JSON
+        })
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            console.log('Color = ', usuario.color1);
+            // Aquí puedes manejar la respuesta del servidor
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Aquí puedes manejar errores
+        });
+    }
+
     preload() {
         //Cargo los audios con this.load.audio("path")
         this.load.audio("select", "assets/musica/click.mp3");
@@ -44,15 +71,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             color: '#ffffff',
             fontStyle: 'bold'
         })
-        const seleccionar = this.add.image(400, 500, "seleccionar")
-        //Poner personajes y colores en texto abajo
-        if(this.color1!=0){
-            seleccionar.setInteractive()
-            .on('pointerdown', () => {
-                this.scene.stop('SeleccionJugador1'); //carga la escena de intro
-                this.scene.start('SeleccionJugador2'); //carga la escena de game
-            });
-        }
+        const seleccionar = this.add.image(400, 500, "seleccionar");
         
 
         let seleccionadoText;
@@ -101,9 +120,10 @@ class SeleccionJugador1 extends Phaser.Scene {
         const azul = this.add.image(115, 300, "azul")
             .setInteractive()
             .on('pointerdown', () => {
-                this.color1=1; 
+                usuario.color1=1; 
                 crearSeleccionadoText(50, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -113,9 +133,10 @@ class SeleccionJugador1 extends Phaser.Scene {
         const verde = this.add.image(310, 300, "verde")
             .setInteractive()
             .on('pointerdown', () => {
-                this.color1=2; 
+                usuario.color1=2; 
                 crearSeleccionadoText(245, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -124,9 +145,10 @@ class SeleccionJugador1 extends Phaser.Scene {
         const naranja = this.add.image(505, 300, "naranja")
             .setInteractive()
             .on('pointerdown', () => {
-                this.color1=3; 
+                usuario.color1=3; 
                 crearSeleccionadoText(440, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
@@ -135,9 +157,10 @@ class SeleccionJugador1 extends Phaser.Scene {
         const rojo = this.add.image(700, 300, "rojo")
             .setInteractive()
             .on('pointerdown', () => {
-                this.color1=4; 
+                usuario.color1=4; 
                 crearSeleccionadoText(635, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
+                    this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
                     this.scene.start('SeleccionJugador2'); //carga la escena de game
                 });
