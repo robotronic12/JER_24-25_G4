@@ -40,10 +40,10 @@ public class UserController {
     }
 
     @GetMapping("/activeUsers")
-    public ResponseEntity<IntClass> getNumberOfActiveUsers() {
+    public ResponseEntity<Integer> getNumberOfActiveUsers() {
         Long time = (long) 10000;
         int users = this.userService.getActiveUsers(time).size();
-        return ResponseEntity.ok(new IntClass(users));
+        return ResponseEntity.ok(users);
     }
 
     private record IntClass(int conectedusers) {
