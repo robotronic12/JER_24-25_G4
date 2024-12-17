@@ -6,10 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import es.urjc.tchs.demorobotcolliseum.ChatDAO;
-import es.urjc.tchs.demorobotcolliseum.UserDAO;
 
 public class ChatService {
     private final List<MessageOnChat> messages = new ArrayList<>();

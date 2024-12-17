@@ -47,20 +47,23 @@ class MenuLogin extends Phaser.Scene {
 
             const inputUsername = elementDOM.getChildByID('username').value;
             const inputPassword = elementDOM.getChildByID('password').value;
+            const colorC1 = 1;
+            const colorC2 = 2;
             if (inputUsername.value === '' || inputPassword.value === '') {
                 //parpadea el texto
                 elementDOM.scene.tweens.add({ targets: textFormulario, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
                 return;
             }
-            if (registro_pantalla) {
-                //protocolo de registro de usuario
+            if (registro_pantalla) {  //protocolo de registro de usuario
+                
 
 
                 //no matamos la página 
                 const user = {
                     username: inputUsername, // Asigna el valor deseado.
                     password: inputPassword, // Asigna el valor deseado.
-
+                    color1: colorC1,
+                    color2: colorC2,
                 };
 
                 fetch('/api/users/', {
@@ -94,7 +97,8 @@ class MenuLogin extends Phaser.Scene {
                 const user = {
                     username: inputUsername, // Asigna el valor deseado.
                     password: inputPassword, // Asigna el valor deseado.
-
+                    color1: colorC1,
+                    color2: colorC2,
                 };
 
                 fetch('/api/users/login', {
@@ -116,6 +120,7 @@ class MenuLogin extends Phaser.Scene {
                     
                     .catch(error => {
                         console.error('Error:', error);
+                        textFormulario.setText('Usuario o Contraseña incorrectos o no existen');
                         // Mostrar mensaje de error al usuario
                     });
                 //comparamos si existe el usuario
