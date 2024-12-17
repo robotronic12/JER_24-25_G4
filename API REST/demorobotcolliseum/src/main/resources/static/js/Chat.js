@@ -6,7 +6,7 @@ class Chat extends Phaser.Scene {
     mensajes;
     timeSpan;
 
-    CargarMensajes(){
+    cargarMensajes(){
         fetch(`/api/chat`, {
             method: 'GET',
             headers: {
@@ -61,7 +61,7 @@ class Chat extends Phaser.Scene {
                     // Agrega el mensaje del usuario al chat
                     addMessageToChat(messagesContainer, GlobalData.usuarioActivo, userInput, 'user');
 
-
+                    this.cargarMensajes();
                 }
         
                 function addMessageToChat(container, username, message, type) {
@@ -105,7 +105,7 @@ class Chat extends Phaser.Scene {
             }
         });
         
-        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
@@ -113,8 +113,6 @@ class Chat extends Phaser.Scene {
             this.scene.stop('Chat'); //carga la escena de intro
             GlobalData.isInChat = false;
         }
-
-        this.CargarMensajes();
     } 
 
 }
