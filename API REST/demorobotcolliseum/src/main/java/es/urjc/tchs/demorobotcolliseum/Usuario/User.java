@@ -10,7 +10,10 @@ public class User {
     private int color2;
 
     @JsonCreator
-    public User( @JsonProperty("username")  String user, @JsonProperty("password")  String pass ){
+    public User(@JsonProperty("username") String user,
+        @JsonProperty("password") String pass,
+        @JsonProperty("color1") int color1,
+        @JsonProperty("color2") int color2){
         username = user;
         password = pass;
         color1 = 1; //blue
@@ -49,12 +52,19 @@ public class User {
     public void setPassword(String password){
         this.password = password;
     }
-
-    public int getColor1(){
+    public int getColor1() {
         return color1;
     }
 
-    public int getColor2(){
+    public void setColor1(int color1) {
+        this.color1 = color1;
+    }
+
+    public int getColor2() {
         return color2;
+    }
+
+    public void setColor2(int color2) {
+        this.color2 = color2;
     }
 }

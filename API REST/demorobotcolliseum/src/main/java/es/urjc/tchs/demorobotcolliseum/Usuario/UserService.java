@@ -34,14 +34,11 @@ public class UserService {
         var readLock = this.lock.readLock();
         readLock.lock();
         try{
-            var user = this.userDAO.getUser(username);
-            if (user == null){
-                return false;
-            }
-            if(user.isPresent()){
+            var user = this.userDAO.getUser(username); //Bien
+            if(user.isPresent() && user.get().getPassword().equals(password)){
                 this.usersLog.add(username);
-                this.updateLastSeen(username);
-                return user.get().getPassword().equals(password); 
+                this.updateLastSeen(username); //Está mal
+                return true; 
             }
             return false;
             //si esto lo hacemos con baeldung y lo codificamos nos dan más notas. Así que habría que mirarlo.
@@ -115,17 +112,9 @@ public class UserService {
         }
     }
 
-    public boolean updateLastSeen (String username){
-        var writeLock = lock.writeLock();
-        writeLock.lock();
-        try{
-            if(this.usersAct.containsKey(username)){
-                this.usersAct.put(username, System.currentTimeMillis());
-                return true;
-            }
-            return false;
-        }finally{
-            writeLock.unlock();
+    public void updateLastSeen (String username){
+        if(this.usersAct.containsKey(username)){
+            this.usersAct.put(username, System.currentTimeMillis());                
         }
     }
 

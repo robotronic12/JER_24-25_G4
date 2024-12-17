@@ -66,8 +66,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
-
-        boolean exist = this.userService.login(user.getUsername(),user.getPassword());
+        // String username = "alo";
+        // String password = "aa";
+        boolean exist = this.userService.login(user.getUsername(), user.getPassword());//username, password   user.getUsername(), user.getPassword()
         if(exist) return ResponseEntity.ok().build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
