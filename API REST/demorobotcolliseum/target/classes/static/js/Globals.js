@@ -4,6 +4,7 @@ var GlobalData = {
     volumenCambiado : false,
     ganador : 0,
     isInChat : false,
+    usuarioActivo : " ",
 }
 
 

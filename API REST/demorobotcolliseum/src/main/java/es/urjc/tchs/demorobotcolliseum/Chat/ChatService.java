@@ -33,7 +33,7 @@ public class ChatService {
         }
     }
 
-    public Optional<ChatResponse> getMessages(int since) {
+    public Optional<ChatResponse> getLastMessages(int since) {
         List<String> newMessages = new ArrayList<>();
         int latestId = since;
 

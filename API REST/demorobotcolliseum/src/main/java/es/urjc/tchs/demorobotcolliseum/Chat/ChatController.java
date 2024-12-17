@@ -24,9 +24,9 @@ public class ChatController {
 
     @GetMapping()
     public ResponseEntity<ChatResponse> getMessages(@RequestParam(defaultValue = "0") int since) {
-        Optional<ChatResponse> msg = chatService.getMessages(since);
+        Optional<ChatResponse> msg = chatService.getLastMessages(since);
         if (msg.isPresent()) {
-            return ResponseEntity.ok(chatService.getMessages(since).get());
+            return ResponseEntity.ok(chatService.getLastMessages(since).get());
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
