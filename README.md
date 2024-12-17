@@ -167,3 +167,17 @@ mediante pulsar el único boton en pantalla.
 En este script se han creado una serie de variables comunes/necesarias en varias escenas para así poder mantener/variar valores, variables como volumenJuego o jugadorGanador
 se han imlementado aquí.
 
+# Desarrollo de Multijugador Local
+En este apartado se ha desarrollado los apartados correspondientes a la comunicación entre cliente y servidor.
+
+### Menús de registro e inicio de sesión
+Se ha implementado una escena que habilita el inicio de sesión si tienes una cuenta creada o registrarte desde 0 si no la tienes
+
+### Chat
+Se ha creado un chat en el que se puede hablar, mandando mensajes al servidor y reciviendo de igual manera.
+
+### Interfaz usuarios activos
+También, se ha implementado una interfaz donde te muestra los usuarios activos en todo momento en el juego.
+
+### Selección de color de robots
+Por último, se ha implementado un sistema de elección de color del personaje
