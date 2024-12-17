@@ -82,13 +82,13 @@ public class UserService {
         Optional<User> us = getUser(newUser.getUsername());
         // optional/*.map(null) */.orElseGet(null);//El map permite hacer algo
         try{
-            if(us.isPresent()){
+            if(!us.isPresent()){
                 boolean added = this.userDAO.updateUser(newUser);//Me indica si se ha añadidos
                 if(added) {
                     this.usersAct.put(newUser.getUsername(), System.currentTimeMillis());
                     this.usersLog.add(newUser.getUsername());
-                    return added;
                 }
+                return added;
             }
             //Si lo hacemos con una estructura de datos podemos comproar si esta con esta y luego hay que actualizarla si se crea.
             return false;
