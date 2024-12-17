@@ -16,6 +16,8 @@ class Juego extends Phaser.Scene
     movingPlatform;
     platforms;
 
+    currentTime
+
 
     //stars;
     //Jugadores
@@ -271,7 +273,6 @@ class Juego extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
             //Quito los controles
             this.recogSonido.play();
-            //this.input.keyboard.eneable=false;
             this.scene.launch('Chat'); 
             this.scene.bringToTop('Chat');
 
@@ -310,7 +311,7 @@ class Juego extends Phaser.Scene
 
     checkPause(){
         if(GlobalData.isInChat) return;
-        
+
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
             this.bgMusic.pause();         
@@ -664,7 +665,7 @@ class Juego extends Phaser.Scene
         //Disparo
         this.trail();
         
-        const currentTime = this.time.now; // Tiempo actual
+        currentTime = this.time.now; // Tiempo actual
 
         if (Math.abs(this.j1.body.velocity.x) > 10) {
             this.lastJ1Vel = this.j1.body.velocity.x;
