@@ -45,6 +45,8 @@ class MenuLogin extends Phaser.Scene {
 
             const inputUsername = elementDOM.getChildByID('username').value;
             const inputPassword = elementDOM.getChildByID('password').value;
+            // const colorC1 = 1;
+            // const colorC2 = 2;
             if (inputUsername.value === '' || inputPassword.value === '') {
                 //parpadea el texto
                 elementDOM.scene.tweens.add({ targets: textFormulario, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
@@ -58,7 +60,8 @@ class MenuLogin extends Phaser.Scene {
                 const user = {
                     username: inputUsername, // Asigna el valor deseado.
                     password: inputPassword, // Asigna el valor deseado.
-
+                    color1: colorC1,
+                    color2: colorC2,
                 };
 
                 fetch('/api/users/', {
