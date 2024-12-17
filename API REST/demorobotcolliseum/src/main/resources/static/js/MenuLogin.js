@@ -20,7 +20,7 @@ class MenuLogin extends Phaser.Scene {
         //pausamos el menu inicio hasta que no ha terminado de logearse
         this.scene.pause('MenuInicio');
         //texto dentro del formulario
-        const textFormulario = this.add.text(10, 15, 'Logueate para jugar', { color: 'white', fontFamily: 'Poppins', fontSize: '32px ',stroke: 'black',strokeThickness: 3  });
+        const textFormulario = this.add.text(10, 15, 'Inicia sesion para jugar', { color: 'white', fontFamily: 'Poppins', fontSize: '32px ',stroke: 'black',strokeThickness: 3  });
         //Añado el html
         const elementDOM = this.add.dom(400, 350).createFromCache('registro');
         //element.addListener('click');
@@ -33,7 +33,7 @@ class MenuLogin extends Phaser.Scene {
                 elementDOM.getChildByID('changeScreen').innerText = '¿Ya tiene usuario? Logueate';
             }
             else {
-                textFormulario.setText('Logueate para jugar');
+                textFormulario.setText('Inicia sesion para jugar');
                 elementDOM.getChildByID('submit').innerText = 'INICIAR SESION';
                 elementDOM.getChildByID('changeScreen').innerText = '¿No tienes usuario? Registrate';
             }
