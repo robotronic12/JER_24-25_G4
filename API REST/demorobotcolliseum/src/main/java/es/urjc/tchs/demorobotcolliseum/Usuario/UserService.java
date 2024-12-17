@@ -132,9 +132,9 @@ public class UserService {
                 connected.add(entry.getKey());
             }
             
-            if (entry.getValue() < (currentTimeMillis - threshold)) {
-                this.usersAct.remove(entry.getKey());
-            }
+            // if (entry.getValue() < (currentTimeMillis - threshold)) {
+            //     this.usersAct.remove(entry.getKey());
+            // }
         }
         
         return connected;        
