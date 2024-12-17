@@ -16,7 +16,7 @@ class Juego extends Phaser.Scene
     movingPlatform;
     platforms;
 
-    currentTime
+    currentTime;
 
 
     //stars;
