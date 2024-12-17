@@ -5,9 +5,6 @@ class Juego extends Phaser.Scene
     }
 
     cursors;
-    aKey;
-    dKey;
-    wKey;
     chatKey;
 
     keyStates = {
@@ -736,6 +733,12 @@ class Juego extends Phaser.Scene
         //Abrir chat
 
         this.checkChat();
+
+        if(GlobalData.isInChat){
+            Object.keys(this.keyStates).forEach(key => {
+                this.keyStates[key] = false;
+            });        
+        }
         
     }
 }
