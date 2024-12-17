@@ -7,7 +7,26 @@ class Chat extends Phaser.Scene {
     timeSpan;
 
     cargarMensajes(){
-        fetch('/api/chat', {
+        const since = 3;
+        var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
+        var game = this
+
+        // Usa jQuery para hacer una solicitud AJAX
+        // $.ajax({
+        //     url: url,
+        //     method: 'GET',
+        //     success: function(response) {
+        //         // Procesa la respuesta del servidor
+        //         // Actualiza el juego con los datos recibidos
+        //         let data = JSON.stringify(response)
+        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('Error en la solicitud AJAX:', error);
+        //     }
+        // });
+
+        fetch(`/api/chat?since=${since}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -15,20 +34,13 @@ class Chat extends Phaser.Scene {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error en la petición al servidor');
+                throw new Error('Error en la peticion al servidor');
             }
             return response.json(); // Si el servidor devuelve JSON
         })
         .then(data => {
-            // Validar datos
-            let newMenssages = data;
-
-            console.log('New Messages:', newMenssages);
-
-            // Crear un array para almacenar los mensajes en Phaser
-            //const phaserMessages = [];
-            //newMenssages.forEach(msg => phaserMessages.push(msg));
-               
+            console.log('Respuesta del servidor:', data);
+            // Aquí puedes manejar la respuesta del servidor
         })
         .catch(error => {
             console.error('Error:', error);

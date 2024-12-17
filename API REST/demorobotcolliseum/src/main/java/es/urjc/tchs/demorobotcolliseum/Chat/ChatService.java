@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
-@Service
+
 public class ChatService {
     private final List<MessageOnChat> messages = new ArrayList<>();
     private final AtomicInteger lastId = new AtomicInteger(0);
