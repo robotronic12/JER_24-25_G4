@@ -114,6 +114,7 @@ class MenuLogin extends Phaser.Scene {
                         elementDOM.setVisible(false);
                         this.scene.stop('MenuLogin');   
                         this.scene.start('MenuInicio');
+                        this.scene.start('EstadoServidor');
                     })
                     
                     .catch(error => {

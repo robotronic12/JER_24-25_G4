@@ -16,7 +16,10 @@ class MenuInicio extends Phaser.Scene {
         this.load.image('opciones', 'assets/botones/Opciones.png');
         this.load.image('salir', 'assets/botones/Salir.png');
 
-        //Cargo Fuentes
+        //Cargo icono de usuario conectado/no conectado
+
+        this.load.image('user_conect','assets/botones/conect.png');
+        this.load.image('user_disconect','assets/botones/disconect.png');
         
 
         
@@ -45,12 +48,19 @@ class MenuInicio extends Phaser.Scene {
         this.bgMusic.loop = true; //que sea loop
         this.bgMusic.play(); //que suene
 
+         //estado de conexión del jugador
+        const texto_conexión= this.add.text(500,100,'Estas conectado, te jodes',{fill:'#32a834',fontsize:40});
+        const icono_conect = this.add.image(500, 60, 'user_conect');
+
+        
+
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
                 GlobalData.playing = true;
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuInicio'); //carga la escena de intro
+                this.scene.pause('EstadoServidor'); //pausamos el estado de conexión para mostrarlo en la siguiente escena
                 this.scene.start('Juego'); //carga la escena de game
         });
         const salir = this.add.image(400, 450, 'salir');
@@ -68,7 +78,7 @@ class MenuInicio extends Phaser.Scene {
             this.scene.start('Ajustes'); //carga la escena de game
         });
         
-
+       
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
         
     }
