@@ -50,8 +50,8 @@ class MenuLogin extends Phaser.Scene {
                 elementDOM.scene.tweens.add({ targets: textFormulario, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
                 return;
             }
-            if (registro_pantalla) {
-                //protocolo de registro de usuario
+            if (registro_pantalla) {  //protocolo de registro de usuario
+                
 
 
                 //no matamos la página 
@@ -114,6 +114,7 @@ class MenuLogin extends Phaser.Scene {
                     
                     .catch(error => {
                         console.error('Error:', error);
+                        textFormulario.setText('Usuario o Contraseña incorrectos o no existen');
                         // Mostrar mensaje de error al usuario
                     });
                 //comparamos si existe el usuario
