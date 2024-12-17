@@ -32,29 +32,23 @@ class SeleccionJugador1 extends Phaser.Scene {
         const fondo = this.add.image(400, 400, 'fondo'); // Creamos el fondo
         this.color1=0;
         //añadimos título
-        const titulo = this.add.text(75+30, 50, 'Selecciona a tu robot', {
+        const titulo = this.add.text(75+30+155, 50, 'Jugador 1', {
             fontFamily: 'Poppins',
             fontSize: '55px',
             color: '#ffffff',
-            fontStyle: 'bold'
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 3
+            
         })
-        const jugador1 = this.add.text(350, 112, 'Jugador 1', {
+        const jugador1 = this.add.text(270, 120, 'Selecciona a tu robot', {
             fontFamily: 'Poppins',
             fontSize: '25px',
             color: '#ffffff',
             fontStyle: 'bold'
         })
         const seleccionar = this.add.image(400, 500, "seleccionar")
-        //Poner personajes y colores en texto abajo
-        if(this.color1!=0){
-            seleccionar.setInteractive()
-            .on('pointerdown', () => {
-                this.scene.stop('SeleccionJugador1'); //carga la escena de intro
-                this.scene.start('SeleccionJugador2'); //carga la escena de game
-            });
-        }
         
-
         let seleccionadoText;
 
         const crearSeleccionadoText = (x, y) => {
@@ -102,6 +96,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=1; 
+                titulo.setColor('#0000ff'); // Cambia a rojo
                 crearSeleccionadoText(50, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
@@ -114,6 +109,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=2; 
+                titulo.setColor('#00ff00');
                 crearSeleccionadoText(245, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
@@ -125,6 +121,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=3; 
+                titulo.setColor('#ffa500');
                 crearSeleccionadoText(440, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
@@ -136,6 +133,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=4; 
+                titulo.setColor('#ff0000'); // Cambia a rojo
                 crearSeleccionadoText(635, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro

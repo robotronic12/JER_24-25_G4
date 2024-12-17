@@ -4,6 +4,8 @@ var GlobalData = {
     volumenCambiado : false,
     ganador : 0,
     isInChat : false,
+    colorJugador1: 0,
+    colorJugador2: 0,
 }
 
 
