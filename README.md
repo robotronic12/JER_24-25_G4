@@ -172,12 +172,15 @@ En este apartado se ha desarrollado los apartados correspondientes a la comunica
 
 ### Menús de registro e inicio de sesión
 Se ha implementado una escena que habilita el inicio de sesión si tienes una cuenta creada o registrarte desde 0 si no la tienes
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/registro.png"></div>
 
 ### Chat
 Se ha creado un chat en el que se puede hablar, mandando mensajes al servidor y reciviendo de igual manera.
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/chat.png"></div>
 
 ### Interfaz usuarios activos
 También, se ha implementado una interfaz donde te muestra los usuarios activos en todo momento en el juego.
 
 ### Selección de color de robots
 Por último, se ha implementado un sistema de elección de color del personaje
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/seleccionColor.png"></div>
