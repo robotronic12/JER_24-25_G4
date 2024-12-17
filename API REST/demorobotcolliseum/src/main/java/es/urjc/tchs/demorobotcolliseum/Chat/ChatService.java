@@ -1,13 +1,17 @@
 package es.urjc.tchs.demorobotcolliseum.Chat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.springframework.stereotype.Service;
+
 import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
+@Service
 public class ChatService {
     private final List<MessageOnChat> messages = new ArrayList<>();
     private final AtomicInteger lastId = new AtomicInteger(0);
@@ -33,7 +37,7 @@ public class ChatService {
         }
     }
 
-    public Optional<ChatResponse> getLastMessages(int since) {
+    public Optional<String[]> getLastMessages(int since) {
         List<String> newMessages = new ArrayList<>();
         int latestId = since;
 
@@ -45,7 +49,14 @@ public class ChatService {
                 }
             }
         }
-        Optional<ChatResponse> response = Optional.of(new ChatResponse(newMessages, latestId));
+
+        String[] msges = (String[]) newMessages.toArray();
+
+        for (int i = 0; i<newMessages.size();i++) {
+            msges[i] = newMessages.get(i);
+        }
+
+        Optional<String[]> response = Optional.of(msges);
 
         return response;
     }

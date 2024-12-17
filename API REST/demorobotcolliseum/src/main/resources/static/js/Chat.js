@@ -7,7 +7,7 @@ class Chat extends Phaser.Scene {
     timeSpan;
 
     cargarMensajes(){
-        fetch(`/api/chat`, {
+        fetch('/api/chat', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,10 +20,14 @@ class Chat extends Phaser.Scene {
             return response.json(); // Si el servidor devuelve JSON
         })
         .then(data => {
-            const newMenssages = data.mensajes;
-            this.timeSpan = data.timestamp;
+            // Validar datos
+            let newMenssages = data;
 
-            newMenssages.forEach(msg => this.mensajes.push(msg));
+            console.log('New Messages:', newMenssages);
+
+            // Crear un array para almacenar los mensajes en Phaser
+            //const phaserMessages = [];
+            //newMenssages.forEach(msg => phaserMessages.push(msg));
                
         })
         .catch(error => {

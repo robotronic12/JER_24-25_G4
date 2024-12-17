@@ -26,6 +26,7 @@ class Juego extends Phaser.Scene
 
     currentTime;
 
+
     //stars;
     //Jugadores
     j1;

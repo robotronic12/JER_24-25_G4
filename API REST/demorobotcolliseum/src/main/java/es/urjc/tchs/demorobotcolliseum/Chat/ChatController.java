@@ -23,8 +23,8 @@ public class ChatController {
     }
 
     @GetMapping()
-    public ResponseEntity<ChatResponse> getMessages(@RequestParam(defaultValue = "0") int since) {
-        Optional<ChatResponse> msg = chatService.getLastMessages(since);
+    public ResponseEntity<String[]> getMessages(@RequestParam(defaultValue = "0") int since) {
+        Optional<String[]> msg = chatService.getLastMessages(since);
         if (msg.isPresent()) {
             return ResponseEntity.ok(chatService.getLastMessages(since).get());
         }
