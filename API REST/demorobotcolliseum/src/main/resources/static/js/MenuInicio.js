@@ -18,8 +18,11 @@ class MenuInicio extends Phaser.Scene {
 
         //Cargo icono de usuario conectado/no conectado
 
-        this.load.image('user_conect','assets/botones/conect.png');
-        this.load.image('user_disconect','assets/botones/disconect.png');
+      
+
+        this.load.image('vestir', 'assets/botones/Vestir.png');
+        //Cargo Fuentes
+
         
 
         
@@ -39,8 +42,8 @@ class MenuInicio extends Phaser.Scene {
                 color: '#ffffff', 
                 fontStyle: 'bold'
         })
-        const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#0f0', fontSize: 20 })
-        const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#0f0', fontSize: 20 })
+        const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#ffff', fontSize: 20 })
+        const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#ffff', fontSize: 20 })
 
         //Configuracion de la musica
         this.bgMusic = this.sound.add('background'); //pongo la musica del menu
@@ -78,7 +81,13 @@ class MenuInicio extends Phaser.Scene {
             this.scene.start('Ajustes'); //carga la escena de game
         });
         
-       
+        const vestir = this.add.image(750, 530, 'vestir');
+        vestir.setInteractive().on('pointerdown', () => {
+            this.sound.play('select'); //que suene el sonido de play
+            this.scene.stop('MenuInicio'); //carga la escena de intro
+            this.scene.start('SeleccionJugador1'); //carga la escena de game
+        });
+
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
         
     }

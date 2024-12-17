@@ -14,26 +14,34 @@
             margin-bottom: 8px;
             font-size: 18px;
             color: white;
+            text-shadow: 
+                -1px -1px 0 #000,  
+                1px -1px 0 #000,
+                -1px  1px 0 #000,
+                1px  1px 0 #000; 
         }
 
         input {
             margin-bottom: 16px;
             padding: 8px;
             font-size: 16px;
+            
         }
 
         button {
             padding: 8px 16px;
             margin-bottom: 10px;
             font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+            font-family: 'Poppins';
+            background-color: white; /* Fondo en blanco */
+            color: black; /* Letras en negro */
+            border: 2px solid black; /* Borde negro */
+            border-radius: 8px; /* Bordes redondeados */
             cursor: pointer;
-        }
+        }   
 
         button:hover {
-            background-color: #007bff;
+            background-color: #c4c4c4;
         }
     </style>
 </head>
@@ -45,7 +53,7 @@
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" placeholder="Introduzca contraseña">
         
-        <button type="button" name="loginButton" id="submit">Login</button>
+        <button type="button" name="loginButton" id="submit">INICIAR SESION</button>
         <div></div>
         <button type="button" name="registerButton" id="changeScreen">¿No tienes usuario? Registrate</button>
     </form>

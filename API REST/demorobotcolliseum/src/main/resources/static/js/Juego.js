@@ -5,10 +5,18 @@ class Juego extends Phaser.Scene
     }
 
     cursors;
-    aKey;
-    dKey;
-    wKey;
     chatKey;
+
+    keyStates = {
+        w: false,
+        a: false,
+        s: false,
+        d: false,
+        arrowup: false,
+        arrowdown: false,
+        arrowleft: false,
+        arrowright: false,
+    };
 
     J1ShootKey;
     J2ShootKey;
@@ -79,11 +87,11 @@ class Juego extends Phaser.Scene
         if (GlobalData.isInChat) return;
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
         
-        if (this.aKey.isDown) {
+        if (this.keyStates.a) {
             this.j1.setVelocityX(-this.velocidadJ1);
             this.j1.setFlipX(false);
             // this.j1.anims.play('left', true);
-        } else if (this.dKey.isDown) {
+        } else if (this.keyStates.d) {
             this.j1.setVelocityX(this.velocidadJ1);
             this.j1.setFlipX(true);
             // this.j1.anims.play('right', true);
@@ -91,12 +99,12 @@ class Juego extends Phaser.Scene
             this.j1.setVelocityX(0);
             // this.j1.anims.play('turn');
         }
-        if (this.wKey.isDown && this.j1.body.touching.down) {
+        if (this.keyStates.w && this.j1.body.touching.down) {
             this.j1.setVelocityY(this.fuerzaSaltoJ1);
         }
 
         ////////// Disparo del jugador 1/////////////
-        if (Phaser.Input.Keyboard.JustDown(this.J1ShootKey)) {
+        if (this.keyStates.s) {
             
             if(this.currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 for (let i = 0; i < this.numeroBalasJ1; i++) {
@@ -153,11 +161,11 @@ class Juego extends Phaser.Scene
     
         const { left, right, up } = this.cursors;
         
-        if (left.isDown) {
+        if (this.keyStates.arrowleft) {
             this.j2.setVelocityX(-this.velocidadJ2);
             this.j2.setFlipX(false);
             // this.j2.anims.play('left', true);
-        } else if (right.isDown) {
+        } else if (this.keyStates.arrowright) {
             this.j2.setVelocityX(this.velocidadJ2);
             this.j2.setFlipX(true);
             // this.j2.anims.play('right', true);
@@ -165,12 +173,12 @@ class Juego extends Phaser.Scene
             this.j2.setVelocityX(0);
             // this.j2.anims.play('turn');
         }
-        if (up.isDown && this.j2.body.touching.down) {
+        if (this.keyStates.arrowup && this.j2.body.touching.down) {
             this.j2.setVelocityY(this.fuerzaSaltoJ2);
         }
 
         ////////// Disparo del jugador 2/////////////
-        if (Phaser.Input.Keyboard.JustDown(this.J2ShootKey)) {
+        if (this.keyStates.arrowdown) {
             
             if(this.currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 for (let i = 0; i < this.numeroBalasJ2; i++) {
@@ -493,6 +501,20 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     create ()
     {
+        this.input.keyboard.on('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            if (key in this.keyStates) {
+                this.keyStates[key] = true;
+            }
+        });
+
+        this.input.keyboard.on('keyup', (event) => {
+            const key = event.key.toLowerCase();
+            if (key in this.keyStates) {
+                this.keyStates[key] = false;
+            }
+        });
+        
         GlobalData.playing = true;
         ////////////Inputs extra//////////////////////////////
         //para comprobar la Pulsación de space
@@ -638,7 +660,7 @@ class Juego extends Phaser.Scene
 
     update ()
     {
-        if(GlobalData.volumenCambiado === true){
+        if(GlobalData.volumenCambiado){
             this.bgMusic.setVolume(GlobalData.volumen);
             GlobalData.volumenCambiado = false;
         }
@@ -715,6 +737,12 @@ class Juego extends Phaser.Scene
         //Abrir chat
 
         this.checkChat();
+
+        if(GlobalData.isInChat){
+            Object.keys(this.keyStates).forEach(key => {
+                this.keyStates[key] = false;
+            });        
+        }
         
     }
 }
