@@ -9,6 +9,7 @@ class Chat extends Phaser.Scene {
     messagesContainer;
 
     addMessageToChat(container, username, message, type) {
+        console.log("Hola");
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}`;
 
@@ -33,7 +34,7 @@ class Chat extends Phaser.Scene {
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: JSON.stringify(user),
+            data: JSON.stringify(usuario),
         })
         // .then(response => {
         //     if (!response.ok) {
@@ -53,56 +54,24 @@ class Chat extends Phaser.Scene {
     }
 
     cargarMensajes(container){
-        const since = 0;
-        var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
-        var game = this
-        const newId = 0;
+        let newId = this.lastID;
 
         $.get(`/api/chat`,
             (data)=>{
                 data.forEach(message =>{
-                    if(this.lastID<message.id){
-                        this.addMessageToChat(container, message.user, message.text, "user")
+                    //console.log(message.id);
+                    if(this.lastID < message.id){
+                        this.addMessageToChat(container, message.user, message.text, 'user')
+                        if(message.id>newId){
+                            newId = message.id;
+                        }
+                        console.log(message.id);
                     }
 
                 });
+                this.lastID = newId;
+                console.log(this.lastID);
             });
-
-        //Usa jQuery para hacer una solicitud AJAX
-        // $.ajax({
-        //     url: url,
-        //     method: 'GET',
-        //     success: function(response) {
-        //         // Procesa la respuesta del servidor
-        //         // Actualiza el juego con los datos recibidos
-        //         let data = JSON.stringify(response)
-        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error('Error en la solicitud AJAX:', error);
-        //     }
-        // });
-
-        // fetch(`/api/chat?since=${since}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        // })
-        // .then(response => {
-        //     if (!response.ok) {
-        //         throw new Error('Error en la peticion al servidor');
-        //     }
-        //     return response.json(); // Si el servidor devuelve JSON
-        // })
-        // .then(data => {
-        //     console.log('Respuesta del servidor:', data);
-        //     // Aquí puedes manejar la respuesta del servidor
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        //     // Aquí puedes manejar errores
-        // });
     }
 
     preload() {
@@ -112,6 +81,7 @@ class Chat extends Phaser.Scene {
 
     create() {     
         const scene = this;
+        this.lastID = 0;
         
         const text = this.add.text(10, 10, 'Chat', { color: 'white', fontFamily: 'Arial', fontSize: '32px '});
         //Añado el html
@@ -119,24 +89,23 @@ class Chat extends Phaser.Scene {
         element.addListener('click');
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM
         console.log("esquizofrenia")
+        this.messagesContainer = document.getElementById('messages');
 
         this.mensajes = [];
         
         element.on('click', (event) => {
             if (event.target.name === 'send-button') {
                 const inputField = document.getElementById('chat-input');  // Accede al input por ID
-                messagesContainer = document.getElementById('messages');
                 console.log("has clickado")
                 if (inputField && inputField.value.trim() !== '') {
                     const userInput = inputField.value.trim();
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    this.addMessageToChat(messagesContainer, usuario.username, userInput, 'user');
+                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
                     this.sendToServer(usuario.username, userInput);
                     this.cargarMensajes();
-                }
-        
+                }  
                 
             }
         });
@@ -149,7 +118,7 @@ class Chat extends Phaser.Scene {
             this.scene.stop('Chat'); //carga la escena de intro
             GlobalData.isInChat = false;
         }
-        this.cargarMensajes(this.messagesContainer);
+        this.cargarMensajes(this.messagesContainer);      
     } 
 
 }

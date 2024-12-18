@@ -27,12 +27,12 @@ public class ChatController {
     @GetMapping()
     public ResponseEntity<List<MessageOnChat>> getMessages(@RequestParam(defaultValue = "0") int since) {
         Optional<List<MessageOnChat>> msg = chatService.getLastMessages(since);
-        if (msg.isPresent()) {
-            StringBuilder sb = new StringBuilder();
+        if (!msg.isEmpty()) {
+            // StringBuilder sb = new StringBuilder();
             // for (String s : msg.get()) {
             //     sb.append(s).append(" ");
             // }
-            String combinado = sb.toString().trim();
+            //String combinado = sb.toString().trim();
             return ResponseEntity.ok(msg.get());//chatService.getLastMessages(since)
         }
 

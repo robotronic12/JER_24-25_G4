@@ -10,6 +10,8 @@ import es.urjc.tchs.demorobotcolliseum.Usuario.UserService;
 @SpringBootApplication
 public class DemorobotcolliseumApplication {
 
+	//Para acceder al servidor necesitamos la ip del dispositivo en el que está.
+
 	@Bean (name = "usersPath") //ESto no tiene dependencias-> lo puede resolver automáticamente 
 	public String getUsersPath(){
 		return "data/users";

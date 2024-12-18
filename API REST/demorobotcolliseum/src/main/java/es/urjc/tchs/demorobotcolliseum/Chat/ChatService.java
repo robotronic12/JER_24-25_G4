@@ -1,13 +1,10 @@
 package es.urjc.tchs.demorobotcolliseum.Chat;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import org.springframework.stereotype.Service;
 
 import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
@@ -53,13 +50,13 @@ public class ChatService {
             }
         }
 
-        String[] msges = (String[]) newMessages.toArray();
+        // String[] msges = (String[]) newMessages.toArray();
 
-        for (int i = 0; i<newMessages.size();i++) {
-            msges[i] = newMessages.get(i);
-        }
+        // for (int i = 0; i<newMessages.size();i++) {
+        //     msges[i] = newMessages.get(i);
+        // }
 
-        Optional<String[]> response = Optional.of(msges);
+        // Optional<String[]> response = Optional.of(msges);
 
         return Optional.of(nM);
     }
