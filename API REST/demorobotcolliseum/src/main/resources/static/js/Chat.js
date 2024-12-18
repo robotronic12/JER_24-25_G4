@@ -5,47 +5,72 @@ class Chat extends Phaser.Scene {
 
     mensajes;
     timeSpan;
+    lastID;
+    messagesContainer;
 
-    cargarMensajes(){
-        const since = 0;
-        // var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
-        // var game = this
+    addMessageToChat(container, username, message, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
 
-        // Usa jQuery para hacer una solicitud AJAX
-        // $.ajax({
-        //     url: url,
-        //     method: 'GET',
-        //     success: function(response) {
-        //         // Procesa la respuesta del servidor
-        //         // Actualiza el juego con los datos recibidos
-        //         let data = JSON.stringify(response)
-        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error('Error en la solicitud AJAX:', error);
-        //     }
-        // });
+        const usernameSpan = document.createElement('span');
+        usernameSpan.textContent = username + ':';
+        usernameSpan.className = 'username';
 
-        fetch(`/api/chat?since=${since}`, {
-            method: 'GET',
+        const textSpan = document.createElement('span');
+        textSpan.textContent = message;
+
+        messageDiv.appendChild(usernameSpan);
+        messageDiv.appendChild(textSpan);
+        container.appendChild(messageDiv);
+        container.scrollTop = container.scrollHeight;  // Hacer scroll al final
+        
+    }
+
+    sendToServer(username, message){
+        console.log("Hola");
+
+        fetch(`/api/chat/${username}/chat?message=${message}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            data: JSON.stringify(usuario),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la peticion al servidor');
-            }
-            return response.json(); // Si el servidor devuelve JSON
-        })
-        .then(data => {
-            console.log('Respuesta del servidor:', data);
-            // Aquí puedes manejar la respuesta del servidor
-        })
+        // .then(response => {
+        //     if (!response.ok) {
+        //         throw new Error('Error en la petición al servidor');
+        //     }
+        //     return response.json(); // Si el servidor devuelve JSON
+        // })
+        // .then(data => {
+        //     console.log('Respuesta del servidor:', data);
+        //     // Aquí puedes manejar la respuesta del servidor
+        // })
         .catch(error => {
             console.error('Error:', error);
             // Aquí puedes manejar errores
         });
+
+    }
+
+    cargarMensajes(container){
+        let newId = this.lastID;
+
+        $.get(`/api/chat`,
+            (data)=>{
+                data.forEach(message =>{
+                    //console.log(message.id);
+                    if(this.lastID < message.id){
+                        this.addMessageToChat(container, message.user, message.text, 'user')
+                        if(message.id>newId){
+                            newId = message.id;
+                        }                        
+                    }
+
+                });
+                this.lastID = newId;
+                //console.log(this.lastID);
+            });
     }
 
     preload() {
@@ -55,6 +80,7 @@ class Chat extends Phaser.Scene {
 
     create() {     
         const scene = this;
+        this.lastID = 0;
         
         const text = this.add.text(10, 10, 'Chat', { color: 'white', fontFamily: 'Arial', fontSize: '32px '});
         //Añado el html
@@ -62,63 +88,24 @@ class Chat extends Phaser.Scene {
         element.addListener('click');
         // Guardamos el contexto de `this` (la escena Phaser) para usarlo dentro del manejador del DOM
         console.log("esquizofrenia")
+        this.messagesContainer = document.getElementById('messages');
 
         this.mensajes = [];
         
         element.on('click', (event) => {
             if (event.target.name === 'send-button') {
                 const inputField = document.getElementById('chat-input');  // Accede al input por ID
-                const messagesContainer = document.getElementById('messages');
                 console.log("has clickado")
                 if (inputField && inputField.value.trim() !== '') {
                     const userInput = inputField.value.trim();
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    addMessageToChat(messagesContainer, usuario.username, userInput, 'user');
-
-                    this.cargarMensajes();
-                }
-        
-                function addMessageToChat(container, username, message, type) {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message ${type}`;
-        
-                    const usernameSpan = document.createElement('span');
-                    usernameSpan.textContent = username + ':';
-                    usernameSpan.className = 'username';
-        
-                    const textSpan = document.createElement('span');
-                    textSpan.textContent = message;
-        
-                    messageDiv.appendChild(usernameSpan);
-                    messageDiv.appendChild(textSpan);
-                    container.appendChild(messageDiv);
-                    container.scrollTop = container.scrollHeight;  // Hacer scroll al final
-
-                    fetch(`/api/chat/${username}/chat?message=${message}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: JSON.stringify(user),
-                    })
-                    // .then(response => {
-                    //     if (!response.ok) {
-                    //         throw new Error('Error en la petición al servidor');
-                    //     }
-                    //     return response.json(); // Si el servidor devuelve JSON
-                    // })
-                    // .then(data => {
-                    //     console.log('Respuesta del servidor:', data);
-                    //     // Aquí puedes manejar la respuesta del servidor
-                    // })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Aquí puedes manejar errores
-                    });
-                    
-                }
+                    this.sendToServer(usuario.username, userInput);
+                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+                    this.lastID++;
+                }  
+                
             }
         });
         
@@ -130,6 +117,7 @@ class Chat extends Phaser.Scene {
             this.scene.stop('Chat'); //carga la escena de intro
             GlobalData.isInChat = false;
         }
+        this.cargarMensajes(this.messagesContainer);      
     } 
 
 }
