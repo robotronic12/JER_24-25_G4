@@ -10,11 +10,11 @@ import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
 
 public class ChatService {
-    private final List<MessageOnChat> messages;
+    private List<MessageOnChat> messages;
     private final AtomicInteger lastId = new AtomicInteger(0);
     private final ChatDAO chatDAO;//El final lo que hace es que si hay cambios da error
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
-
+    
     public ChatService(ChatDAO chatDAO){
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
@@ -36,28 +36,29 @@ public class ChatService {
     }
 
     public Optional<List<MessageOnChat>> getLastMessages(int since) {
-        List<String> newMessages = new ArrayList<>();
-        List<MessageOnChat> nM = new ArrayList<>();
-        int latestId = since;
+    //this.messages = this.chatDAO.getAllchats();
+    List<String> newMessages = new ArrayList<>();
+    List<MessageOnChat> nM = new ArrayList<>();
+    int latestId = since;
 
-        synchronized (messages) {
-            for (MessageOnChat msg : messages) {
-                if (msg.getId() > since) {
-                    newMessages.add(msg.getText());
-                    nM.add(msg);
-                    latestId = msg.getId();
-                }
+    synchronized (messages) {
+        for (MessageOnChat msg : messages) {
+            if (msg.getId() > since) {
+                newMessages.add(msg.getText());
+                nM.add(msg);
+                latestId = msg.getId();
             }
         }
+    }
 
-        // String[] msges = (String[]) newMessages.toArray();
+    // String[] msges = (String[]) newMessages.toArray();
 
-        // for (int i = 0; i<newMessages.size();i++) {
-        //     msges[i] = newMessages.get(i);
-        // }
+    // for (int i = 0; i<newMessages.size();i++) {
+    //     msges[i] = newMessages.get(i);
+    // }
 
-        // Optional<String[]> response = Optional.of(msges);
+    // Optional<String[]> response = Optional.of(msges);
 
-        return Optional.of(nM);
+    return Optional.of(nM);
     }
 }
