@@ -38,14 +38,16 @@ public class ChatService {
         }
     }
 
-    public Optional<String[]> getLastMessages(int since) {
+    public Optional<List<MessageOnChat>> getLastMessages(int since) {
         List<String> newMessages = new ArrayList<>();
+        List<MessageOnChat> nM = new ArrayList<>();
         int latestId = since;
 
         synchronized (messages) {
             for (MessageOnChat msg : messages) {
                 if (msg.getId() > since) {
                     newMessages.add(msg.getText());
+                    nM.add(msg);
                     latestId = msg.getId();
                 }
             }
@@ -59,6 +61,6 @@ public class ChatService {
 
         Optional<String[]> response = Optional.of(msges);
 
-        return response;
+        return Optional.of(nM);
     }
 }

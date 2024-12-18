@@ -1,6 +1,8 @@
 package es.urjc.tchs.demorobotcolliseum.Chat;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,15 +25,15 @@ public class ChatController {
     }
 
     @GetMapping()
-    public ResponseEntity<String> getMessages(@RequestParam(defaultValue = "0") int since) {
-        Optional<String[]> msg = chatService.getLastMessages(since);
+    public ResponseEntity<List<MessageOnChat>> getMessages(@RequestParam(defaultValue = "0") int since) {
+        Optional<List<MessageOnChat>> msg = chatService.getLastMessages(since);
         if (msg.isPresent()) {
             StringBuilder sb = new StringBuilder();
-            for (String s : msg.get()) {
-                sb.append(s).append(" ");
-            }
+            // for (String s : msg.get()) {
+            //     sb.append(s).append(" ");
+            // }
             String combinado = sb.toString().trim();
-            return ResponseEntity.ok(combinado);//chatService.getLastMessages(since)
+            return ResponseEntity.ok(msg.get());//chatService.getLastMessages(since)
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
