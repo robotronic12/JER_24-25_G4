@@ -91,7 +91,6 @@ class MenuInicio extends Phaser.Scene {
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
         
     }
-
     update() {} //se puede poner un delta 
 
 }
