@@ -45,6 +45,7 @@ public class UserController {
 
        /* Long time = (long) 10000;
         this.userService.updateLastSeen(username);//Esto es para que actualice la actividad del usuario.
+
         int users = this.userService.getActiveUsers(time).size();
         return ResponseEntity.ok(users);*/
         long activeThreshold = 1000; // Tiempo de actividad considerado válido (en milisegundos).
