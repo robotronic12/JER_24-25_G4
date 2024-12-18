@@ -64,7 +64,7 @@ class MenuLogin extends Phaser.Scene {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(user)
+                    body: JSON.stringify(usuario)
                 })
                     .then(response => {
                         if (!response.ok) {
