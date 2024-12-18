@@ -19,7 +19,7 @@ public class UserService {
     private final UserDAO userDAO;//El final lo que hace es que si hay cambios da error
 
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
-    private ConcurrentHashMap<String, Long> usersAct; //Esto complica las cosas porque me crea una nueva extrutura.
+    private ConcurrentHashMap<String, Long> usersAct=new ConcurrentHashMap<>(); //Esto complica las cosas porque me crea una nueva extrutura.
     //private ArrayList<String> usersLog;
 
 
@@ -113,16 +113,28 @@ public class UserService {
         }
     }
 
-    public void updateLastSeen (String username){
-        if(this.usersAct.containsKey(username)){
-            this.usersAct.put(username, System.currentTimeMillis());                
-        }
+    /*public void updateLastSeen (String username){
+        //if(usersAct.containsKey(username)){
+            usersAct.put(username, System.currentTimeMillis());  
+                       
+        //}
+    }*/
+    public void updateLastSeen(String username) {
+        usersAct.put(username, System.currentTimeMillis());
+        System.out.println("Mapa actualizado: " + usersAct);
     }
 
    
-    public List<String> getActiveUsers(long threshold) {
+    public int getActiveUsers(long threshold) {
+        long currentTime = System.currentTimeMillis();
 
-        List<String> connected = new ArrayList<>();
+        // Filtra y devuelve el tamaño (no necesitas agregar a otra lista)
+        int conteo=(int) usersAct.values().stream()
+                .filter(lastSeen -> (currentTime - lastSeen) <= threshold)
+                .count();
+        return conteo;
+        
+       /*  List<String> connected = new ArrayList<>();
 
         long currentTimeMillis = System.currentTimeMillis();
 
@@ -130,14 +142,14 @@ public class UserService {
             
             if (entry.getValue() > (currentTimeMillis - threshold)) {
                 connected.add(entry.getKey());
-            }
+            }*/
             
             // if (entry.getValue() < (currentTimeMillis - threshold)) {
             //     this.usersAct.remove(entry.getKey());
             // }
-        }
+       /* }
         
-        return connected;        
+        return connected.size();  */      
     }
 }
 

@@ -52,8 +52,8 @@ class MenuInicio extends Phaser.Scene {
         this.bgMusic.play(); //que suene
 
          //estado de conexión del jugador
-        const texto_conexión= this.add.text(500,100,'Estas conectado, te jodes',{fill:'#32a834',fontsize:40});
-        const icono_conect = this.add.image(500, 60, 'user_conect');
+        //const texto_conexión= this.add.text(500,100,'Estas conectado, te jodes',{fill:'#32a834',fontsize:40});
+        //const icono_conect = this.add.image(500, 60, 'user_conect');
 
         
 
@@ -91,7 +91,6 @@ class MenuInicio extends Phaser.Scene {
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
         
     }
-
     update() {} //se puede poner un delta 
 
 }

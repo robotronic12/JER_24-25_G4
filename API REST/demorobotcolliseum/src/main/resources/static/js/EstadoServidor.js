@@ -67,6 +67,7 @@ class EstadoServidor extends Phaser.Scene {
             fetch('/api/users/activeUsers') //GET de los usuarios activos
     .then(response => {
         if (!response.ok) {
+           
             // Si la respuesta no es exitosa, mostramos un mensaje de error y no continuamos
             const icono_conect = this.add.image(510, 55, 'user_disconect');
             const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
