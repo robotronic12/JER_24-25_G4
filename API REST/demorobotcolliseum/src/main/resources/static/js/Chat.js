@@ -9,7 +9,6 @@ class Chat extends Phaser.Scene {
     messagesContainer;
 
     addMessageToChat(container, username, message, type) {
-        console.log("Hola");
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}`;
 
@@ -28,6 +27,7 @@ class Chat extends Phaser.Scene {
     }
 
     sendToServer(username, message){
+        console.log("Hola");
 
         fetch(`/api/chat/${username}/chat?message=${message}`, {
             method: 'POST',
@@ -64,13 +64,12 @@ class Chat extends Phaser.Scene {
                         this.addMessageToChat(container, message.user, message.text, 'user')
                         if(message.id>newId){
                             newId = message.id;
-                        }
-                        console.log(message.id);
+                        }                        
                     }
 
                 });
                 this.lastID = newId;
-                console.log(this.lastID);
+                //console.log(this.lastID);
             });
     }
 
@@ -102,9 +101,9 @@ class Chat extends Phaser.Scene {
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
                     this.sendToServer(usuario.username, userInput);
-                    this.cargarMensajes();
+                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+                    this.lastID++;
                 }  
                 
             }
