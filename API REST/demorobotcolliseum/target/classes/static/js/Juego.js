@@ -355,19 +355,19 @@ class Juego extends Phaser.Scene
     }
 
     //Teclas
-    instanceKeyboardKeys(){
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    //instanceKeyboardKeys(){
+    //    this.cursors = this.input.keyboard.createCursorKeys();
+    //    this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    //    this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    //    this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
-        this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    //    this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    //    this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
-        this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+    //    this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
         
-    }
+    //}
 
     //Final
     acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
@@ -622,7 +622,7 @@ class Juego extends Phaser.Scene
 
         this.physics.add.collider(this.balas, this.j2, this.handleColision2, null, this);
 
-        this.instanceKeyboardKeys();
+    //this.instanceKeyboardKeys();
 
         //Marcadores de vida;
         const recuadro2 = this.add.image(700, 568, 'marcoVida');
