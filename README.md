@@ -184,3 +184,7 @@ También, se ha implementado una interfaz donde te muestra los usuarios activos 
 ### Selección de color de robots
 Por último, se ha implementado un sistema de elección de color del personaje
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/seleccionColor.png"></div>
+
+### Diagrama UML de las clases
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/Imagen de WhatsApp 2024-12-17 a las 21.06.38_af36e915.jpg"></div>
+
