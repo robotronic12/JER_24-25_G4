@@ -62,9 +62,8 @@ class Chat extends Phaser.Scene {
                     //console.log(message.id);
                     if(this.lastID < message.id){
                         this.addMessageToChat(container, message.user, message.text, 'user')
-                        if(message.id>newId){
-                            newId = message.id;
-                        }                        
+                        console.log('Pintado en 65');
+                        newId = message.id;          
                     }
 
                 });
@@ -106,6 +105,7 @@ class Chat extends Phaser.Scene {
 
                     if(chatSend){
                         this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+                        console.log('Pintado en 108');
                         chatSend = !chatSend;
                     }
                     this.lastID++;
