@@ -11,7 +11,7 @@ import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
 public class ChatService {
     private List<MessageOnChat> messages;
-    private final AtomicInteger lastId = new AtomicInteger(0);
+    private AtomicInteger lastId = new AtomicInteger(0);
     private final ChatDAO chatDAO;//El final lo que hace es que si hay cambios da error
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
     
@@ -19,11 +19,13 @@ public class ChatService {
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
         this.messages = this.chatDAO.getAllchats();
+        this.lastId = new AtomicInteger(messages.size());
     }
 
     // public List<String>
     public void addMessage(String username, String message) {
         synchronized (messages) {
+            this.lastId = new AtomicInteger(messages.size());
             var msg = new MessageOnChat(lastId.incrementAndGet(), username, message);
             messages.add(msg);
             chatDAO.updatechat(msg);
@@ -43,7 +45,7 @@ public class ChatService {
 
     synchronized (messages) {
         for (MessageOnChat msg : messages) {
-            if (msg.getId() > since) {
+            if (msg.getId() > latestId) {
                 newMessages.add(msg.getText());
                 nM.add(msg);
                 latestId = msg.getId();

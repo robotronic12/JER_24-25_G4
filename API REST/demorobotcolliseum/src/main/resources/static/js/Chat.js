@@ -56,7 +56,7 @@ class Chat extends Phaser.Scene {
     cargarMensajes(container){
         let newId = this.lastID;
 
-        $.get(`/api/chat`,
+        $.get(`/api/chat?since=${this.lastID}`,
             (data)=>{
                 data.forEach(message =>{
                     //console.log(message.id);
@@ -93,6 +93,7 @@ class Chat extends Phaser.Scene {
         this.mensajes = [];
         
         element.on('click', (event) => {
+            var chatSend = true;
             if (event.target.name === 'send-button') {
                 const inputField = document.getElementById('chat-input');  // Accede al input por ID
                 console.log("has clickado")
@@ -102,7 +103,11 @@ class Chat extends Phaser.Scene {
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
                     this.sendToServer(usuario.username, userInput);
-                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+
+                    if(chatSend){
+                        this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+                        chatSend = !chatSend;
+                    }
                     this.lastID++;
                 }  
                 
