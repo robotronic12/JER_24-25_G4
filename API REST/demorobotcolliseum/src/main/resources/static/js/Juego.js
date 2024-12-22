@@ -159,7 +159,7 @@ class Juego extends Phaser.Scene
         if (GlobalData.isInChat) return;
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
-        const { left, right, up } = this.cursors;
+        // const { left, right, up } = this.cursors;
         
         if (this.keyStates.arrowleft) {
             this.j2.setVelocityX(-this.velocidadJ2);

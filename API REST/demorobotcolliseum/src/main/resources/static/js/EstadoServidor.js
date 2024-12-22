@@ -64,31 +64,32 @@ class EstadoServidor extends Phaser.Scene {
                 //userText.setText('Error al cargar usuarios activos.');
                 
             });*/
-            fetch('/api/users/activeUsers') //GET de los usuarios activos
-    .then(response => {
-        if (!response.ok) {
-            // Si la respuesta no es exitosa, mostramos un mensaje de error y no continuamos
-            const icono_conect = this.add.image(510, 55, 'user_disconect');
-            const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
-            throw new Error(`Error en la petición: ${response.status}`); // Lanzamos el error para que lo capture el catch
-        }
-        
-        return response.json(); // Convertimos la respuesta a JSON solo si la respuesta es válida
-    })
-    .then(data => {
-        // Si la respuesta es exitosa, actualizamos la interfaz con los usuarios activos
-        const numberOfUsers = data; // `data` es ahora directamente el número de usuarios activos
+            var usern = usuario.username;
+            fetch(`/api/users/activeUsers/${usern}`) //GET de los usuarios activos
+            .then(response => {
+                if (!response.ok) {
+                    // Si la respuesta no es exitosa, mostramos un mensaje de error y no continuamos
+                    const icono_conect = this.add.image(510, 55, 'user_disconect');
+                    const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
+                    throw new Error(`Error en la peticion: ${response.status}`); // Lanzamos el error para que lo capture el catch
+                }
+                
+                return response.json(); // Convertimos la respuesta a JSON solo si la respuesta es válida
+            })
+            .then(data => {
+                // Si la respuesta es exitosa, actualizamos la interfaz con los usuarios activos
+                const numberOfUsers = data; // `data` es ahora directamente el número de usuarios activos
 
-        const icono_conect = this.add.image(510, 55, 'user_conect');
-        const texto_conect = this.add.text(550, 40, `Estas conectado!! \nUsuarios conectados: ${numberOfUsers}`, { fill: '#a3e6bd', font: '17px' });
-    })
-    .catch(error => {
-        // En el caso de un error (ya sea de la petición o en el procesamiento de datos)
-        const icono_conect = this.add.image(510, 55, 'user_disconect');
-        const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
-        console.error('Error al obtener usuarios activos:', error);
-        // Ya se maneja la desconexión en el bloque if(response.ok) en caso de error
-    });
+                const icono_conect = this.add.image(510, 55, 'user_conect');
+                const texto_conect = this.add.text(550, 40, `Estas conectado!! \nUsuarios conectados: ${numberOfUsers}`, { fill: '#a3e6bd', font: '17px' });
+            })
+            .catch(error => {
+                // En el caso de un error (ya sea de la petición o en el procesamiento de datos)
+                const icono_conect = this.add.image(510, 55, 'user_disconect');
+                const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
+                console.error('Error al obtener usuarios activos:', error);
+                // Ya se maneja la desconexión en el bloque if(response.ok) en caso de error
+            });
     
             
     } //se puede poner un delta 
