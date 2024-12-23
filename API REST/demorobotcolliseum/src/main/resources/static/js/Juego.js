@@ -16,6 +16,8 @@ class Juego extends Phaser.Scene
         arrowdown: false,
         arrowleft: false,
         arrowright: false,
+        t: false,
+        esc: false,
     };
 
     J1ShootKey;
@@ -278,7 +280,7 @@ class Juego extends Phaser.Scene
     checkChat(){
         if(GlobalData.isInChat) return;
         
-        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+        if (this.keyStates.t) {
             //Quito los controles
             this.recogSonido.play();
             this.scene.launch('Chat'); 
@@ -320,7 +322,7 @@ class Juego extends Phaser.Scene
     checkPause(){
         if(GlobalData.isInChat) return;
 
-        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+        if (this.keyStates.esc) {
             this.scene.pause('Juego');
             this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
