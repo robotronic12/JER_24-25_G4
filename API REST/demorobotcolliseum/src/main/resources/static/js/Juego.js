@@ -516,6 +516,10 @@ class Juego extends Phaser.Scene
                 this.keyStates[key] = false;
             }
         });
+
+        for (let key in keyStates) {
+            keyStates[key] = false;
+        }
         
         GlobalData.playing = true;
         ////////////Inputs extra//////////////////////////////
