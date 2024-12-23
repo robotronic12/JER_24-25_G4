@@ -26,6 +26,12 @@ public class ChatService {
     public void addMessage(String username, String message) {
         var writeLock = this.lock.writeLock();
         writeLock.lock();
+        // int idnew = messages.get(0).getId();
+        // for (MessageOnChat messageOnChat : messages) {
+        //     if(idnew>messageOnChat.getId()){
+        //         idnew = messageOnChat.getId(); 
+        //     }
+        // }
         try{
             synchronized (messages) {
                 //this.lastId = new AtomicInteger(messages.size());
