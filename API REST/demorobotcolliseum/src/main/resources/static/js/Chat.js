@@ -8,6 +8,8 @@ class Chat extends Phaser.Scene {
     lastID;
     messagesContainer;
     cargarMas;
+    tiempoCarga = 1000; // Tiempo en milisegundos entre cargas de mensajes
+    tiempo = 0;
 
     addMessageToChat(container, username, message, type) {
         const messageDiv = document.createElement('div');
@@ -30,13 +32,7 @@ class Chat extends Phaser.Scene {
     sendToServer(username, message){
         console.log("Hola");
 
-        fetch(`/api/chat/${username}/chat?message=${message}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(usuario),
-        })
+        fetch(`/api/chat/${username}/chat?message=${message}`)
         // .then(response => {
         //     if (!response.ok) {
         //         throw new Error('Error en la petición al servidor');
@@ -131,10 +127,11 @@ class Chat extends Phaser.Scene {
             GlobalData.isInChat = false;
         }    
         
-        if(this.cargarMas){
+        if(this.cargarMas && this.tiempoCarga <= tiempo){
             this.cargarMas = false;
             this.cargarMensajes(this.messagesContainer); 
         }
+        this.tiempo += this.game.loop.delta; // Incrementa el tiempo transcurrido
     } 
 
 }

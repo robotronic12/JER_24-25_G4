@@ -34,13 +34,16 @@ public class UserService {
         var readLock = this.lock.readLock();
         readLock.lock();
         try{
+            
+            
             var user = this.userDAO.getUser(username); //Bien
             if(user.isPresent() && user.get().getPassword().equals(password)){
                 //this.usersLog.add(username);
+                this.usersAct.put(username, System.currentTimeMillis());
                 this.updateLastSeen(username); //Está mal
                 return true; 
             }
-            return false;
+            return false; //Si no está o la contraseña es incorrecta
             //si esto lo hacemos con baeldung y lo codificamos nos dan más notas. Así que habría que mirarlo.
         }finally{
             readLock.unlock();
@@ -115,7 +118,7 @@ public class UserService {
 
     public void updateLastSeen (String username){
         if(this.usersAct.containsKey(username)){
-            this.usersAct.put(username, System.currentTimeMillis());                
+            this.usersAct.put(username, System.currentTimeMillis()); 
         }
     }
 
@@ -131,7 +134,7 @@ public class UserService {
             if (entry.getValue() > (currentTimeMillis - threshold)) {
                 connected.add(entry.getKey());
             }
-            
+
             // if (entry.getValue() < (currentTimeMillis - threshold)) {
             //     this.usersAct.remove(entry.getKey());
             // }

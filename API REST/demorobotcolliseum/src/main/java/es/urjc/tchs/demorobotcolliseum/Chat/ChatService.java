@@ -19,7 +19,7 @@ public class ChatService {
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
         this.messages = this.chatDAO.getAllchats();
-        this.lastId = new AtomicInteger(messages.size());
+        this.lastId = new AtomicInteger(this.getLastMessage().get().getId());
     }
 
     // public List<String>
@@ -52,6 +52,22 @@ public class ChatService {
         }finally{
             writeLock.unlock();
         }
+    }
+
+    public Optional<MessageOnChat> getLastMessage() {
+        //this.messages = this.chatDAO.getAllchats();
+        var readLock = this.lock.readLock();
+        readLock.lock();
+        try{
+            synchronized (messages) {
+                if (!messages.isEmpty()) {
+                    return Optional.of(messages.get(messages.size() - 1));
+                }
+            }
+        }finally{
+            readLock.unlock();
+        }
+        return Optional.empty();
     }
 
     public Optional<List<MessageOnChat>> getLastMessages(int since) {

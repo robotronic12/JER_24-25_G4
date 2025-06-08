@@ -1,6 +1,8 @@
 package es.urjc.tchs.demorobotcolliseum.Usuario;
 
+import java.io.Console;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class UserController {
 
     @GetMapping("/activeUsers/{username}")
     public ResponseEntity<Integer> getNumberOfActiveUsers(@PathVariable String username) {
-        Long time = (long) 10000;
+        Long time = (long) 5000;
         this.userService.updateLastSeen(username);//Esto es para que actualice la actividad del usuario.
 
         int users = this.userService.getActiveUsers(time).size();

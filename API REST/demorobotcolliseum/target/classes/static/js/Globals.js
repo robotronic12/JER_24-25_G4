@@ -6,7 +6,7 @@ var GlobalData = {
     isInChat : false,
 }
 
-const usuario = {
+var usuario = {
     username: " ", // Asigna el valor deseado.
     password: " ", // Asigna el valor deseado.
     color1: 0,
