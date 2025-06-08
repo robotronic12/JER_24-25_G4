@@ -19,7 +19,7 @@ class EstadoServidor extends Phaser.Scene {
         const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#0f0', fontSize: 20 })
         const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#0f0', fontSize: 20 })
 
-        
+        this.iconoConexion = this.add.image(500, 60, 'user_conect');
         
          //estado de conexión del jugador
         //if(estado_conex_jugador){
@@ -69,8 +69,8 @@ class EstadoServidor extends Phaser.Scene {
             .then(response => {
                 if (!response.ok) {
                     // Si la respuesta no es exitosa, mostramos un mensaje de error y no continuamos
-                    const icono_conect = this.add.image(510, 55, 'user_disconect');
-                    const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
+                    //const icono_conect = this.add.image(510, 55, 'user_disconect');
+                    //const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
                     throw new Error(`Error en la peticion: ${response.status}`); // Lanzamos el error para que lo capture el catch
                 }
                 
@@ -88,6 +88,10 @@ class EstadoServidor extends Phaser.Scene {
                 const icono_conect = this.add.image(510, 55, 'user_disconect');
                 const texto_conect = this.add.text(550, 40, 'Usuario desconectado \nvuelve a reconectarte', { fill: '#f5a4a2', font: '18px' });
                 console.error('Error al obtener usuarios activos:', error);
+                this.estadoConexion = !this.estadoConexion;
+
+                const nuevaTextura = this.estadoConexion ? 'user_conect' : 'user_disconect';
+                this.iconoConexion.setTexture(nuevaTextura);
                 // Ya se maneja la desconexión en el bloque if(response.ok) en caso de error
             });
     

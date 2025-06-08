@@ -66,23 +66,23 @@ class MenuLogin extends Phaser.Scene {
                     },
                     body: JSON.stringify(usuario)
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la autenticación, error al registrar usuario');
-                        }
-                        registro_pantalla = false;    //vamos a la pantalla de login
-                        actualizarFormulario();
-                        return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
-                    })
-                    .then(data => {
-                        console.log('Respuesta del servidor:', data);
-                        console.log('Usuario registrado con éxito');
-                        // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Mostrar mensaje de error al usuario
-                    });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la autenticación, error al registrar usuario');
+                    }
+                    registro_pantalla = false;    //vamos a la pantalla de login
+                    actualizarFormulario();
+                    return response.json(); // Cambia a `response.text()` si tu servidor devuelve texto
+                })
+                .then(data => {
+                    console.log('Respuesta del servidor:', data);
+                    console.log('Usuario registrado con éxito');
+                    // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Mostrar mensaje de error al usuario
+                });
                     
             }
 
