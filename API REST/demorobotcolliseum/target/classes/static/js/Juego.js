@@ -16,6 +16,8 @@ class Juego extends Phaser.Scene
         arrowdown: false,
         arrowleft: false,
         arrowright: false,
+        t: false,
+        esc: false,
     };
 
     J1ShootKey;
@@ -159,7 +161,7 @@ class Juego extends Phaser.Scene
         if (GlobalData.isInChat) return;
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
-        const { left, right, up } = this.cursors;
+        // const { left, right, up } = this.cursors;
         
         if (this.keyStates.arrowleft) {
             this.j2.setVelocityX(-this.velocidadJ2);
@@ -278,7 +280,7 @@ class Juego extends Phaser.Scene
     checkChat(){
         if(GlobalData.isInChat) return;
         
-        if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
+        if (this.keyStates.t) {
             //Quito los controles
             this.recogSonido.play();
             this.scene.launch('Chat'); 
@@ -320,7 +322,7 @@ class Juego extends Phaser.Scene
     checkPause(){
         if(GlobalData.isInChat) return;
 
-        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+        if (this.keyStates.esc) {
             this.scene.pause('Juego');
             this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
@@ -355,19 +357,19 @@ class Juego extends Phaser.Scene
     }
 
     //Teclas
-    instanceKeyboardKeys(){
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    //instanceKeyboardKeys(){
+    //    this.cursors = this.input.keyboard.createCursorKeys();
+    //    this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    //    this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    //    this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
-        this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    //    this.J1ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    //    this.J2ShootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
-        this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+    //    this.chatKey= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
         
-    }
+    //}
 
     //Final
     acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
@@ -514,6 +516,10 @@ class Juego extends Phaser.Scene
                 this.keyStates[key] = false;
             }
         });
+
+        for (let key in this.keyStates) {
+            this.keyStates[key] = false;
+        }
         
         GlobalData.playing = true;
         ////////////Inputs extra//////////////////////////////
@@ -622,7 +628,7 @@ class Juego extends Phaser.Scene
 
         this.physics.add.collider(this.balas, this.j2, this.handleColision2, null, this);
 
-        this.instanceKeyboardKeys();
+    //this.instanceKeyboardKeys();
 
         //Marcadores de vida;
         const recuadro2 = this.add.image(700, 568, 'marcoVida');

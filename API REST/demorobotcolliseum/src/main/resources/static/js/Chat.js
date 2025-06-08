@@ -7,9 +7,9 @@ class Chat extends Phaser.Scene {
     timeSpan;
     lastID;
     messagesContainer;
+    cargarMas;
 
     addMessageToChat(container, username, message, type) {
-        console.log("Hola");
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}`;
 
@@ -28,6 +28,7 @@ class Chat extends Phaser.Scene {
     }
 
     sendToServer(username, message){
+        console.log("Hola");
 
         fetch(`/api/chat/${username}/chat?message=${message}`, {
             method: 'POST',
@@ -50,28 +51,32 @@ class Chat extends Phaser.Scene {
             console.error('Error:', error);
             // Aquí puedes manejar errores
         });
+        // this.lastID++;
 
     }
 
     cargarMensajes(container){
         let newId = this.lastID;
 
-        $.get(`/api/chat`,
-            (data)=>{
-                data.forEach(message =>{
-                    //console.log(message.id);
-                    if(this.lastID < message.id){
-                        this.addMessageToChat(container, message.user, message.text, 'user')
-                        if(message.id>newId){
-                            newId = message.id;
+        try{
+            $.get(`/api/chat?since=${this.lastID}`,
+                (data)=>{
+                    data.forEach(message =>{
+                        //console.log(message.id);
+                        if(this.lastID < message.id){
+                            this.addMessageToChat(container, message.user, message.text, 'user')
+                            console.log('Pintado en 65');
+                            newId = message.id;          
                         }
-                        console.log(message.id);
-                    }
-
+    
+                    });
+                    this.lastID = newId;
+                    this.cargarMas = true;
                 });
-                this.lastID = newId;
-                console.log(this.lastID);
-            });
+        }catch (error) {
+            console.error("Error en la carga de mensajes: ", error);
+            this.cargarMas = true;
+        }
     }
 
     preload() {
@@ -82,6 +87,7 @@ class Chat extends Phaser.Scene {
     create() {     
         const scene = this;
         this.lastID = 0;
+        this.cargarMas = true;
         
         const text = this.add.text(10, 10, 'Chat', { color: 'white', fontFamily: 'Arial', fontSize: '32px '});
         //Añado el html
@@ -94,6 +100,7 @@ class Chat extends Phaser.Scene {
         this.mensajes = [];
         
         element.on('click', (event) => {
+            var chatSend = true;
             if (event.target.name === 'send-button') {
                 const inputField = document.getElementById('chat-input');  // Accede al input por ID
                 console.log("has clickado")
@@ -102,9 +109,14 @@ class Chat extends Phaser.Scene {
                     // Limpiar el campo de entrada después de enviar el mensaje
                     inputField.value = '';  
                     // Agrega el mensaje del usuario al chat
-                    this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
                     this.sendToServer(usuario.username, userInput);
-                    this.cargarMensajes();
+
+                    // if(chatSend){
+                    //     // this.addMessageToChat(this.messagesContainer, usuario.username, userInput, 'user');
+                    //     // console.log('Pintado en 108');
+                    //     // this.cargarMensajes(this.messagesContainer);
+                    //     chatSend = !chatSend;
+                    // }
                 }  
                 
             }
@@ -117,8 +129,12 @@ class Chat extends Phaser.Scene {
             
             this.scene.stop('Chat'); //carga la escena de intro
             GlobalData.isInChat = false;
+        }    
+        
+        if(this.cargarMas){
+            this.cargarMas = false;
+            this.cargarMensajes(this.messagesContainer); 
         }
-        this.cargarMensajes(this.messagesContainer);      
     } 
 
 }

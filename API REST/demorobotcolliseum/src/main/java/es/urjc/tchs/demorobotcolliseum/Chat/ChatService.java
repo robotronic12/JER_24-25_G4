@@ -10,46 +10,71 @@ import es.urjc.tchs.demorobotcolliseum.ChatDAO;
 
 
 public class ChatService {
-    private final List<MessageOnChat> messages;
-    private final AtomicInteger lastId = new AtomicInteger(0);
+    private List<MessageOnChat> messages;
+    private AtomicInteger lastId = new AtomicInteger(0);
     private final ChatDAO chatDAO;//El final lo que hace es que si hay cambios da error
     public final ReentrantReadWriteLock lock; //Cuando usamos esto si yo estoy escribiendo no dejo ni lectura ni escritura
-
+    
     public ChatService(ChatDAO chatDAO){
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
         this.messages = this.chatDAO.getAllchats();
+        this.lastId = new AtomicInteger(messages.size());
     }
 
     // public List<String>
     public void addMessage(String username, String message) {
-        synchronized (messages) {
-            var msg = new MessageOnChat(lastId.incrementAndGet(), username, message);
-            messages.add(msg);
-            chatDAO.updatechat(msg);
-            if (messages.size() > 50) {
-                int idDelete= messages.get(0).getId();
-                messages.remove(0); // Keep only the last 50 messages
-                chatDAO.deletechat(idDelete);
+        var writeLock = this.lock.writeLock();
+        writeLock.lock();
+        // int idnew = messages.get(0).getId();
+        // for (MessageOnChat messageOnChat : messages) {
+        //     if(idnew>messageOnChat.getId()){
+        //         idnew = messageOnChat.getId(); 
+        //     }
+        // }
+        try{
+            synchronized (messages) {
+                //this.lastId = new AtomicInteger(messages.size());
+                var msg = new MessageOnChat(lastId.incrementAndGet(), username, message);
+                messages.add(msg);
+                chatDAO.updatechat(msg);
+                if (messages.size() > 10) {
+                    int idDelete = this.lastId.get();
+                    for (MessageOnChat messageOnChat : messages) {
+                        if(idDelete>messageOnChat.getId()){
+                            idDelete = messageOnChat.getId(); 
+                        }
+                    }
+                    messages.remove(0); // Keep only the last 50 messages
+                    chatDAO.deletechat(idDelete);
+                }
             }
+        }finally{
+            writeLock.unlock();
         }
     }
 
     public Optional<List<MessageOnChat>> getLastMessages(int since) {
+        //this.messages = this.chatDAO.getAllchats();
         List<String> newMessages = new ArrayList<>();
         List<MessageOnChat> nM = new ArrayList<>();
         int latestId = since;
-
-        synchronized (messages) {
-            for (MessageOnChat msg : messages) {
-                if (msg.getId() > since) {
-                    newMessages.add(msg.getText());
-                    nM.add(msg);
-                    latestId = msg.getId();
+        
+        var readLock = this.lock.readLock();
+        readLock.lock();
+        try{
+            synchronized (messages) {
+                for (MessageOnChat msg : messages) {
+                    if (msg.getId() > latestId) {
+                        newMessages.add(msg.getText());
+                        nM.add(msg);
+                        latestId = msg.getId();
+                    }
                 }
             }
+        }finally{
+            readLock.unlock();
         }
-
         // String[] msges = (String[]) newMessages.toArray();
 
         // for (int i = 0; i<newMessages.size();i++) {
