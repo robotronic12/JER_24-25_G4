@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import es.urjc.tchs.demorobotcolliseum.ChatDAO;
-
 
 public class ChatService {
     private List<MessageOnChat> messages;
