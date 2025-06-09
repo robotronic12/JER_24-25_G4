@@ -4,7 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import es.urjc.tchs.demorobotcolliseum.Chat.ChatDAO;
 import es.urjc.tchs.demorobotcolliseum.Chat.ChatService;
+import es.urjc.tchs.demorobotcolliseum.Usuario.UserDAO;
 import es.urjc.tchs.demorobotcolliseum.Usuario.UserService;
 
 @SpringBootApplication
