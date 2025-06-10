@@ -1,34 +1,31 @@
-var messageT1 = {
-    id: 0,
-    type: 'MessageItem',
-    item: {
-
-    }
-
-}
-
-
 class WebManager{
     constructor() {
-        var connection = 
+        this.connection = 
           new WebSocket('ws://127.0.0.1:8080/echo');
-        connection.onerror = function(e) {
+        this.connection.onerror = function(e) {
           console.log("WS error: " + e);
         }
-        connection.onmessage = function(msg) {
-          console.log("WS message: " + msg.data);
-          
-          $('#chat').append(msg.data)
+        this.connection.onmessage = function(msg) {
+            console.log("WS message: " + msg.data);          
+            $('#chat').append(msg.data)
+            this.handleMessage(msg.data);
         }
-        connection.onclose = function() {
+        this.connection.onclose = function() {
             console.log("Closing socket");
         }
+
+        this.lastId = 0;
+    }
+
+    sendMessage(message) {
+        this.connection.send(JSON.stringify(message));
     }
 
     handleMessage(message) {
         message = JSON.parse(message);
         switch (message.type) {
             case 'MessageItem':
+
                 break;
             case 'MessageJPlayer':
                 break;
@@ -39,6 +36,9 @@ class WebManager{
             case 'MessageDamage':
                 break;
             case 'MessageBegin':
+                break;
+            case 'MessageMasterMessageMasterResponse':
+                GlobalData.isMaster = message.isMaster;
                 break;
             default:
                 console.log("Unknown message type: ", message.type);
@@ -56,7 +56,35 @@ class WebManager{
         this.sendMessage(message);
     }
 
+    sendItem(id, x, y, type, isCollected, playerOwner){
+        var message = {
+            id: this.newId(),
+            type: 'MessageItem',
+            item: {
+                id: id,
+                x: x,
+                y: y,
+                type: type,
+                timestamp: Date.now(),
+                collected: isCollected,
+                owner: playerOwner
+            }
+        };
+
+        this.sendMessage(message);
+    }
+
+    isMaster(){
+        var message = {
+            id: this.newId(),
+            type: 'MessageMaster',
+            timestamp: Date.now()
+        };
+        this.sendMessage(message);
+    }
+
     newId(){
-        return 0;
+        this.lastId++;
+        return this.lastId;
     }
 }

@@ -3,14 +3,19 @@ package es.urjc.tchs.demorobotcolliseum;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import es.urjc.tchs.demorobotcolliseum.Chat.ChatDAO;
 import es.urjc.tchs.demorobotcolliseum.Chat.ChatService;
+import es.urjc.tchs.demorobotcolliseum.Spring.WebsocketEchoHandler;
 import es.urjc.tchs.demorobotcolliseum.Usuario.UserDAO;
 import es.urjc.tchs.demorobotcolliseum.Usuario.UserService;
 
 @SpringBootApplication
-public class DemorobotcolliseumApplication {
+@EnableWebSocket
+public class DemorobotcolliseumApplication implements WebSocketConfigurer{
 
 	//Para acceder al servidor necesitamos la ip del dispositivo en el que está.
 
@@ -35,6 +40,16 @@ public class DemorobotcolliseumApplication {
 	public ChatService getChatService(ChatDAO chatDAO){ //Tiene dependencias entonces no lo puede hacer hasta que crea el userDAO
 		return new ChatService(chatDAO);
 	}
+	
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(echoHandler(), "/echo").setAllowedOrigins("*");
+    }    
+
+    @Bean
+    public WebsocketEchoHandler echoHandler() {
+        return new WebsocketEchoHandler();
+    }
 	//En este caso estamos trabajado 
 
 	// @Bean

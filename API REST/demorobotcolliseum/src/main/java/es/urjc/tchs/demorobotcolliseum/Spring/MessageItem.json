@@ -8,6 +8,8 @@
             "x": 10.0,
             "y": 20.0
         },
-        "timestamp": "2023-10-01T12:00:00Z"
+        "timestamp": "2023-10-01T12:00:00Z",
+        "collected": true,
+        "owner": "J1"
     }
 }
