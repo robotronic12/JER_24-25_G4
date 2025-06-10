@@ -2,15 +2,26 @@ package es.urjc.tchs.demorobotcolliseum.Spring;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class WebsocketEchoHandler extends TextWebSocketHandler{
 
     private Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();    
+    private WebSocketSession masterSession;
+    private final ReentrantReadWriteLock lock;
+
+    public WebsocketEchoHandler() {
+        this.lock = new ReentrantReadWriteLock();
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -28,9 +39,52 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         System.out.println("Message received: " + message.getPayload());
 
-        String msg = message.getPayload();     
+        String msg = message.getPayload();
 
+        // Si esperas un JSON:
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(msg);
+
+        // Ejemplo de acceso a un campo "id":
+        var id = root.get("id").asInt();
+        var type = root.get("type").asText();
+
+        if (type.equals("MessageMaster")) {
+            Map<String, Object> response = new java.util.HashMap<>();
+
+            response.put("id", -1);
+            response.put("type", "MessageMasterResponse");
+            response.put("isMaster", isMasterSession(session));
+
+            String responseJson = mapper.writeValueAsString(response);
+
+            sendMessageToOne(session, responseJson);
+        }
+    }
+
+    private boolean isMasterSession(WebSocketSession session) {
         
+        var writeLock = this.lock.writeLock();
+        writeLock.lock();
+        try {
+            if (masterSession == null) {
+                masterSession = session;
+                return true;
+            }
+            else{
+                return false;
+            }
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
+    public void sendMessageToOne(WebSocketSession session, String payload) {
+        try {
+            session.sendMessage(new TextMessage(payload));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendMessageToOther(WebSocketSession session, String payload) {

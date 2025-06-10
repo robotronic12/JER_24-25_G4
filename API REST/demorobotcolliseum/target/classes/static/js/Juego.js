@@ -66,6 +66,8 @@ class Juego extends Phaser.Scene
     //Sonidos
     recogSonido;
 
+    webManager = new WebManager(this);
+
     //#region JUGADOR 1
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -419,10 +421,14 @@ class Juego extends Phaser.Scene
             this.physics.add.collider(powerUp, this.platforms);
             this.physics.add.collider(powerUp, this.movingPlatform1);
             this.physics.add.collider(powerUp, this.movingPlatform2);
+
             this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
-            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
+            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);     
+            this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor       
         }
     }
+
+    PowerUps = [];
 
     handleColision1PU(powerUp, jugador){
         //this.powerUpTake.play();
@@ -431,7 +437,20 @@ class Juego extends Phaser.Scene
         powerUp.destroy();
         powerUp.collected(this.j1,this.j1,this.j2);
         this.recogSonido.play();
-        console.log(this.danioJ1);
+        console.log(this.danioJ1);    
+        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J1"); // Enviar el PowerUp al servidor      
+    }
+
+    takeItem(, jugador){
+        this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
+        this.recogSonido.play();
+        powerUp.collected(jugador,this.j1,this.j2);
+        powerUp.destroy(); // Destruye el PowerUp
+    }
+
+    addItem(powerUp){
+        this.PowerUps.push(powerUp);
+        this.spawnPowerUp(powerUp.x, powerUp.y, powerUp.type); // Re-spawnea el PowerUp
     }
 
     handleColision2PU(powerUp, jugador){
@@ -442,6 +461,7 @@ class Juego extends Phaser.Scene
         powerUp.collected(this.j2,this.j1,this.j2);
         this.recogSonido.play();
         console.log(this.danioJ2);
+        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J2"); // Enviar el PowerUp al servidor  
     }
 
     createPowerUp(){
@@ -493,7 +513,10 @@ class Juego extends Phaser.Scene
         
 
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
-        this.load.image('vida', 'assets/jugador/Vida.png');       
+        this.load.image('vida', 'assets/jugador/Vida.png');  
+        
+        this.webManager.isMaster(); // Asignar el valor de isMaster desde WebManager
+
     }
     //#endregion
     
@@ -646,14 +669,18 @@ class Juego extends Phaser.Scene
             maxSize: 2,            // Número máximo de powerups activas           
         });
 
-        this.time.addEvent({
-            delay: 10000,        // Milisegundos
-            callback: () => {
-                this.createPowerUp();
-            },
-            callbackScope: this,
-            loop: true          // Se repite indefinidamente
-        });
+        while (GlobalData.isMaster == null){}
+        console.log('isMaster: ' + GlobalData.isMaster);
+        if(GlobalData.isMaster){
+            this.time.addEvent({
+                delay: 10000,        // Milisegundos
+                callback: () => {
+                    this.createPowerUp();
+                },
+                callbackScope: this,
+                loop: true          // Se repite indefinidamente
+            });
+        }
         
     }
     //#endregion
