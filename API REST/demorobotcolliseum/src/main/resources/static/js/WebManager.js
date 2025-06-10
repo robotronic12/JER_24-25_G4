@@ -1,14 +1,13 @@
 class WebManager{
     constructor() {
-        this.connection = 
-          new WebSocket('ws://127.0.0.1:8080/echo');
+        this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
+        const self = this;
         this.connection.onerror = function(e) {
           console.log("WS error: " + e);
         }
         this.connection.onmessage = function(msg) {
-            console.log("WS message: " + msg.data);          
-            $('#chat').append(msg.data)
-            this.handleMessage(msg.data);
+            console.log("WS message: " + msg.data);
+            self.handleMessage(msg.data);
         }
         this.connection.onclose = function() {
             console.log("Closing socket");
