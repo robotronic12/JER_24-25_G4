@@ -1,5 +1,6 @@
-class WebManager{
-    constructor() {
+class WebManager{    
+    constructor(juegoInstance) {
+        this.juego = juegoInstance;
         this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
         const self = this;
         this.connection.onerror = function(e) {
@@ -24,7 +25,12 @@ class WebManager{
         message = JSON.parse(message);
         switch (message.type) {
             case 'MessageItem':
-
+                if(message.item.collected){
+                    this.juego.takeItem(message.item.id, (message.item.owner === "J1" ? this.juego.jugador1 : this.juego.jugador2));
+                }
+                else {
+                    this.juego.addItem(message.item);
+                }
                 break;
             case 'MessageJPlayer':
                 break;
@@ -36,7 +42,7 @@ class WebManager{
                 break;
             case 'MessageBegin':
                 break;
-            case 'MessageMasterMessageMasterResponse':
+            case 'MessageMasterResponse':
                 GlobalData.isMaster = message.isMaster;
                 break;
             default:

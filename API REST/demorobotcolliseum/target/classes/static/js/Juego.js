@@ -66,7 +66,7 @@ class Juego extends Phaser.Scene
     //Sonidos
     recogSonido;
 
-    webManager = new WebManager();
+    webManager = new WebManager(this);
 
     //#region JUGADOR 1
 
@@ -422,11 +422,9 @@ class Juego extends Phaser.Scene
             this.physics.add.collider(powerUp, this.movingPlatform1);
             this.physics.add.collider(powerUp, this.movingPlatform2);
 
-            if(GlobalData.isMaster){
-                this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
-                this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
-            }
-            
+            this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
+            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);     
+            this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor       
         }
     }
 
@@ -439,13 +437,14 @@ class Juego extends Phaser.Scene
         powerUp.destroy();
         powerUp.collected(this.j1,this.j1,this.j2);
         this.recogSonido.play();
-        console.log(this.danioJ1);        
+        console.log(this.danioJ1);    
+        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J1"); // Enviar el PowerUp al servidor      
     }
 
-    takeItem(powerUp, jugador){
+    takeItem(, jugador){
         this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
         this.recogSonido.play();
-        powerUp.collected(this.j1,this.j1,this.j2);
+        powerUp.collected(jugador,this.j1,this.j2);
         powerUp.destroy(); // Destruye el PowerUp
     }
 
@@ -462,6 +461,7 @@ class Juego extends Phaser.Scene
         powerUp.collected(this.j2,this.j1,this.j2);
         this.recogSonido.play();
         console.log(this.danioJ2);
+        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J2"); // Enviar el PowerUp al servidor  
     }
 
     createPowerUp(){
