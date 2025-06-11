@@ -460,13 +460,13 @@ class Juego extends Phaser.Scene
             powerUp.setPosition(x, y); // Ubícalo en las coordenadas específicas
             powerUp.body.setVelocity(0, 0); // Opcional: inicializa sin velocidad
             powerUp.setCollideWorldBounds(true);
-    
+
+            this.physics.add.collider(powerUp, this.platforms);
+            this.physics.add.collider(powerUp, this.movingPlatform1);
+            this.physics.add.collider(powerUp, this.movingPlatform2);
+
             //Colliders
             if(GlobalData.isMaster){
-                this.physics.add.collider(powerUp, this.platforms);
-                this.physics.add.collider(powerUp, this.movingPlatform1);
-                this.physics.add.collider(powerUp, this.movingPlatform2);
-
                 this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
                 this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
             }
