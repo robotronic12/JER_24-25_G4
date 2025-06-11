@@ -33,6 +33,11 @@ class WebManager{
                 }
                 break;
             case 'MessageJPlayer':
+                if (message.player.id === "J1") {
+                    this.juego.updateRemotePlayer1(message.player);
+                } else if (message.player.id === "J2") {
+                    this.juego.updateRemotePlayer2(message.player);
+                }
                 break;
             case 'MessageInput':
                 break;
@@ -56,6 +61,22 @@ class WebManager{
             type: 'MessageDamage',
             item: {
                 vida: vida
+            }
+        };
+        this.sendMessage(message);
+    }
+    
+    sendPlayerPosition(playerId, x, y, vx, vy) {
+        var message = {
+            id: this.newId(),
+            type: 'MessageJPlayer',
+            player: {
+                id: playerId,
+                x: x,
+                y: y,
+                vx: vx,
+                vy: vy,
+                timestamp: Date.now()
             }
         };
         this.sendMessage(message);
@@ -92,4 +113,6 @@ class WebManager{
         this.lastId++;
         return this.lastId;
     }
+
+    
 }

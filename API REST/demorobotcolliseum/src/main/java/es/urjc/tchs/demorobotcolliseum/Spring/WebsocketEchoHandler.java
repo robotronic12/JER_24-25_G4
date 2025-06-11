@@ -59,6 +59,11 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             String responseJson = mapper.writeValueAsString(response);
 
             sendMessageToOne(session, responseJson);
+        } else if (type.equals("MessageItem")){
+            handleItemMessage(session, root);
+        }else if (type.equals("MessageJPlayer")) { ///
+            // Reenviar a otros jugadores
+            sendMessageToOther(session, root.toString());
         }
     }
 
@@ -77,6 +82,14 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         } finally {
             writeLock.unlock();
         }
+    }
+
+    ////No pyuedo probar si funciona peroooo toi en ello
+    private void handleItemMessage(WebSocketSession session, JsonNode root) {
+        // Este mensaje se reenvía a todos los demás jugadores
+        // (ya lo recibiste tú al emitirlo)
+        String payload = root.toString(); 
+        sendMessageToOther(session, payload);
     }
 
     public void sendMessageToOne(WebSocketSession session, String payload) {

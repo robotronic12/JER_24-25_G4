@@ -90,14 +90,16 @@ class Juego extends Phaser.Scene
     checkPlayer1Movement() {
         if (GlobalData.isInChat) return;
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
-        
+        var pulsado=false
         if (this.keyStates.a) {
             this.j1.setVelocityX(-this.velocidadJ1);
             this.j1.setFlipX(false);
+            this.pulsado=true
             // this.j1.anims.play('left', true);
         } else if (this.keyStates.d) {
             this.j1.setVelocityX(this.velocidadJ1);
             this.j1.setFlipX(true);
+            this.pulsado=true
             // this.j1.anims.play('right', true);
         } else {
             this.j1.setVelocityX(0);
@@ -105,6 +107,13 @@ class Juego extends Phaser.Scene
         }
         if (this.keyStates.w && this.j1.body.touching.down) {
             this.j1.setVelocityY(this.fuerzaSaltoJ1);
+            this.pulsado=true
+        }
+        if(this.pulsado){
+            this.webManager.sendPlayerPosition()
+            console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
+            this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
+            this.pulsado=false
         }
 
         ////////// Disparo del jugador 1/////////////
@@ -135,7 +144,13 @@ class Juego extends Phaser.Scene
                 // console.log('velocityY: ' + yVel);
             }
         }
-        
+    }
+    updateRemotePlayer1(playerData) {
+        if (!this.j2) return;
+        this.j2.x = playerData.x;
+        this.j2.y = playerData.y;
+        this.j2.body.velocity.x = playerData.vx;
+        this.j2.body.velocity.y = playerData.vy;
     }
 
     //#endregion
@@ -164,14 +179,16 @@ class Juego extends Phaser.Scene
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
         // const { left, right, up } = this.cursors;
-        
+        var pulsado=false
         if (this.keyStates.arrowleft) {
             this.j2.setVelocityX(-this.velocidadJ2);
             this.j2.setFlipX(false);
+            this.pulsado=true
             // this.j2.anims.play('left', true);
         } else if (this.keyStates.arrowright) {
             this.j2.setVelocityX(this.velocidadJ2);
             this.j2.setFlipX(true);
+            this.pulsado=true
             // this.j2.anims.play('right', true);
         } else {
             this.j2.setVelocityX(0);
@@ -179,6 +196,12 @@ class Juego extends Phaser.Scene
         }
         if (this.keyStates.arrowup && this.j2.body.touching.down) {
             this.j2.setVelocityY(this.fuerzaSaltoJ2);
+            this.pulsado=true
+        }
+        
+        if(pulsado){
+            this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
+            this.pulsado=false
         }
 
         ////////// Disparo del jugador 2/////////////
@@ -208,7 +231,13 @@ class Juego extends Phaser.Scene
             }
         }
     }
-    
+    updateRemotePlayer2(playerData) {
+        if (!this.j1) return;
+        this.j1.x = playerData.x;
+        this.j1.y = playerData.y;
+        this.j1.body.velocity.x = playerData.vx;
+        this.j1.body.velocity.y = playerData.vy;
+    }
     //#endregion
     
     //#region BALAS
