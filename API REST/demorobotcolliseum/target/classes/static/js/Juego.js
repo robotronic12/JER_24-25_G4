@@ -75,6 +75,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     createJ1(){
         //creacion de j1 en una pos
+        
         this.j1 = this.physics.add.sprite(147, 450, 'j1');
         this.fuerzaSaltoJ1=-330;
         this.j1.setCollideWorldBounds(true);
@@ -90,31 +91,34 @@ class Juego extends Phaser.Scene
     checkPlayer1Movement() {
         if (GlobalData.isInChat) return;
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
-        var pulsado=false
-        if (this.keyStates.a) {
-            this.j1.setVelocityX(-this.velocidadJ1);
-            this.j1.setFlipX(false);
-            this.pulsado=true
-            // this.j1.anims.play('left', true);
-        } else if (this.keyStates.d) {
-            this.j1.setVelocityX(this.velocidadJ1);
-            this.j1.setFlipX(true);
-            this.pulsado=true
-            // this.j1.anims.play('right', true);
-        } else {
-            this.j1.setVelocityX(0);
-            // this.j1.anims.play('turn');
+        if(GlobalData.isMaster){
+            var pulsado=false
+            if (this.keyStates.a) {
+                this.j1.setVelocityX(-this.velocidadJ1);
+                this.j1.setFlipX(false);
+                this.pulsado=true
+                // this.j1.anims.play('left', true);
+            } else if (this.keyStates.d) {
+                this.j1.setVelocityX(this.velocidadJ1);
+                this.j1.setFlipX(true);
+                this.pulsado=true
+                // this.j1.anims.play('right', true);
+            } else {
+                this.j1.setVelocityX(0);
+                // this.j1.anims.play('turn');
+            }
+            if (this.keyStates.w && this.j1.body.touching.down) {
+                this.j1.setVelocityY(this.fuerzaSaltoJ1);
+                this.pulsado=true
+            }
+            if(this.pulsado && this.GlobalData.isMaster){
+                this.webManager.sendPlayerPosition()
+                console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
+                this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
+                this.pulsado=false
+            }
         }
-        if (this.keyStates.w && this.j1.body.touching.down) {
-            this.j1.setVelocityY(this.fuerzaSaltoJ1);
-            this.pulsado=true
-        }
-        if(this.pulsado && GlobalData.isMaster){
-            this.webManager.sendPlayerPosition()
-            console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
-            this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
-            this.pulsado=false
-        }
+        
 
         ////////// Disparo del jugador 1/////////////
         if (this.keyStates.s) {
@@ -179,30 +183,33 @@ class Juego extends Phaser.Scene
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
         // const { left, right, up } = this.cursors;
-        var pulsado=false
-        if (this.keyStates.arrowleft) {
-            this.j2.setVelocityX(-this.velocidadJ2);
-            this.j2.setFlipX(false);
-            this.pulsado=true
-            // this.j2.anims.play('left', true);
-        } else if (this.keyStates.arrowright) {
-            this.j2.setVelocityX(this.velocidadJ2);
-            this.j2.setFlipX(true);
-            this.pulsado=true
-            // this.j2.anims.play('right', true);
-        } else {
-            this.j2.setVelocityX(0);
-            // this.j2.anims.play('turn');
-        }
-        if (this.keyStates.arrowup && this.j2.body.touching.down) {
-            this.j2.setVelocityY(this.fuerzaSaltoJ2);
-            this.pulsado=true
+        if(!GlobalData.isMaster){
+            var pulsado=false
+            if (this.keyStates.a) {
+                this.j2.setVelocityX(-this.velocidadJ2);
+                this.j2.setFlipX(false);
+                this.pulsado=true
+                // this.j2.anims.play('left', true);
+            } else if (this.keyStates.d) {
+                this.j2.setVelocityX(this.velocidadJ2);
+                this.j2.setFlipX(true);
+                this.pulsado=true
+                // this.j2.anims.play('right', true);
+            } else {
+                this.j2.setVelocityX(0);
+                // this.j2.anims.play('turn');
+            }
+            if (this.keyStates.w && this.j2.body.touching.down) {
+                this.j2.setVelocityY(this.fuerzaSaltoJ2);
+                this.pulsado=true
+            }
+            
+            if(pulsado && !this.GlobalData.isMaster){
+                this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
+                this.pulsado=false
+            }
         }
         
-        if(pulsado && !GlobalData.isMaster){
-            this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
-            this.pulsado=false
-        }
 
         ////////// Disparo del jugador 2/////////////
         if (this.keyStates.arrowdown) {
