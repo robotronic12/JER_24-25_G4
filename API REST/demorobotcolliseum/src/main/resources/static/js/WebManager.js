@@ -27,6 +27,7 @@ class WebManager{
         console.log("Handling message: ", message.type);
         switch (message.type) {
             case 'MessageItem':
+                if (GlobalData.isMaster) return; // Master does not handle item messages
                 if(message.item.collected){
                     console.log("Item collected: " + message.item.id + " by player: " + message.item.owner);
                     this.juego.takeItem(message.item.id, message.item.owner);

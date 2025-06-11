@@ -464,16 +464,19 @@ class Juego extends Phaser.Scene
             powerUp.setCollideWorldBounds(true);
     
             //Colliders
-            this.physics.add.collider(powerUp, this.platforms);
-            this.physics.add.collider(powerUp, this.movingPlatform1);
-            this.physics.add.collider(powerUp, this.movingPlatform2);
+            if(GlobalData.isMaster){
+                this.physics.add.collider(powerUp, this.platforms);
+                this.physics.add.collider(powerUp, this.movingPlatform1);
+                this.physics.add.collider(powerUp, this.movingPlatform2);
 
-            this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
-            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
+                this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
+                this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
+            }
 
             this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor   
 
             this.PowerUps.push(powerUp); // Añade el PowerUp al array de PowerUps
+            console.log('PowerUp creado con ID: ' + powerUp.id);
 
             return powerUp; // Devuelve el PowerUp creado
         }
@@ -492,23 +495,21 @@ class Juego extends Phaser.Scene
 
     takeItem(idPwUp, jugador){
         var powerUp = this.PowerUps.find(item => item.id === idPwUp); // Busca el PowerUp por su ID
-        if(!powerUp == null){
-            this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
-            this.recogSonido.play();
-            powerUp.destroy(); // Destruye el PowerUp
-            if(jugador == "J1"){
-                powerUp.collected(this.j1,this.j1,this.j2);
-            }
-            if(jugador == "J2"){
-                powerUp.collected(this.j2,this.j1,this.j2);
-            }
-            console.log('PowerUp recogido por ' + jugador + ': ' + powerUp.type);
-        }else{
-            console.log('PowerUp no encontrado con ID: ' + idPwUp);
+    
+        this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
+        this.recogSonido.play();
+        powerUp.destroy(); // Destruye el PowerUp
+        if(jugador == "J1"){
+            powerUp.collected(this.j1,this.j1,this.j2);
         }
+        if(jugador == "J2"){
+            powerUp.collected(this.j2,this.j1,this.j2);
+        }
+        console.log('PowerUp recogido por ' + jugador + ': ' + powerUp.type);
     }
 
     addItem(powerUp){ // Crea un PowerUp real usando tu grupo de Phaser
+        if (this.PowerUps.find(item => item.id === powerUp.id)) return;
         var newPowerUp = this.spawnPowerUp(powerUp.x, powerUp.y, powerUp.type); // Re-spawnea el PowerUp
         newPowerUp.id = powerUp.id; // Asigna el ID del PowerUp recibido
 
