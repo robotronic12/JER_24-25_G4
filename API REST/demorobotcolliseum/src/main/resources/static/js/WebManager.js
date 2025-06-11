@@ -1,21 +1,44 @@
 class WebManager{    
     constructor(juegoInstance) {
         this.juego = juegoInstance;
-        this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
+    }
 
-        const self = this;
-        this.connection.onerror = function(e) {
-          console.log("WS error: " + e);
-        }
-        this.connection.onmessage = function(msg) {
-            console.log("WS message: " + msg.data);
-            self.handleMessage(msg.data);
-        }
-        this.connection.onclose = function() {
-            console.log("Closing socket");
-        }
+    isConnected() {
+        return this.connection && this.connection.readyState === WebSocket.OPEN;
+    }
 
-        this.lastId = 0;
+    openConnection() {
+        if (!this.connection || this.connection.readyState === WebSocket.CLOSED) {
+            this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
+
+            const self = this;
+            this.connection.onerror = function(e) {
+            console.log("WS error: " + e);
+            }
+            this.connection.onmessage = function(msg) {
+                console.log("WS message: " + msg.data);
+                self.handleMessage(msg.data);
+            }
+            this.connection.onclose = function() {
+                console.log("Closing socket");
+            }
+            this.connection.onopen = () => {
+                self.isMaster();                
+                self.juego.startUpdate();
+            };
+
+            this.lastId = 0;
+        }
+    }
+
+    closeConection() {
+        if (this.connection) {
+            this.connection.close();
+            this.connection = null;
+            console.log("Connection closed");
+        } else {
+            console.log("No connection to close");
+        }
     }
 
     sendMessage(message) {
@@ -49,6 +72,8 @@ class WebManager{
             case 'MessageInput':
                 break;
             case 'MessageEnd':
+                GlobalData.ganador = message.player;
+                this.juego.endGame();
                 break;
 
             case 'MessageDamage':
@@ -77,6 +102,11 @@ class WebManager{
                     this.juego.createPowerUps();
                 }
                 break;
+
+            case 'EmpiezaPartida':
+                GlobalData.initPlay = true;
+                break;
+
             default:
                 console.log("Unknown message type: ", message.type);
         }
@@ -115,6 +145,15 @@ class WebManager{
                 vy: vy,
                 timestamp: Date.now()
             }
+        };
+        this.sendMessage(message);
+    }
+
+    sendEndGame(playerId) {
+        var message = {
+            id: this.newId(),
+            type: 'MessageEnd',
+            player: playerId,
         };
         this.sendMessage(message);
     }

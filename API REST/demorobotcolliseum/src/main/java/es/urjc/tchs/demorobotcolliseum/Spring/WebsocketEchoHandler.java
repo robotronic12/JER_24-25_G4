@@ -27,6 +27,16 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("New session: " + session.getId());
         sessions.put(session.getId(), session);
+
+        if (sessions.size() == 2) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> response = new java.util.HashMap<>();
+            response.put("id", -1);
+            response.put("type", "EmpiezaPartida");
+
+            String responseJson = mapper.writeValueAsString(response);
+            sendMessageToAll(responseJson);
+        }
     }
 
     @Override
@@ -77,6 +87,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToOther(session, msg);
                 break;
 
+            case "MessageEnd":                
+                sendMessageToAll(msg);          
+                break;
+
             default:
                 break;
         }
@@ -99,14 +113,6 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         }
     }
 
-    ////No pyuedo probar si funciona peroooo toi en ello
-    private void handleItemMessage(WebSocketSession session, JsonNode root) {
-        // Este mensaje se reenvía a todos los demás jugadores
-        // (ya lo recibiste tú al emitirlo)
-        String payload = root.toString(); 
-        sendMessageToOther(session, payload);
-    }
-
     public void sendMessageToOne(WebSocketSession session, String payload) {
         try {
             session.sendMessage(new TextMessage(payload));
@@ -122,6 +128,16 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                     sessionAct.sendMessage(new TextMessage(payload));
                 }
                 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void sendMessageToAll(String payload) {
+        for (WebSocketSession sessionAct : sessions.values()) {
+            try {
+                sessionAct.sendMessage(new TextMessage(payload));
             } catch (Exception e) {
                 e.printStackTrace();
             }

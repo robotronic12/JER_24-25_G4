@@ -5,7 +5,8 @@ var GlobalData = {
     ganador : 0,
     isInChat : false,
     isMaster : false,
-    numPowerUps : 0
+    numPowerUps : 0,
+    initPlay: true
 }
 
 var usuario = {
