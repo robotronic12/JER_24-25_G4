@@ -39,8 +39,10 @@ class WebManager{
                 
                 if (message.player.id === "J1") {
                     this.juego.updateRemotePlayer1(message.player);
-                } else if (message.player.id === "J2") {
+                    
+                } else {
                     this.juego.updateRemotePlayer2(message.player);
+                    console.log("Soy servidor y recibí el mensaje de J2 y envío su mensaje de actualización")
                 }
                 break;
             case 'MessageInput':
