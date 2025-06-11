@@ -50,8 +50,23 @@ class WebManager{
                 break;
             case 'MessageEnd':
                 break;
+
             case 'MessageDamage':
+                if (message.player === "J1") {
+                    this.juego.vida1 = message.live;
+                    if (this.juego.vida1 <= 0) {
+                        this.juego.j1.setActive(false);
+                        this.juego.j1.setVisible(false);
+                    }
+                } else if (message.player === "J2") {
+                    this.juego.vida2 = message.live;
+                    if (this.juego.vida2 <= 0) {
+                        this.juego.j2.setActive(false);
+                        this.juego.j2.setVisible(false);
+                    }
+                }
                 break;
+
             case 'MessageBegin':
                 break;
             case 'MessageMasterResponse':
@@ -77,7 +92,17 @@ class WebManager{
         };
         this.sendMessage(message);
     }
-    
+
+    sendLive(playerId, vida){
+        var message = {
+            id: this.newId(),
+            type: 'MessageDamage',
+            player: playerId,
+            live: vida
+        };
+        this.sendMessage(message);
+    }
+
     sendPlayerPosition(playerId, x, y, vx, vy) {
         var message = {
             id: this.newId(),

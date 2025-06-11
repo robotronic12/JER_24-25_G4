@@ -92,18 +92,16 @@ class Juego extends Phaser.Scene
     checkPlayer1Movement() {
         if (GlobalData.isInChat) return;
         if (!this.j1 || !this.j1.active) return; // Salir si J2 no está activo
-        var pulsado=false
+
         
             
             if (this.keyStates.a) {
                 this.j1.setVelocityX(-this.velocidadJ1);
                 this.j1.setFlipX(false);
-                this.pulsado=true
                 // this.j1.anims.play('left', true);
             } else if (this.keyStates.d) {
                 this.j1.setVelocityX(this.velocidadJ1);
                 this.j1.setFlipX(true);
-                this.pulsado=true
                 // this.j1.anims.play('right', true);
             } else {
                 this.j1.setVelocityX(0);
@@ -111,17 +109,15 @@ class Juego extends Phaser.Scene
             }
             if (this.keyStates.w && this.j1.body.touching.down) {
                 this.j1.setVelocityY(this.fuerzaSaltoJ1);
-                this.pulsado=true
             }
-            
-        
-        if(this.pulsado){
                 
-                //console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
+            //console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
+              
                 this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
                 console.log("player 1 ha mandado su posición a servidor")
                 this.pulsado=false
-            }
+            
+            
             
         
         
@@ -189,18 +185,16 @@ class Juego extends Phaser.Scene
         if (!this.j2 || !this.j2.active) return; // Salir si J2 no está activo
     
         // const { left, right, up } = this.cursors;
-        var pulsado=false
+        
        
             
             if (this.keyStates.a) {
                 this.j2.setVelocityX(-this.velocidadJ2);
                 this.j2.setFlipX(false);
-                this.pulsado=true
                 // this.j2.anims.play('left', true);
             } else if (this.keyStates.d) {
                 this.j2.setVelocityX(this.velocidadJ2);
                 this.j2.setFlipX(true);
-                this.pulsado=true
                 // this.j2.anims.play('right', true);
             } else {
                 this.j2.setVelocityX(0);
@@ -208,21 +202,17 @@ class Juego extends Phaser.Scene
             }
             if (this.keyStates.w && this.j2.body.touching.down) {
                 this.j2.setVelocityY(this.fuerzaSaltoJ2);
-                this.pulsado=true
             }
-        
-        
-        if(pulsado){
-                this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
-                console.log("player 2 ha mandado su posición a servidor")
-                this.pulsado=false
-            }
-            
-            
-        
 
+            this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
+            console.log("player 2 ha mandado su posición a servidor")
+
+            
+            
+        
+    
         ////////// Disparo del jugador 2/////////////
-        if (this.keyStates.arrowdown) {
+        if (this.keyStates.s) {
             
             if(this.currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
                 for (let i = 0; i < this.numeroBalasJ2; i++) {
@@ -433,6 +423,10 @@ class Juego extends Phaser.Scene
             bala.destroy(); // Destruye la bala
             this.vida1 -= bala.danioBala;
             console.log(this.vida1);
+            
+            this.webManager.sendLive("J1", this.vida1); // <--- Agregado
+
+
             if (this.vida1 <= 0) {
                 console.log('Jugador 1 eliminado');
                 this.j1.setActive(false);
@@ -446,6 +440,10 @@ class Juego extends Phaser.Scene
             bala.destroy(); // Destruye la bala
             this.vida2 -= bala.danioBala;
             console.log(this.vida2);
+
+             this.webManager.sendLive("J2", this.vida2); // <--- Agregado
+
+
             if (this.vida2 <= 0) {
                 console.log('Jugador 2 eliminado');
                 this.j2.setActive(false);

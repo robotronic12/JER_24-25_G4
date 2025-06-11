@@ -73,6 +73,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToOther(session,root.toString());
             break;
 
+            case "MessageDamage":
+                sendMessageToOther(session, msg);
+                break;
+
             default:
                 break;
         }
