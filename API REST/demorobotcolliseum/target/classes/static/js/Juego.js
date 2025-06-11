@@ -114,7 +114,7 @@ class Juego extends Phaser.Scene
             //console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
               
                 this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
-                console.log("player 1 ha mandado su posición a servidor")
+
                 this.pulsado=false
             
             
@@ -205,7 +205,7 @@ class Juego extends Phaser.Scene
             }
 
             this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
-            console.log("player 2 ha mandado su posición a servidor")
+
 
             
             
@@ -422,13 +422,13 @@ class Juego extends Phaser.Scene
         if (this.j1 && this.j1.active) {
             bala.destroy(); // Destruye la bala
             this.vida1 -= bala.danioBala;
-            console.log(this.vida1);
+            //console.log(this.vida1);
             
             this.webManager.sendLive("J1", this.vida1); // <--- Agregado
 
 
             if (this.vida1 <= 0) {
-                console.log('Jugador 1 eliminado');
+                //console.log('Jugador 1 eliminado');
                 this.j1.setActive(false);
                 this.j1.setVisible(false);
             }
@@ -439,13 +439,13 @@ class Juego extends Phaser.Scene
         if (this.j2 && this.j2.active) {
             bala.destroy(); // Destruye la bala
             this.vida2 -= bala.danioBala;
-            console.log(this.vida2);
+            //console.log(this.vida2);
 
              this.webManager.sendLive("J2", this.vida2); // <--- Agregado
 
 
             if (this.vida2 <= 0) {
-                console.log('Jugador 2 eliminado');
+                //console.log('Jugador 2 eliminado');
                 this.j2.setActive(false);
                 this.j2.setVisible(false);
             }
