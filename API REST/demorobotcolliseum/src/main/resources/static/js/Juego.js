@@ -441,7 +441,7 @@ class Juego extends Phaser.Scene
         this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J1"); // Enviar el PowerUp al servidor      
     }
 
-    takeItem(, jugador){
+    takeItem(idPwUp, jugador){
         this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
         this.recogSonido.play();
         powerUp.collected(jugador,this.j1,this.j2);
