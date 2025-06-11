@@ -128,7 +128,7 @@ public class UserService {
         long currentTimeMillis = System.currentTimeMillis();
 
         for (var entry: this.usersAct.entrySet()) {
-            
+
             if (entry.getValue() > (currentTimeMillis - threshold)) {
                 connected.add(entry.getKey());
             }
@@ -137,8 +137,8 @@ public class UserService {
             //     this.usersAct.remove(entry.getKey());
             // }
         }
-        
-        return connected;        
+
+        return connected;
     }
 }
 

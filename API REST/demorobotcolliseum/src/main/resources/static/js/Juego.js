@@ -18,6 +18,8 @@ class Juego extends Phaser.Scene
         arrowright: false,
         t: false,
         esc: false,
+        mouseLeft: false 
+        
     };
 
     J1ShootKey;
@@ -254,6 +256,55 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // BALAS
     ///////////////////////////////////////////////////////////////////////////////////////
+    //input de balas nuevo con ratón
+    inputDisparoBala(){
+            if (this.keyStates.mouseLeft) {
+                const isMaster = GlobalData.isMaster;
+                const jugador = isMaster ? this.j1 : this.j2;
+                const cooldown = isMaster ? this.cooldownBalaP1 : this.cooldownBalaP2;
+                const tiempoUltimoDisparo = isMaster ? this.tiempoUltimoDisparoP1 : this.tiempoUltimoDisparoP2;
+                const numeroBalas = isMaster ? this.numeroBalasJ1 : this.numeroBalasJ2;
+                const danio = isMaster ? this.danioJ1 : this.danioJ2;
+                const velBala = isMaster ? this.velBala1 : this.velBala2;
+
+                const currentTime = this.time.now;
+            if (currentTime - tiempoUltimoDisparo < cooldown) return;
+
+                const startX = jugador.x;
+                const startY = jugador.y;
+
+                const pointer = this.input.activePointer;
+                const worldX = pointer.worldX;
+                const worldY = pointer.worldY;
+
+                const dirX = worldX - startX;
+                const dirY = worldY - startY;
+                const length = Math.sqrt(dirX * dirX + dirY * dirY);
+                const normX = dirX / length;
+                const normY = dirY / length;
+
+                for (let i = 0; i < numeroBalas; i++) {
+                    let balaOffset;
+                    if (i % 2 === 0) {
+                        balaOffset = (-30) + i * 10;
+                    } else {
+                        balaOffset = (-30) - i * 10;
+                    }
+
+                    const offsetX = normX * velBala;
+                    const offsetY = normY * velBala + balaOffset;
+
+                    this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
+            }
+
+            if (isMaster) {
+                this.tiempoUltimoDisparoP1 = currentTime;
+            } else {
+                this.tiempoUltimoDisparoP2 = currentTime;
+            }
+        }
+    }
+
 
     dispararBala(x, y, velocidadX, velocidadY, danio, velBala) {
         const bala = this.balas.get(); // Obtener una bala disponible del grupo
@@ -615,6 +666,19 @@ class Juego extends Phaser.Scene
             }
         });
 
+        //parte ratón
+        this.input.on('pointerdown', (pointer) => {
+            if (pointer.leftButtonDown()) {
+                this.keyStates.mouseLeft = true;
+            }
+        });
+
+        this.input.on('pointerup', (pointer) => {
+            if (pointer.leftButtonReleased()) {
+                this.keyStates.mouseLeft = false;
+            }
+        });
+
         for (let key in this.keyStates) {
             this.keyStates[key] = false;
         }
@@ -835,6 +899,9 @@ class Juego extends Phaser.Scene
         if (Math.abs(this.j2.body.velocity.x) > 10) {
             this.lastJ2Vel = this.j2.body.velocity.x;
         }
+
+        //gestionamos el disparo
+        this.inputDisparoBala();
         
         //Plataformas
         //pataforma móvil 1 (abajo)
