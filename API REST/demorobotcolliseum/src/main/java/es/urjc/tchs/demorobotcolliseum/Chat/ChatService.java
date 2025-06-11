@@ -17,19 +17,20 @@ public class ChatService {
         this.chatDAO = chatDAO;
         this.lock = new ReentrantReadWriteLock();
         this.messages = this.chatDAO.getAllchats();
-        this.lastId = new AtomicInteger(this.getLastMessage().get().getId());
+        int idnew = 0;
+        for (MessageOnChat messageOnChat : messages) {
+            if(idnew < messageOnChat.getId()){
+                idnew = messageOnChat.getId(); 
+            }
+        }
+        this.lastId = new AtomicInteger(idnew);
     }
 
     // public List<String>
     public void addMessage(String username, String message) {
         var writeLock = this.lock.writeLock();
         writeLock.lock();
-        // int idnew = messages.get(0).getId();
-        // for (MessageOnChat messageOnChat : messages) {
-        //     if(idnew>messageOnChat.getId()){
-        //         idnew = messageOnChat.getId(); 
-        //     }
-        // }
+        
         try{
             synchronized (messages) {
                 //this.lastId = new AtomicInteger(messages.size());
