@@ -109,7 +109,7 @@ class Juego extends Phaser.Scene
             this.j1.setVelocityY(this.fuerzaSaltoJ1);
             this.pulsado=true
         }
-        if(this.pulsado){
+        if(this.pulsado && GlobalData.isMaster){
             this.webManager.sendPlayerPosition()
             console.log("Métodos WebManager:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.webManager)));
             this.webManager.sendPlayerPosition("J1", this.j1.x, this.j1.y, this.j1.body.velocity.x, this.j1.body.velocity.y);
@@ -199,7 +199,7 @@ class Juego extends Phaser.Scene
             this.pulsado=true
         }
         
-        if(pulsado){
+        if(pulsado && !GlobalData.isMaster){
             this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
             this.pulsado=false
         }

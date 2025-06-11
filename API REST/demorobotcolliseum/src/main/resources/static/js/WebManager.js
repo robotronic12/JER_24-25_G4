@@ -2,6 +2,7 @@ class WebManager{
     constructor(juegoInstance) {
         this.juego = juegoInstance;
         this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
+
         const self = this;
         this.connection.onerror = function(e) {
           console.log("WS error: " + e);
@@ -33,6 +34,7 @@ class WebManager{
                 }
                 break;
             case 'MessageJPlayer':
+                
                 if (message.player.id === "J1") {
                     this.juego.updateRemotePlayer1(message.player);
                 } else if (message.player.id === "J2") {
