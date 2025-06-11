@@ -33,6 +33,11 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("Session closed: " + session.getId());
         sessions.remove(session.getId());
+        if (masterSession != null && masterSession.getId().equals(session.getId())) {
+            // Si el master se desconecta, se limpia la referencia
+            masterSession = null;
+            System.out.println("Master session cleared.");
+        }
     }
 
     @Override
@@ -49,21 +54,27 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         var id = root.get("id").asInt();
         var type = root.get("type").asText();
 
-        if (type.equals("MessageMaster")) {
-            Map<String, Object> response = new java.util.HashMap<>();
+        switch (type) {
+            case "MessageMaster":
+                Map<String, Object> response = new java.util.HashMap<>();
 
-            response.put("id", -1);
-            response.put("type", "MessageMasterResponse");
-            response.put("isMaster", isMasterSession(session));
+                response.put("id", -1);
+                response.put("type", "MessageMasterResponse");
+                response.put("isMaster", isMasterSession(session));
 
-            String responseJson = mapper.writeValueAsString(response);
+                String responseJson = mapper.writeValueAsString(response);
 
-            sendMessageToOne(session, responseJson);
-        } else if (type.equals("MessageItem")){
-            handleItemMessage(session, root);
-        }else if (type.equals("MessageJPlayer")) { ///
-            // Reenviar a otros jugadores
-            sendMessageToOther(session, root.toString());
+                sendMessageToOne(session, responseJson);
+                break;
+            
+            case "MessageItem":
+                sendMessageToOther(session, msg);
+            case "MessageJPlayer":
+                sendMessageToOther(session,root.toString());
+            break;
+
+            default:
+                break;
         }
     }
 

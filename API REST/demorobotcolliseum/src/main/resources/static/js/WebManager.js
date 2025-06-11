@@ -24,10 +24,12 @@ class WebManager{
 
     handleMessage(message) {
         message = JSON.parse(message);
+        console.log("Handling message: ", message.type);
         switch (message.type) {
             case 'MessageItem':
                 if(message.item.collected){
-                    this.juego.takeItem(message.item.id, (message.item.owner === "J1" ? this.juego.jugador1 : this.juego.jugador2));
+                    console.log("Item collected: " + message.item.id + " by player: " + message.item.owner);
+                    this.juego.takeItem(message.item.id, message.item.owner);
                 }
                 else {
                     this.juego.addItem(message.item);
@@ -50,7 +52,12 @@ class WebManager{
             case 'MessageBegin':
                 break;
             case 'MessageMasterResponse':
+                console.log("Is master ...");
                 GlobalData.isMaster = message.isMaster;
+                console.log("Is master: " + GlobalData.isMaster);
+                if(GlobalData.isMaster){
+                    this.juego.createPowerUps();
+                }
                 break;
             default:
                 console.log("Unknown message type: ", message.type);

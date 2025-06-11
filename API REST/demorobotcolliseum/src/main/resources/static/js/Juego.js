@@ -66,6 +66,7 @@ class Juego extends Phaser.Scene
     //Sonidos
     recogSonido;
 
+    PowerUps = [];
     webManager = new WebManager(this);
 
     //#region JUGADOR 1
@@ -459,12 +460,15 @@ class Juego extends Phaser.Scene
             this.physics.add.collider(powerUp, this.movingPlatform2);
 
             this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
-            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);     
-            this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor       
+            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
+
+            this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor   
+
+            this.PowerUps.push(powerUp); // Añade el PowerUp al array de PowerUps
+
+            return powerUp; // Devuelve el PowerUp creado
         }
     }
-
-    PowerUps = [];
 
     handleColision1PU(powerUp, jugador){
         //this.powerUpTake.play();
@@ -478,15 +482,28 @@ class Juego extends Phaser.Scene
     }
 
     takeItem(idPwUp, jugador){
-        this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
-        this.recogSonido.play();
-        powerUp.collected(jugador,this.j1,this.j2);
-        powerUp.destroy(); // Destruye el PowerUp
+        var powerUp = this.PowerUps.find(item => item.id === idPwUp); // Busca el PowerUp por su ID
+        if(!powerUp == null){
+            this.PowerUps = this.PowerUps.filter(item => item !== powerUp); // Elimina el PowerUp del array
+            this.recogSonido.play();
+            powerUp.destroy(); // Destruye el PowerUp
+            if(jugador == "J1"){
+                powerUp.collected(this.j1,this.j1,this.j2);
+            }
+            if(jugador == "J2"){
+                powerUp.collected(this.j2,this.j1,this.j2);
+            }
+            console.log('PowerUp recogido por ' + jugador + ': ' + powerUp.type);
+        }else{
+            console.log('PowerUp no encontrado con ID: ' + idPwUp);
+        }
     }
 
-    addItem(powerUp){
-        this.PowerUps.push(powerUp);
-        this.spawnPowerUp(powerUp.x, powerUp.y, powerUp.type); // Re-spawnea el PowerUp
+    addItem(powerUp){ // Crea un PowerUp real usando tu grupo de Phaser
+        var newPowerUp = this.spawnPowerUp(powerUp.x, powerUp.y, powerUp.type); // Re-spawnea el PowerUp
+        newPowerUp.id = powerUp.id; // Asigna el ID del PowerUp recibido
+
+        console.log('PowerUp creado con ID: ' + powerUp.id);
     }
 
     handleColision2PU(powerUp, jugador){
@@ -705,10 +722,23 @@ class Juego extends Phaser.Scene
             maxSize: 2,            // Número máximo de powerups activas           
         });
 
-        while (GlobalData.isMaster == null){}
-        console.log('isMaster: ' + GlobalData.isMaster);
-        if(GlobalData.isMaster){
-            this.time.addEvent({
+        //while (GlobalData.isMaster == null){}
+        //console.log('isMaster: ' + GlobalData.isMaster);
+        //if(GlobalData.isMaster){
+        //    this.time.addEvent({
+        //        delay: 10000,        // Milisegundos
+        //        callback: () => {
+        //            this.createPowerUp();
+        //        },
+        //        callbackScope: this,
+        //        loop: true          // Se repite indefinidamente
+        //    });
+        //}
+        
+    }
+
+    createPowerUps(){
+        this.time.addEvent({
                 delay: 10000,        // Milisegundos
                 callback: () => {
                     this.createPowerUp();
@@ -716,9 +746,8 @@ class Juego extends Phaser.Scene
                 callbackScope: this,
                 loop: true          // Se repite indefinidamente
             });
-        }
-        
     }
+
     //#endregion
     
     //#region Update    
@@ -765,7 +794,7 @@ class Juego extends Phaser.Scene
             this.lastJ1Vel = this.j1.body.velocity.x;
         }
 
-        console.log('lastJ1Vel: ' + this.lastJ1Vel);
+        //console.log('lastJ1Vel: ' + this.lastJ1Vel);
 
         if (Math.abs(this.j2.body.velocity.x) > 10) {
             this.lastJ2Vel = this.j2.body.velocity.x;

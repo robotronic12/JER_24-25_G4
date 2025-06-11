@@ -14,7 +14,8 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
         this.type = tipeOfPP;
         this.player;
         this.Juego = juego;
-        this.id = this.Juego.powerUps.length; // Asignar un ID único al PowerUp
+        this.id = GlobalData.numPowerUps; // Asignar un ID único al PowerUp
+        GlobalData.numPowerUps++; // Incrementar el contador de PowerUps global
 
         this.setScale(0.5);
 
@@ -26,6 +27,7 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
 
     collected(jugador, j1, j2){
         this.player = jugador;
+        console.log('PowerUp collected: ' + this.type);
         this.crearMini();
         if(this.type === 'speedUp'){
             if(this.player==j1 || jugador.y==j1.y)
