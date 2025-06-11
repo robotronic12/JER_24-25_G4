@@ -4,7 +4,8 @@ var GlobalData = {
     volumenCambiado : false,
     ganador : 0,
     isInChat : false,
-    isMaster : false
+    isMaster : false,
+    numPowerUps : 0
 }
 
 var usuario = {
