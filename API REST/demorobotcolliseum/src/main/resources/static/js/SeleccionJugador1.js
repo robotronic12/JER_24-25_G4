@@ -194,7 +194,7 @@ class SeleccionJugador1 extends Phaser.Scene {
                 seleccionar.setInteractive().on('pointerdown', () => {
                     this.sendColor();
                     this.scene.stop('SeleccionJugador1'); //carga la escena de intro
-                    this.scene.start('SeleccionJugador2'); //carga la escena de game
+                    this.scene.start('MenuInicio'); //carga la escena de game
                 });
             });
 

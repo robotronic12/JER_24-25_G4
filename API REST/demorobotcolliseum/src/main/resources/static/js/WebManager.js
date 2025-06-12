@@ -78,15 +78,18 @@ class WebManager{
                 break;
 
             case 'MessageDamage':
-                if (message.player === "J1") {
-                    this.juego.vida1 = message.live;
-                    if (this.juego.vida1 <= 0) {
+                const target = message.damage.target;
+                const newLife = message.damage.life;
+
+                if (target === "J1") {
+                    this.juego.vida1 = newLife;
+                    if (newLife <= 0) {
                         this.juego.j1.setActive(false);
                         this.juego.j1.setVisible(false);
                     }
-                } else if (message.player === "J2") {
-                    this.juego.vida2 = message.live;
-                    if (this.juego.vida2 <= 0) {
+                } else if (target === "J2") {
+                    this.juego.vida2 = newLife;
+                    if (newLife <= 0) {
                         this.juego.j2.setActive(false);
                         this.juego.j2.setVisible(false);
                     }
@@ -119,6 +122,17 @@ class WebManager{
             type: 'MessageDamage',
             item: {
                 vida: vida
+            }
+        };
+        this.sendMessage(message);
+    }
+    sendDamage(targetPlayerId, damageAmount) {
+        const message = {
+            id: this.newId(),
+            type: 'MessageDamage',
+            damage: {
+                target: targetPlayerId,
+                amount: damageAmount
             }
         };
         this.sendMessage(message);
