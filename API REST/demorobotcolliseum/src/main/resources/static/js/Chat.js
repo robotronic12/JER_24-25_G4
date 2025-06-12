@@ -127,7 +127,7 @@ class Chat extends Phaser.Scene {
             GlobalData.isInChat = false;
         }    
         
-        if(this.cargarMas && this.tiempoCarga <= tiempo){
+        if(this.cargarMas && this.tiempoCarga <= this.tiempo){
             this.cargarMas = false;
             this.cargarMensajes(this.messagesContainer); 
         }

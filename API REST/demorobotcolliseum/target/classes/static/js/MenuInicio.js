@@ -81,10 +81,15 @@ class MenuInicio extends Phaser.Scene {
         });
         
         const vestir = this.add.image(750, 530, 'vestir');
+        
         vestir.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
-            this.scene.start('SeleccionJugador1'); //carga la escena de game
+            if(GlobalData.isMaster){
+                this.scene.start('SeleccionJugador1'); //carga la escena de game
+            }else{
+                this.scene.start('SeleccionJugador2'); //carga la escena de game
+            }
         });
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 

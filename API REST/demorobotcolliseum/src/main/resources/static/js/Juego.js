@@ -186,7 +186,6 @@ class Juego extends Phaser.Scene
     
         // const { left, right, up } = this.cursors;
         
-       
             
             if (this.keyStates.a) {
                 this.j2.setVelocityX(-this.velocidadJ2);
@@ -203,7 +202,7 @@ class Juego extends Phaser.Scene
             if (this.keyStates.w && this.j2.body.touching.down) {
                 this.j2.setVelocityY(this.fuerzaSaltoJ2);
             }
-
+            
             this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
 
 
@@ -424,7 +423,7 @@ class Juego extends Phaser.Scene
             this.vida1 -= bala.danioBala;
             //console.log(this.vida1);
             
-            this.webManager.sendLive("J1", this.vida1); // <--- Agregado
+            this.webManager.sendDamage("J1", bala.danioBala);
 
 
             if (this.vida1 <= 0) {
@@ -441,7 +440,7 @@ class Juego extends Phaser.Scene
             this.vida2 -= bala.danioBala;
             //console.log(this.vida2);
 
-             this.webManager.sendLive("J2", this.vida2); // <--- Agregado
+            this.webManager.sendDamage("J2", bala.danioBala);
 
 
             if (this.vida2 <= 0) {

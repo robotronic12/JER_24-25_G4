@@ -1,5 +1,6 @@
 package es.urjc.tchs.demorobotcolliseum.Spring;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -18,6 +19,13 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     private Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();    
     private WebSocketSession masterSession;
     private final ReentrantReadWriteLock lock;
+    private Map<String, Integer> playerLives = new ConcurrentHashMap<>();
+
+    // Inicializar vidas por defecto
+    {
+        playerLives.put("J1", 100);
+        playerLives.put("J2", 100);
+    }
 
     public WebsocketEchoHandler() {
         this.lock = new ReentrantReadWriteLock();
@@ -74,7 +82,25 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             break;
 
             case "MessageDamage":
-                sendMessageToOther(session, msg);
+                JsonNode damageNode = root.get("damage");
+                String target = damageNode.get("target").asText();
+                int amount = damageNode.get("amount").asInt();
+
+                int currentLife = playerLives.getOrDefault(target, 100);
+                int newLife = Math.max(0, currentLife - amount);
+                playerLives.put(target, newLife);
+
+                // Reenviar a todos los jugadores el nuevo valor de vida
+                Map<String, Object> vidaMessage = new HashMap<>();
+                vidaMessage.put("id", id);
+                vidaMessage.put("type", "MessageDamage");
+                Map<String, Object> vidaData = new HashMap<>();
+                vidaData.put("target", target);
+                vidaData.put("life", newLife);
+                vidaMessage.put("damage", vidaData);
+
+                String vidaJson = mapper.writeValueAsString(vidaMessage);
+                sendMessageToAll(vidaJson);
                 break;
 
             default:
@@ -122,6 +148,15 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                     sessionAct.sendMessage(new TextMessage(payload));
                 }
                 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void sendMessageToAll(String payload) {
+        for (WebSocketSession sessionAct : sessions.values()) {
+            try {
+                sessionAct.sendMessage(new TextMessage(payload));
             } catch (Exception e) {
                 e.printStackTrace();
             }
