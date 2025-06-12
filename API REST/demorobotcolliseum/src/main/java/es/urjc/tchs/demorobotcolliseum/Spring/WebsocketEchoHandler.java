@@ -77,7 +77,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToOne(session, responseJson);
                 break;
             
-            case "MessageItem":
+            case "MessageItem"://Hay que mandar a todos que se ha recogido un item
                 sendMessageToOther(session, msg);
             case "MessageJPlayer":
                 sendMessageToOther(session,root.toString());

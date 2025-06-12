@@ -16,7 +16,6 @@ class EsperaSincronizacion extends Phaser.Scene {
 
     finEsperaSincronizacion() {
         this.scene.stop('EsperaSincronizacion');
-        this.scene.resume('Juego');
     }
 
     update() {    
@@ -24,6 +23,7 @@ class EsperaSincronizacion extends Phaser.Scene {
             this.finEsperaSincronizacion();
             GlobalData.initPlay = false;
         }
+        console.log("Esperando a que se conecten los jugadores...");
     } //se puede poner un delta 
 
 }

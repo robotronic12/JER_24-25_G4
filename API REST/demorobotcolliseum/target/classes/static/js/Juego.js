@@ -641,6 +641,8 @@ class Juego extends Phaser.Scene
         this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
         this.load.image('vida', 'assets/jugador/Vida.png');  
         
+        GlobalData.initPlay = false;
+        
         this.webManager.openConnection(); // Abrir la conexión WebSocket al iniciar la escena
 
     }
@@ -820,19 +822,19 @@ class Juego extends Phaser.Scene
         //        loop: true          // Se repite indefinidamente
         //    });
         //}    
-        GlobalData.initPlay = false;
         this.startWaitForSinchronization();
     }
 
-    startWaitForSinchronization() { 
-        this.scene.pause('Juego');  
-        this.scene.start('EsperandoSincronizacion');
+    startWaitForSinchronization() {           
+        this.scene.launch('EsperandoSincronizacion'); // Inicia la escena sin parar la actual
+        this.scene.bringToTop('EsperandoSincronizacion');
     }
 
     createPowerUps(){
         this.time.addEvent({
                 delay: 10000,        // Milisegundos
                 callback: () => {
+                    if(this.start === false || GlobalData.initPlay === false) return;
                     this.createPowerUp();
                 },
                 callbackScope: this,
@@ -850,7 +852,7 @@ class Juego extends Phaser.Scene
 
     update ()
     {
-        if(this.start === false) return; // Si no se ha iniciado el juego, no hacemos nada
+        if(this.start === false || GlobalData.initPlay === false) return; // Si no se ha iniciado el juego, no hacemos nada
 
         if(GlobalData.volumenCambiado){
             this.bgMusic.setVolume(GlobalData.volumen);
