@@ -64,14 +64,28 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("Session closed: " + session.getId());
         sessions.remove(session.getId());
+
         if (masterSession != null && masterSession.getId().equals(session.getId())) {
-            // Si el master se desconecta, se limpia la referencia
             masterSession = null;
             System.out.println("Master session cleared.");
         }
 
         if(sessions.size() == 0) {
             spawnedItems.clear(); // Limpiar items si no hay jugadores
+        }
+        // Enviar mensaje al otro jugador avisando que ha ganado
+        for (WebSocketSession other : sessions.values()) {
+            if (other.isOpen()) {
+                Map<String, Object> winMsg = new HashMap<>();
+                winMsg.put("type", "DesconexionVictory");
+
+                // Determinar quién es el jugador conectado
+                String winner = (masterSession != null && masterSession.getId().equals(other.getId())) ? "J1" : "J2";
+                winMsg.put("player", winner);
+
+                String json = new ObjectMapper().writeValueAsString(winMsg);
+                other.sendMessage(new TextMessage(json));
+            }
         }
     }
 
@@ -139,7 +153,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             case "MessageEnd":                
                 sendMessageToAll(msg);          
                 break;
-
+            
             default:
                 break;
         }
@@ -192,6 +206,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             }
         }
     }
+
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private boolean powerUpSpawnerStarted = false;
 
