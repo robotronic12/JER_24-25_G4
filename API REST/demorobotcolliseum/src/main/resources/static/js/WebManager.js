@@ -21,6 +21,7 @@ class WebManager{
             }
             this.connection.onclose = function() {
                 console.log("Closing socket");
+                //Hacer algo si se cierra la conexión
             }
             this.connection.onopen = () => {
                 self.isMaster();                
