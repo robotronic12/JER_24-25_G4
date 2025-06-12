@@ -35,6 +35,16 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("New session: " + session.getId());
         sessions.put(session.getId(), session);
+
+        if (sessions.size() == 2) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> response = new java.util.HashMap<>();
+            response.put("id", -1);
+            response.put("type", "EmpiezaPartida");
+
+            String responseJson = mapper.writeValueAsString(response);
+            sendMessageToAll(responseJson);
+        }
     }
 
     @Override
@@ -75,7 +85,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToOne(session, responseJson);
                 break;
             
-            case "MessageItem":
+            case "MessageItem"://Hay que mandar a todos que se ha recogido un item
                 sendMessageToOther(session, msg);
             case "MessageJPlayer":
                 sendMessageToOther(session,root.toString());
@@ -103,6 +113,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToAll(vidaJson);
                 break;
 
+            case "MessageEnd":                
+                sendMessageToAll(msg);          
+                break;
+
             default:
                 break;
         }
@@ -123,14 +137,6 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         } finally {
             writeLock.unlock();
         }
-    }
-
-    ////No pyuedo probar si funciona peroooo toi en ello
-    private void handleItemMessage(WebSocketSession session, JsonNode root) {
-        // Este mensaje se reenvía a todos los demás jugadores
-        // (ya lo recibiste tú al emitirlo)
-        String payload = root.toString(); 
-        sendMessageToOther(session, payload);
     }
 
     public void sendMessageToOne(WebSocketSession session, String payload) {

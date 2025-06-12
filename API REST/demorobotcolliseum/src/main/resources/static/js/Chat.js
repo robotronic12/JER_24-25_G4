@@ -32,7 +32,13 @@ class Chat extends Phaser.Scene {
     sendToServer(username, message){
         console.log("Hola");
 
-        fetch(`/api/chat/${username}/chat?message=${message}`)
+        fetch(`/api/chat/${username}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: (message)
+                })
         // .then(response => {
         //     if (!response.ok) {
         //         throw new Error('Error en la petición al servidor');
