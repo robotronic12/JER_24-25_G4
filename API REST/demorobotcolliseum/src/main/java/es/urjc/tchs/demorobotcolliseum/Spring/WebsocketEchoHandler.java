@@ -1,8 +1,12 @@
 package es.urjc.tchs.demorobotcolliseum.Spring;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
@@ -20,6 +24,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     private WebSocketSession masterSession;
     private final ReentrantReadWriteLock lock;
     private Map<String, Integer> playerLives = new ConcurrentHashMap<>();
+    private Map<Integer, PowerUpServer> spawnedItems = new HashMap<>();
 
     // Inicializar vidas por defecto
     {
@@ -44,6 +49,14 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
             String responseJson = mapper.writeValueAsString(response);
             sendMessageToAll(responseJson);
+            startCreatePowerUps();
+        }
+
+        if(spawnedItems.size() > 0) {
+            for (int id : spawnedItems.keySet()) {
+                PowerUpServer item = spawnedItems.get(id);
+                sendItem(id, item.type, item.owner, item.x, item.y, false);
+            }
         }
     }
 
@@ -55,6 +68,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             // Si el master se desconecta, se limpia la referencia
             masterSession = null;
             System.out.println("Master session cleared.");
+        }
+
+        if(sessions.size() == 0) {
+            spawnedItems.clear(); // Limpiar items si no hay jugadores
         }
     }
 
@@ -86,7 +103,13 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 break;
             
             case "MessageItem"://Hay que mandar a todos que se ha recogido un item
-                sendMessageToOther(session, msg);
+                var item = root.get("item");
+                var itemId = item.get("id").asInt();
+
+                if (spawnedItems.containsKey(itemId)) {
+                    spawnedItems.remove(itemId);
+                    sendMessageToAll(msg);
+                }
             case "MessageJPlayer":
                 sendMessageToOther(session,root.toString());
             break;
@@ -159,6 +182,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             }
         }
     }
+
     public void sendMessageToAll(String payload) {
         for (WebSocketSession sessionAct : sessions.values()) {
             try {
@@ -167,5 +191,66 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 e.printStackTrace();
             }
         }
+    }
+    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private boolean powerUpSpawnerStarted = false;
+
+    public void startCreatePowerUps() {
+        if (powerUpSpawnerStarted) return; // Evita múltiples timers
+        powerUpSpawnerStarted = true;
+
+        scheduler.scheduleAtFixedRate(() -> {            
+            try {
+                if(spawnedItems.size() >= 2) {
+                    System.out.println("Max power-ups reached, not creating more.");
+                    return; // Evita crear más de 10 power-ups
+                }
+                createPowerUp();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, 0, 5, TimeUnit.SECONDS); // Cada 5 segundos
+    }
+
+    private static final String[] POWER_UP_TYPES = {
+    "speedUp", "speedAtkUp", "moreDamage", "speedBulletkUp", "moreJump", "moreLive", "multiplesDisparos"
+    };
+    private static final int NUMBER_OF_POSITIONS = 5;
+    private int nextPowerUpId = 0;
+
+    public void createPowerUp() throws IOException {
+        // Selecciona un tipo aleatorio
+        String type = POWER_UP_TYPES[(int)(Math.random() * POWER_UP_TYPES.length)];
+        // Selecciona una posición aleatoria
+        int randomPos = (int)(Math.random() * (NUMBER_OF_POSITIONS + 1));
+        int x = randomPos * 100;
+        int y = 0;
+
+        spawnedItems.put(nextPowerUpId, new PowerUpServer(type, "J1", x, y));
+
+        // Crea el mensaje del PowerUp  
+        sendItem(nextPowerUpId++, type, " ", x, y, false);
+    }
+
+    public void sendItem(int id, String type, String playerId, int x, int y, Boolean isCollected) throws IOException {
+        Map<String, Object> item = new HashMap<>();
+
+        Map<String, Object> powerUpMsg = new HashMap<>();
+        powerUpMsg.put("id", -1);
+        powerUpMsg.put("type", "MessageItem");
+
+        item.put("id", id);
+        item.put("type", type);
+        item.put("x", x);
+        item.put("y", y);
+        item.put("collected", isCollected);
+        item.put("timestamp", System.currentTimeMillis());
+
+        powerUpMsg.put("item", item);
+
+        // Serializa y envía a todos los clientes
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(powerUpMsg);
+        sendMessageToAll(json);
     }
 }
