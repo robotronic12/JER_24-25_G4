@@ -94,6 +94,16 @@ class WebManager{
                     }
                 }
                 break;
+            case "DesconexionVictory":
+                if (message.player === "J1") {
+                    GlobalData.ganador = 1;
+                } else if (message.player === "J2") {
+                    GlobalData.ganador = 2;
+                }
+
+                this.juego.scene.stop('Juego'); 
+                this.juego.scene.start('MenuVictoriaJ1');
+                break;
 
             case 'MessageBegin':
                 break;
@@ -104,6 +114,12 @@ class WebManager{
                 if(GlobalData.isMaster){
                     this.juego.createPowerUps();
                 }
+                if (data.isMaster) {
+                    this.jugadorId = "J1";
+                } else {
+                    this.jugadorId = "J2";
+                }
+                console.log("Jugador asignado:", this.jugadorId);
                 break;
 
             case 'EmpiezaPartida':

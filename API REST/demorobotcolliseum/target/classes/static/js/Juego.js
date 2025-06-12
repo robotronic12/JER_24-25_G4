@@ -749,15 +749,15 @@ class Juego extends Phaser.Scene
 
         this.movingPlatform1.setImmovable(true);
         this.movingPlatform1.body.allowGravity = false;
-        this.movingPlatform1.setVelocityX(50);
+        //this.movingPlatform1.setVelocityX(50); <-------------------------Aqui se mueven las platafomas
 
         //plataforma movil 2
         this.movingPlatform2 = this.physics.add.image(410, 250, 'plataforma');   
-        //this.movingPlatform2.setScale(1.2,1);
+        this.movingPlatform2.setScale(1.2,1);
 
         this.movingPlatform2.setImmovable(true);
         this.movingPlatform2.body.allowGravity = false;
-        this.movingPlatform2.setVelocityY(50);
+        //this.movingPlatform2.setVelocityY(50); <-------------------------Aqui se mueven las platafomas
 
 
         //jugadores
