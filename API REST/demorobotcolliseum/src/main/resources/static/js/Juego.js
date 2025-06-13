@@ -488,60 +488,44 @@ class Juego extends Phaser.Scene
 
     //Para power ups
 
-    handleColision1(player,bala) {
+    handleColision1(player, bala) {
         if (this.j1 && this.j1.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida1 -= bala.danioBala;
-            //console.log(this.vida1);
-            
-            this.webManager.sendDamage("J1", bala.danioBala);
-
-
-            if (this.vida1 <= 0) {
-                //console.log('Jugador 1 eliminado');
-                this.j1.setActive(false);
-                this.j1.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J1", bala.danioBala);
             }
         }
     }
 
-    handleColision2(player,bala) {
+    handleColision2(player, bala) {
         if (this.j2 && this.j2.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida2 -= bala.danioBala;
-            //console.log(this.vida2);
-
-            this.webManager.sendDamage("J2", bala.danioBala);
-
-
-            if (this.vida2 <= 0) {
-                //console.log('Jugador 2 eliminado');
-                this.j2.setActive(false);
-                this.j2.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J2", bala.danioBala);
             }
         }
     }
 
     spawnPowerUp(x, y, type) {
-        let powerUp = this.powerups.get(x, y, type, this); // Usa un objeto del grupo o crea uno nuevo
+        //let powerUp = this.powerups.get(x, y, type, this); // Usa un objeto del grupo o crea uno nuevo
+        let powerUp = new PowerUp(this, x, y, type, this); // Crea un nuevo PowerUp
         if (powerUp) {
             powerUp.type = type; // Define el tipo de PowerUp
             powerUp.setActive(true).setVisible(true); // Activa y haz visible el PowerUp
             powerUp.setPosition(x, y); // Ubícalo en las coordenadas específicas
             powerUp.body.setVelocity(0, 0); // Opcional: inicializa sin velocidad
             powerUp.setCollideWorldBounds(true);
-
+            powerUp.body.setAllowGravity(true); 
+            
             this.physics.add.collider(powerUp, this.platforms);
             this.physics.add.collider(powerUp, this.movingPlatform1);
             this.physics.add.collider(powerUp, this.movingPlatform2);
 
             //Colliders
-            if(GlobalData.isMaster){
-                this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);    
-                this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
-            }
+            this.physics.add.collider(powerUp, this.j1, this.handleColision1PU, null, this);   
+            this.physics.add.collider(powerUp, this.j2, this.handleColision2PU, null, this);
 
-            this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor   
+            //this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, false, "J1"); // Enviar el PowerUp al servidor   
 
             this.PowerUps.push(powerUp); // Añade el PowerUp al array de PowerUps
             console.log('PowerUp creado con ID: ' + powerUp.id);
@@ -554,11 +538,22 @@ class Juego extends Phaser.Scene
         //this.powerUpTake.play();
         console.log('J1 coge el PowerUp');
         console.log(this.danioJ1);
-        powerUp.destroy();
-        powerUp.collected(this.j1,this.j1,this.j2);
-        this.recogSonido.play();
+        //powerUp.destroy();
+        //powerUp.collected(this.j1,this.j1,this.j2);
+        //this.recogSonido.play();
         console.log(this.danioJ1);    
         this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J1"); // Enviar el PowerUp al servidor      
+    }
+
+    handleColision2PU(powerUp, jugador){
+        //this.powerUpTake.play();
+        console.log('J2 coge el PowerUp');
+        console.log(this.danioJ2);
+        //powerUp.destroy();
+        //powerUp.collected(this.j2,this.j1,this.j2);
+        //this.recogSonido.play();
+        console.log(this.danioJ2);
+        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J2"); // Enviar el PowerUp al servidor  
     }
 
     takeItem(idPwUp, jugador){
@@ -582,17 +577,6 @@ class Juego extends Phaser.Scene
         newPowerUp.id = powerUp.id; // Asigna el ID del PowerUp recibido
 
         console.log('PowerUp creado con ID: ' + powerUp.id);
-    }
-
-    handleColision2PU(powerUp, jugador){
-        //this.powerUpTake.play();
-        console.log('J2 coge el PowerUp');
-        console.log(this.danioJ2);
-        powerUp.destroy();
-        powerUp.collected(this.j2,this.j1,this.j2);
-        this.recogSonido.play();
-        console.log(this.danioJ2);
-        this.webManager.sendItem(powerUp.id, powerUp.x, powerUp.y, powerUp.type, true, "J2"); // Enviar el PowerUp al servidor  
     }
 
     createPowerUp(){
