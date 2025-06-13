@@ -70,8 +70,9 @@ class WebManager{
                     //console.log("Soy servidor y recibí el mensaje de J2 y envío su mensaje de actualización")
                 }
                 break;
-            case 'MessageInput':
-                this.juego.dispararBala(message.x, message.y, message.offsetX, message.offsetY, message.danio, message.velBala);
+            case 'MessageDisparo':
+                console.log(message.disparo.x, message.disparo.y, message.disparo.offsetX, message.disparo.offsetY, message.disparo.danio, message.disparo.velBala);
+                this.juego.dispararBala(message.disparo.x, message.disparo.y, message.disparo.offsetX, message.disparo.offsetY, message.disparo.danio, message.disparo.velBala);
                 break;
             case 'MessageEnd':
                 GlobalData.ganador = message.player;
@@ -183,9 +184,8 @@ class WebManager{
     sendDisparo(x,y,offsetX,offsetY,danio,velBala){ 
         var message={
             id:this.newId(),
-            type:'MessageInput',
+            type:'MessageDisparo',
             disparo:{
-                
                 x: x,
                 y: y,
                 offsetX: offsetX,

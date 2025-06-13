@@ -117,8 +117,8 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 sendMessageToOne(session, responseJson);
                 break;
             //para disparo
-            case "MessageInput":
-                sendMessageToOther(session,root.toString());
+            case "MessageDisparo":
+                sendMessageToAll(root.toString());
                 break;
             case "MessageItem"://Hay que mandar a todos que se ha recogido un item
                 var item = root.get("item");

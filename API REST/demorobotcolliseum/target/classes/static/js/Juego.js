@@ -293,10 +293,10 @@ class Juego extends Phaser.Scene
                     const offsetX = normX * velBala;
                     const offsetY = normY * velBala + balaOffset;
 
-                    this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
+                    //this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
                     //paso del disparo al servidor
                     
-                    this.webManager.sendDisparo(startX, startY, offsetX, offsetY, danio,velBala)
+                    this.webManager.sendDisparo(startX, startY, offsetX, offsetY,danio,velBala)
                             
                                 
                             
@@ -317,6 +317,7 @@ class Juego extends Phaser.Scene
         let modul = Math.sqrt(velocidadX * velocidadX + velocidadY * velocidadY);
         if (bala) {
             this.disparoSonido.play();
+            console.log("sonido disparo ralizado, se va a realizar el disparo")
             bala.fire(x, y, velocidadX/modul, velocidadY/modul, danio); // Configurar la posición y velocidad
         }
     
