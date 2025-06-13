@@ -18,6 +18,7 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
     }
 
     fire(x, y, velocityX, velocityY, danio) {
+        console.log("se va a soltar el disparo")
         this.trailPoints = [];
 
         this.danioBala = danio;
@@ -27,6 +28,7 @@ class Bala extends Phaser.Physics.Arcade.Sprite {
         this.setVisible(true);           // Hacer visible
         
         this.setVelocity(this.vel*velocityX, this.vel*velocityY);
+        console.log("se ha realizado el diaparo con éxito")
     }
 
     update() {

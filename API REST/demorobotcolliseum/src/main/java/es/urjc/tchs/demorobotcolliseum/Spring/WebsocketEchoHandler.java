@@ -41,6 +41,8 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         sessions.put(session.getId(), session);
 
         if (sessions.size() == 2) {
+            resetPlayerLives();
+
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> response = new java.util.HashMap<>();
             response.put("id", -1);
@@ -114,7 +116,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
                 sendMessageToOne(session, responseJson);
                 break;
-            
+            //para disparo
+            case "MessageDisparo":
+                sendMessageToAll(root.toString());
+                break;
             case "MessageItem"://Hay que mandar a todos que se ha recogido un item
                 var item = root.get("item");
                 var itemId = item.get("id").asInt();
@@ -123,6 +128,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                     spawnedItems.remove(itemId);
                     sendMessageToAll(msg);
                 }
+                break;
             case "MessageJPlayer":
                 sendMessageToOther(session,root.toString());
             break;
@@ -204,6 +210,12 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 e.printStackTrace();
             }
         }
+    }
+    
+    private void resetPlayerLives() {
+        playerLives.put("J1", 100);
+        playerLives.put("J2", 100);
+        System.out.println("Vidas reiniciadas: J1=100, J2=100");
     }
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();

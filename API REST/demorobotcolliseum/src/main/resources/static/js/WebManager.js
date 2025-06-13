@@ -9,8 +9,8 @@ class WebManager{
 
     openConnection() {
         if (!this.connection || this.connection.readyState === WebSocket.CLOSED) {
-            this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
-
+            const hostname = window.location.hostname;
+            this.connection = new WebSocket(`ws://${hostname}:8080/echo`);
             const self = this;
             this.connection.onerror = function(e) {
             console.log("WS error: " + e);
@@ -70,7 +70,9 @@ class WebManager{
                     //console.log("Soy servidor y recibí el mensaje de J2 y envío su mensaje de actualización")
                 }
                 break;
-            case 'MessageInput':
+            case 'MessageDisparo':
+                console.log(message.disparo.x, message.disparo.y, message.disparo.offsetX, message.disparo.offsetY, message.disparo.danio, message.disparo.velBala);
+                this.juego.dispararBala(message.disparo.x, message.disparo.y, message.disparo.offsetX, message.disparo.offsetY, message.disparo.danio, message.disparo.velBala);
                 break;
             case 'MessageEnd':
                 GlobalData.ganador = message.player;
@@ -95,6 +97,8 @@ class WebManager{
                     }
                 }
                 break;
+
+                
             case "DesconexionVictory":
                 if (message.player === "J1") {
                     GlobalData.ganador = 1;
@@ -174,6 +178,23 @@ class WebManager{
                 timestamp: Date.now()
             }
         };
+        this.sendMessage(message);
+    }
+
+    sendDisparo(x,y,offsetX,offsetY,danio,velBala){ 
+        var message={
+            id:this.newId(),
+            type:'MessageDisparo',
+            disparo:{
+                x: x,
+                y: y,
+                offsetX: offsetX,
+                offsetY: offsetY,
+                danio: danio,
+                velBala: velBala
+            }
+        };
+                   
         this.sendMessage(message);
     }
 

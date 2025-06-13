@@ -4,6 +4,7 @@ class Juego extends Phaser.Scene
         super({ key: 'Juego' });
     }
 
+
     cursors;
     chatKey;
 
@@ -71,6 +72,7 @@ class Juego extends Phaser.Scene
     PowerUps = [];
     webManager = new WebManager(this);
 
+    JuegoAcabaDeEmpezar=false;
     start = false;
 
     //#region JUGADOR 1
@@ -121,39 +123,6 @@ class Juego extends Phaser.Scene
 
                 this.pulsado=false
             
-            
-            
-        
-        
-
-        ////////// Disparo del jugador 1/////////////
-        if (this.keyStates.s) {
-            
-            if(this.currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ1; i++) {
-                    var xVel = this.j1.body.velocity.x;
-                    var yVel = this.j1.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i===0){
-                        balaOfset= (-30)
-                    }else if(i%2===0){
-                        balaOfset= (-30) + (i -1) * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j1.x, this.j1.y, xVel, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP1=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
     }
     updateRemotePlayer1(playerData) {
         if (!this.j1) return;
@@ -209,37 +178,6 @@ class Juego extends Phaser.Scene
             
             this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
 
-
-            
-            
-        
-    
-        ////////// Disparo del jugador 2/////////////
-        if (this.keyStates.s) {
-            
-            if(this.currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ2; i++) {
-                    var xVel = this.j2.body.velocity.x;
-                    var yVel = this.j2.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i%2===0){
-                        balaOfset= (-30) + i * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j2.x, this.j2.y, xVel, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP2=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
     }
     updateRemotePlayer2(playerData) {
         
@@ -293,7 +231,13 @@ class Juego extends Phaser.Scene
                     const offsetX = normX * velBala;
                     const offsetY = normY * velBala + balaOffset;
 
-                    this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
+                    //this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
+                    //paso del disparo al servidor
+                    
+                    this.webManager.sendDisparo(startX, startY, offsetX, offsetY,danio,velBala)
+                            
+                                
+                            
             }
 
             if (isMaster) {
@@ -311,6 +255,7 @@ class Juego extends Phaser.Scene
         let modul = Math.sqrt(velocidadX * velocidadX + velocidadY * velocidadY);
         if (bala) {
             this.disparoSonido.play();
+            console.log("sonido disparo ralizado, se va a realizar el disparo")
             bala.fire(x, y, velocidadX/modul, velocidadY/modul, danio); // Configurar la posición y velocidad
         }
     
@@ -482,36 +427,20 @@ class Juego extends Phaser.Scene
 
     //Para power ups
 
-    handleColision1(player,bala) {
+    handleColision1(player, bala) {
         if (this.j1 && this.j1.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida1 -= bala.danioBala;
-            //console.log(this.vida1);
-            
-            this.webManager.sendDamage("J1", bala.danioBala);
-
-
-            if (this.vida1 <= 0) {
-                //console.log('Jugador 1 eliminado');
-                this.j1.setActive(false);
-                this.j1.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J1", bala.danioBala);
             }
         }
     }
 
-    handleColision2(player,bala) {
+    handleColision2(player, bala) {
         if (this.j2 && this.j2.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida2 -= bala.danioBala;
-            //console.log(this.vida2);
-
-            this.webManager.sendDamage("J2", bala.danioBala);
-
-
-            if (this.vida2 <= 0) {
-                //console.log('Jugador 2 eliminado');
-                this.j2.setActive(false);
-                this.j2.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J2", bala.danioBala);
             }
         }
     }
@@ -855,6 +784,16 @@ class Juego extends Phaser.Scene
     update ()
     {
         if(this.start === false || GlobalData.initPlay === false) return; // Si no se ha iniciado el juego, no hacemos nada
+
+        //platamorfas móviles
+        
+        if(!this.JuegoAcabaDeEmpezar)
+        {
+            
+            this.movingPlatform1.setVelocityX(50);
+            this.movingPlatform2.setVelocityY(50);
+            this.JuegoAcabaDeEmpezar = true;
+        }
 
         if(GlobalData.volumenCambiado){
             this.bgMusic.setVolume(GlobalData.volumen);
