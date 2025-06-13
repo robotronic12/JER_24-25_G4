@@ -123,39 +123,6 @@ class Juego extends Phaser.Scene
 
                 this.pulsado=false
             
-            
-            
-        
-        
-
-        ////////// Disparo del jugador 1/////////////
-        if (this.keyStates.s) {
-            
-            if(this.currentTime-this.tiempoUltimoDisparoP1>this.cooldownBalaP1){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ1; i++) {
-                    var xVel = this.j1.body.velocity.x;
-                    var yVel = this.j1.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i===0){
-                        balaOfset= (-30)
-                    }else if(i%2===0){
-                        balaOfset= (-30) + (i -1) * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j1.x, this.j1.y, xVel, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j1.x, this.j1.y, this.lastJ1Vel || 160, yVel + balaOfset, this.danioJ1, this.velBala1); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP1=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
     }
     updateRemotePlayer1(playerData) {
         if (!this.j1) return;
@@ -211,37 +178,6 @@ class Juego extends Phaser.Scene
             
             this.webManager.sendPlayerPosition("J2", this.j2.x, this.j2.y, this.j2.body.velocity.x, this.j2.body.velocity.y)
 
-
-            
-            
-        
-    
-        ////////// Disparo del jugador 2/////////////
-        if (this.keyStates.s) {
-            
-            if(this.currentTime-this.tiempoUltimoDisparoP2>this.cooldownBalaP2){  //si la bala se dispara dentro del cooldown aparece si no no aparece
-                for (let i = 0; i < this.numeroBalasJ2; i++) {
-                    var xVel = this.j2.body.velocity.x;
-                    var yVel = this.j2.body.velocity.y;
-                    var balaOfset;
-                    //this.Shoot.play();
-                    if(i%2===0){
-                        balaOfset= (-30) + i * 10 ;
-                    }else{
-                        balaOfset= (-30)- i * 10 ;
-                    }
-                    if(Math.abs(xVel) > 1){
-                        this.dispararBala(this.j2.x, this.j2.y, xVel, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    else{
-                        this.dispararBala(this.j2.x, this.j2.y, this.lastJ2Vel || -160, yVel + balaOfset, this.danioJ2, this.velBala2); // Dirección horizontal derecha
-                    }
-                    this.tiempoUltimoDisparoP2=this.currentTime;   //actualizamos el tiempo de nuestro ultimo disparo al actual
-                }
-                // console.log('velocityX: ' + xVel);
-                // console.log('velocityY: ' + yVel);
-            }
-        }
     }
     updateRemotePlayer2(playerData) {
         
