@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -39,6 +40,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("New session: " + session.getId());
         sessions.put(session.getId(), session);
+        System.out.println("Total sessions: " + sessions.size());
 
         if (sessions.size() == 2) {
             resetPlayerLives();
@@ -50,6 +52,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
             String responseJson = mapper.writeValueAsString(response);
             sendMessageToAll(responseJson);
+            
             startCreatePowerUps();
         }
 
@@ -66,6 +69,9 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         System.out.println("Session closed: " + session.getId());
         sessions.remove(session.getId());
 
+        System.out.println(sessions.size()); 
+        stopCreatePowerUps(); // Detener generación de power-ups
+
         if (masterSession != null && masterSession.getId().equals(session.getId())) {
             masterSession = null;
             System.out.println("Master session cleared.");
@@ -73,7 +79,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
         if(sessions.size() == 0) {
             spawnedItems.clear(); // Limpiar items si no hay jugadores
-        }
+        }        
         // Enviar mensaje al otro jugador avisando que ha ganado
         for (WebSocketSession other : sessions.values()) {
             if (other.isOpen()) {
@@ -220,22 +226,37 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private boolean powerUpSpawnerStarted = false;
+    private boolean firtsPowerUpCreated = true;
+    private ScheduledFuture<?> createItems;
 
     public void startCreatePowerUps() {
-        if (powerUpSpawnerStarted) return; // Evita múltiples timers
-        powerUpSpawnerStarted = true;
+        if (createItems != null) {
+            System.out.println("Restarting power-up creation.");
+            createItems.cancel(false);
+        }
 
-        scheduler.scheduleAtFixedRate(() -> {            
-            try {
+        createItems = scheduler.scheduleAtFixedRate(() -> {            
+            try { // Si se ha detenido la generación de power-ups, no hacer nada
                 if(spawnedItems.size() >= 2) {
                     System.out.println("Max power-ups reached, not creating more.");
                     return; // Evita crear más de 10 power-ups
+                }
+                if(firtsPowerUpCreated) {
+                    firtsPowerUpCreated = false; // Solo crea el primer power-up una vez
+                    return;
                 }
                 createPowerUp();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }, 0, 5, TimeUnit.SECONDS); // Cada 5 segundos
+    }
+
+    public void stopCreatePowerUps() {
+        if (createItems != null) {
+            System.out.println("Stopping power-up creation.");
+            createItems.cancel(true);
+        }
     }
 
     private static final String[] POWER_UP_TYPES = {

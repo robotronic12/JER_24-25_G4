@@ -408,16 +408,18 @@ class Juego extends Phaser.Scene
 
     //Final
     acabarPartida(){    //para enseñar la pantalla de fin cuando uno de los jugadores muere
-        this.bgMusic.stop();
-        this.scene.stop('Juego'); //carga la escena de intro
         this.webManager.sendEndGame(GlobalData.ganador); // Enviar el ganador al servidor      
     }
 
     endGame(){
         this.bgMusic.stop();
+        
+        console.log("Juego terminado, cerrando conexión WebSocket");
+        if(this.webManager.isConnected()){ // Si la conexión ya está cerrada, no hacemos nada
+            this.webManager.closeConection(); // Cerrar la conexión WebSocket
+        }
         this.scene.stop('Juego');
         this.start = false;
-        this.webManager.closeConection(); // Cerrar la conexión WebSocket
         this.scene.start('MenuVictoriaJ1'); //carga la escena 
     }
 
@@ -574,6 +576,7 @@ class Juego extends Phaser.Scene
         
         GlobalData.initPlay = false;
         
+        console.log("Abrir conexión WebSocket al iniciar la escena");
         this.webManager.openConnection(); // Abrir la conexión WebSocket al iniciar la escena
 
     }

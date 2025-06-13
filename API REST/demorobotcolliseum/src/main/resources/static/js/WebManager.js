@@ -21,6 +21,7 @@ class WebManager{
             }
             this.connection.onclose = function() {
                 console.log("Closing socket");
+                self.juego.endGame();
                 //Hacer algo si se cierra la conexión
             }
             this.connection.onopen = () => {
@@ -33,6 +34,7 @@ class WebManager{
     }
 
     closeConection() {
+        console.log("Closing connection");
         if (this.connection) {
             this.connection.close();
             this.connection = null;
@@ -40,6 +42,10 @@ class WebManager{
         } else {
             console.log("No connection to close");
         }
+    }
+
+    isConnected() {
+        return this.connection && this.connection.readyState === WebSocket.OPEN;
     }
 
     sendMessage(message) {
