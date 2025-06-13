@@ -94,6 +94,8 @@ class WebManager{
                     }
                 }
                 break;
+
+                
             case "DesconexionVictory":
                 if (message.player === "J1") {
                     GlobalData.ganador = 1;

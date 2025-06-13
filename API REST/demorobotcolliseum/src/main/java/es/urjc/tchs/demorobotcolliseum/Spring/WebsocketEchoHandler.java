@@ -37,6 +37,8 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         sessions.put(session.getId(), session);
 
         if (sessions.size() == 2) {
+            resetPlayerLives();
+
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> response = new java.util.HashMap<>();
             response.put("id", -1);
@@ -183,6 +185,12 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 e.printStackTrace();
             }
         }
+    }
+    
+    private void resetPlayerLives() {
+        playerLives.put("J1", 100);
+        playerLives.put("J2", 100);
+        System.out.println("Vidas reiniciadas: J1=100, J2=100");
     }
 
 

@@ -482,36 +482,20 @@ class Juego extends Phaser.Scene
 
     //Para power ups
 
-    handleColision1(player,bala) {
+    handleColision1(player, bala) {
         if (this.j1 && this.j1.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida1 -= bala.danioBala;
-            //console.log(this.vida1);
-            
-            this.webManager.sendDamage("J1", bala.danioBala);
-
-
-            if (this.vida1 <= 0) {
-                //console.log('Jugador 1 eliminado');
-                this.j1.setActive(false);
-                this.j1.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J1", bala.danioBala);
             }
         }
     }
 
-    handleColision2(player,bala) {
+    handleColision2(player, bala) {
         if (this.j2 && this.j2.active) {
-            bala.destroy(); // Destruye la bala
-            this.vida2 -= bala.danioBala;
-            //console.log(this.vida2);
-
-            this.webManager.sendDamage("J2", bala.danioBala);
-
-
-            if (this.vida2 <= 0) {
-                //console.log('Jugador 2 eliminado');
-                this.j2.setActive(false);
-                this.j2.setVisible(false);
+            bala.destroy();
+            if (GlobalData.isMaster) {
+                this.webManager.sendDamage("J2", bala.danioBala);
             }
         }
     }
