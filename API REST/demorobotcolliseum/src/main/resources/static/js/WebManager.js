@@ -16,11 +16,12 @@ class WebManager{
             console.log("WS error: " + e);
             }
             this.connection.onmessage = function(msg) {
-                console.log("WS message: " + msg.data);
+                //console.log("WS message: " + msg.data);
                 self.handleMessage(msg.data);
             }
             this.connection.onclose = function() {
                 console.log("Closing socket");
+                //Hacer algo si se cierra la conexión
             }
             this.connection.onopen = () => {
                 self.isMaster();                
@@ -47,11 +48,11 @@ class WebManager{
 
     handleMessage(message) {
         message = JSON.parse(message);
-        console.log("Handling message: ", message.type);
+        //console.log("Handling message: ", message.type);
         switch (message.type) {
             case 'MessageItem':
-                if (GlobalData.isMaster) return; // Master does not handle item messages
                 if(message.item.collected){
+                    console.log("Handling message: ", message.type);
                     console.log("Item collected: " + message.item.id + " by player: " + message.item.owner);
                     this.juego.takeItem(message.item.id, message.item.owner);
                 }
@@ -66,7 +67,7 @@ class WebManager{
                     
                 } else {
                     this.juego.updateRemotePlayer2(message.player);
-                    console.log("Soy servidor y recibí el mensaje de J2 y envío su mensaje de actualización")
+                    //console.log("Soy servidor y recibí el mensaje de J2 y envío su mensaje de actualización")
                 }
                 break;
             case 'MessageInput':
@@ -113,10 +114,7 @@ class WebManager{
                 console.log("Is master ...");
                 GlobalData.isMaster = message.isMaster;
                 console.log("Is master: " + GlobalData.isMaster);
-                if(GlobalData.isMaster){
-                    this.juego.createPowerUps();
-                }
-                if (data.isMaster) {
+                if (message.isMaster) {
                     this.jugadorId = "J1";
                 } else {
                     this.jugadorId = "J2";
