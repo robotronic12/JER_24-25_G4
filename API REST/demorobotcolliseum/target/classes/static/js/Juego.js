@@ -4,6 +4,7 @@ class Juego extends Phaser.Scene
         super({ key: 'Juego' });
     }
 
+
     cursors;
     chatKey;
 
@@ -71,6 +72,7 @@ class Juego extends Phaser.Scene
     PowerUps = [];
     webManager = new WebManager(this);
 
+    JuegoAcabaDeEmpezar=false;
     start = false;
 
     //#region JUGADOR 1
@@ -748,7 +750,7 @@ class Juego extends Phaser.Scene
 
         this.movingPlatform1.setImmovable(true);
         this.movingPlatform1.body.allowGravity = false;
-        
+        //this.movingPlatform1.setVelocityX(50); <-------------------------Aqui se mueven las platafomas
 
         //plataforma movil 2
         this.movingPlatform2 = this.physics.add.image(410, 250, 'plataforma');   
@@ -756,7 +758,7 @@ class Juego extends Phaser.Scene
 
         this.movingPlatform2.setImmovable(true);
         this.movingPlatform2.body.allowGravity = false;
-        
+        //this.movingPlatform2.setVelocityY(50); <-------------------------Aqui se mueven las platafomas
 
 
         //jugadores
@@ -848,19 +850,18 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
    
 
-    JuegoAcabaDeEmpezar = false
     update ()
     {
-        if(this.start === false || GlobalData.initPlay === false)
-        {
-            return; // Si no se ha iniciado el juego, no hacemos nada
-        } 
+        if(this.start === false || GlobalData.initPlay === false) return; // Si no se ha iniciado el juego, no hacemos nada
+
+        //platamorfas móviles
         
-        if(!JuegoAcabaDeEmpezar)
+        if(!this.JuegoAcabaDeEmpezar)
         {
+            
             this.movingPlatform1.setVelocityX(50);
             this.movingPlatform2.setVelocityY(50);
-            JuegoAcabaDeEmpezar = true
+            this.JuegoAcabaDeEmpezar = true;
         }
 
         if(GlobalData.volumenCambiado){
