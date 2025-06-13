@@ -4,6 +4,7 @@ class Juego extends Phaser.Scene
         super({ key: 'Juego' });
     }
 
+
     cursors;
     chatKey;
 
@@ -71,6 +72,7 @@ class Juego extends Phaser.Scene
     PowerUps = [];
     webManager = new WebManager(this);
 
+    JuegoAcabaDeEmpezar=false;
     start = false;
 
     //#region JUGADOR 1
@@ -843,6 +845,16 @@ class Juego extends Phaser.Scene
     update ()
     {
         if(this.start === false || GlobalData.initPlay === false) return; // Si no se ha iniciado el juego, no hacemos nada
+
+        //platamorfas móviles
+        
+        if(!this.JuegoAcabaDeEmpezar)
+        {
+            
+            this.movingPlatform1.setVelocityX(50);
+            this.movingPlatform2.setVelocityY(50);
+            this.JuegoAcabaDeEmpezar = true;
+        }
 
         if(GlobalData.volumenCambiado){
             this.bgMusic.setVolume(GlobalData.volumen);
