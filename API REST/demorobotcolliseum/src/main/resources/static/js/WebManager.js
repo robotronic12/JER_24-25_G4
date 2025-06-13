@@ -70,6 +70,7 @@ class WebManager{
                 }
                 break;
             case 'MessageInput':
+                this.juego.dispararBala(message.x, message.y, message.offsetX, message.offsetY, message.danio, message.velBala);
                 break;
             case 'MessageEnd':
                 GlobalData.ganador = message.player;
@@ -176,6 +177,24 @@ class WebManager{
                 timestamp: Date.now()
             }
         };
+        this.sendMessage(message);
+    }
+
+    sendDisparo(x,y,offsetX,offsetY,danio,velBala){ 
+        var message={
+            id:this.newId(),
+            type:'MessageInput',
+            disparo:{
+                
+                x: x,
+                y: y,
+                offsetX: offsetX,
+                offsetY: offsetY,
+                danio: danio,
+                velBala: velBala
+            }
+        };
+                   
         this.sendMessage(message);
     }
 

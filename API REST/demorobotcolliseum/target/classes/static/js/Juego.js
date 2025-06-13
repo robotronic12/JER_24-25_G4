@@ -294,6 +294,12 @@ class Juego extends Phaser.Scene
                     const offsetY = normY * velBala + balaOffset;
 
                     this.dispararBala(startX, startY, offsetX, offsetY, danio, velBala);
+                    //paso del disparo al servidor
+                    
+                    this.webManager.sendDisparo(startX, startY, offsetX, offsetY, danio,velBala)
+                            
+                                
+                            
             }
 
             if (isMaster) {
