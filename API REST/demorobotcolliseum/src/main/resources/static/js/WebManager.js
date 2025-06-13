@@ -107,6 +107,10 @@ class WebManager{
                 }
 
                 this.juego.scene.stop('Juego'); 
+                if (GlobalData.isInChat){
+                    this.juego.scene.stop('Chat');
+                    GlobalData.isInChat = false;
+                }
                 this.juego.scene.start('MenuVictoriaJ1');
                 break;
 
