@@ -582,7 +582,10 @@ class Juego extends Phaser.Scene
     }
 
     addItem(powerUp){ // Crea un PowerUp real usando tu grupo de Phaser
-        if (this.PowerUps.find(item => item.id === powerUp.id)) return;
+        if (this.PowerUps.find(item => item.id === powerUp.id)) {
+            console.log('PowerUp con ID ' + powerUp.id + ' ya existe, no se creará de nuevo.');
+            return; // Si el PowerUp ya existe, no lo creamos de nuevo
+        }
         var newPowerUp = this.spawnPowerUp(powerUp.x, powerUp.y, powerUp.type); // Re-spawnea el PowerUp
         newPowerUp.id = powerUp.id; // Asigna el ID del PowerUp recibido
 
