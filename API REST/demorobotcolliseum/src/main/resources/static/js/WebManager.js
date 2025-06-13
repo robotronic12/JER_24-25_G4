@@ -9,8 +9,8 @@ class WebManager{
 
     openConnection() {
         if (!this.connection || this.connection.readyState === WebSocket.CLOSED) {
-            this.connection = new WebSocket('ws://127.0.0.1:8080/echo');
-
+            const hostname = window.location.hostname;
+            this.connection = new WebSocket(`ws://${hostname}:8080/echo`);
             const self = this;
             this.connection.onerror = function(e) {
             console.log("WS error: " + e);
