@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -91,7 +90,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println("Message received: " + message.getPayload());
+        //System.out.println("Message received: " + message.getPayload());
 
         String msg = message.getPayload();
 
@@ -232,16 +231,23 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     };
     private static final int NUMBER_OF_POSITIONS = 5;
     private int nextPowerUpId = 0;
+    private int pos = -1; 
 
     public void createPowerUp() throws IOException {
         // Selecciona un tipo aleatorio
         String type = POWER_UP_TYPES[(int)(Math.random() * POWER_UP_TYPES.length)];
         // Selecciona una posición aleatoria
+        
         int randomPos = (int)(Math.random() * (NUMBER_OF_POSITIONS + 1));
+        while (randomPos == pos) {
+            randomPos = (int)(Math.random() * (NUMBER_OF_POSITIONS + 1)); // Asegura que no se repita la posición            
+        }
+        pos = randomPos; // Guarda la posición para el siguiente power-up
         int x = randomPos * 100;
         int y = 0;
 
         spawnedItems.put(nextPowerUpId, new PowerUpServer(type, "J1", x, y));
+        System.out.println("Creating power-up: " + type + " at position (" + x + ", " + y + ") with id: " + nextPowerUpId);
 
         // Crea el mensaje del PowerUp  
         sendItem(nextPowerUpId++, type, " ", x, y, false);

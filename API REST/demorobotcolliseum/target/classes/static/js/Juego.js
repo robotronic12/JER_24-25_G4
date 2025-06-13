@@ -525,7 +525,8 @@ class Juego extends Phaser.Scene
             powerUp.setPosition(x, y); // Ubícalo en las coordenadas específicas
             powerUp.body.setVelocity(0, 0); // Opcional: inicializa sin velocidad
             powerUp.setCollideWorldBounds(true);
-
+            powerUp.body.setAllowGravity(true); 
+            
             this.physics.add.collider(powerUp, this.platforms);
             this.physics.add.collider(powerUp, this.movingPlatform1);
             this.physics.add.collider(powerUp, this.movingPlatform2);
