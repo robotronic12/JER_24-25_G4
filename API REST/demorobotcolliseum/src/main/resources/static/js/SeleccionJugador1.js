@@ -21,7 +21,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             headers: {
                 "Content-Type": "application/json"
             },
-            data: JSON.stringify(user),
+            body: JSON.stringify(user),
         })
         .then(response => {
             if (!response.ok) {
@@ -38,23 +38,6 @@ class SeleccionJugador1 extends Phaser.Scene {
             console.error('Error:', error);
             // Aquí puedes manejar errores
         });
-        // var url = `/api/chat?since=${since}`; // Reemplaza con la URL de tu servidor
-        // var game = this
-
-        // Usa jQuery para hacer una solicitud AJAX
-        // $.ajax({
-        //     url: url,
-        //     method: 'GET',
-        //     success: function(response) {
-        //         // Procesa la respuesta del servidor
-        //         // Actualiza el juego con los datos recibidos
-        //         let data = JSON.stringify(response)
-        //         console.log(datos); // Muestra los datos en la consola, o manipula elementos del juego
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error('Error en la solicitud AJAX:', error);
-        //     }
-        // });
     }
 
     preload() {
@@ -148,7 +131,8 @@ class SeleccionJugador1 extends Phaser.Scene {
         const azul = this.add.image(115, 300, "azul")
             .setInteractive()
             .on('pointerdown', () => {
-                this.color1=1; 
+                this.color1 = 1; 
+                usuario.color1 = 1; // Asigna el color seleccionado al objeto usuario
                 titulo.setColor('#0000ff'); // Cambia a rojo
                 crearSeleccionadoText(50, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
@@ -163,6 +147,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=2; 
+                usuario.color1 = 2; // Asigna el color seleccionado al objeto usuario
                 titulo.setColor('#00ff00');
                 crearSeleccionadoText(245, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
@@ -176,6 +161,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=3; 
+                usuario.color1 = 3; // Asigna el color seleccionado al objeto usuario
                 titulo.setColor('#ffa500');
                 crearSeleccionadoText(440, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {
@@ -189,6 +175,7 @@ class SeleccionJugador1 extends Phaser.Scene {
             .setInteractive()
             .on('pointerdown', () => {
                 this.color1=4; 
+                usuario.color1 = 4; // Asigna el color seleccionado al objeto usuario
                 titulo.setColor('#ff0000'); // Cambia a rojo
                 crearSeleccionadoText(635, 400);
                 seleccionar.setInteractive().on('pointerdown', () => {

@@ -477,8 +477,38 @@ class Juego extends Phaser.Scene
         this.load.image('player', 'assets/jugador/PersonajesA.png'); // Ruta de tu imagen del jugador
         this.load.image('player2', 'assets/jugador/PersonajesR.png'); // Ruta de tu imagen del jugador
         //this.load.image('star', 'src/games/firstgame/assets/star.png');
-        this.load.spritesheet('j1', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
-        this.load.spritesheet('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
+
+        switch (usuario.color1) {
+            case 1:
+                this.load.image('j1', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 2:
+                this.load.image('j1', 'assets/jugador/PersonajesV.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 3:
+                this.load.image('j1', 'assets/jugador/PersonajesN.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 4:
+                this.load.image('j1', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+        }
+
+        switch (usuario.color2) {
+            case 1:
+                this.load.image('j2', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 2:
+                this.load.image('j2', 'assets/jugador/PersonajesV.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 3:
+                this.load.image('j2', 'assets/jugador/PersonajesN.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+            case 4:
+                this.load.image('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
+                break;
+        }
+        //this.load.spritesheet('j1', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
+        //this.load.spritesheet('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
 
         this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
 

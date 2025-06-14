@@ -107,6 +107,13 @@ class MenuLogin extends Phaser.Scene {
                         this.scene.stop('MenuLogin');   
                         this.scene.start('MenuInicio');
                         this.scene.start('EstadoServidor');
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Respuesta del servidor:', data);
+                        console.log('Usuario logueado con éxito');
+                        usuario.color1 = data.color1;
+                        usuario.color2 = data.color2; 
                     })
                     
                     .catch(error => {
