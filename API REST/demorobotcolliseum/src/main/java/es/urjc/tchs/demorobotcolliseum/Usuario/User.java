@@ -12,12 +12,12 @@ public class User {
     @JsonCreator
     public User(@JsonProperty("username") String user,
         @JsonProperty("password") String pass,
-        @JsonProperty("color1") int color1,
-        @JsonProperty("color2") int color2){
+        @JsonProperty("color1") int c1,
+        @JsonProperty("color2") int c2){
         username = user;
         password = pass;
-        color1 = 1; //blue
-        color2 = 2; //red
+        color1 = c1; //blue
+        color2 = c2; //red
     }
 
     public void copiaProfunda(User user){

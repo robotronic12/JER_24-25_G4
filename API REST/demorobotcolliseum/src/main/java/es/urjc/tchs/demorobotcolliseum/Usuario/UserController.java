@@ -84,12 +84,17 @@ public class UserController {
 
     @PutMapping("/actualize")
     public ResponseEntity<UserDTO> actuliceUser(@RequestBody User user) {
-        Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
-        if(usu.isPresent()){            
-            UserDTO userDTO = (new UserDTO(usu.get()));
-            return ResponseEntity.ok(userDTO);
+        try{        
+            Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
+            if(usu.isPresent()){            
+                UserDTO userDTO = (new UserDTO(usu.get()));
+                return ResponseEntity.ok(userDTO);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping

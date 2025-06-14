@@ -6,22 +6,22 @@ class SeleccionJugador1 extends Phaser.Scene {
     color1;
 
     sendColor(){
-        var username = usuario.username;
+        // var username = usuario.username;
 
-        const user = {
-            username : usuario.username,
-            password : usuario.password,
-            color1 : usuario.color1,
-            color2 : usuario.color2
-        }
-        console.log(username);
+        // const user = {
+        //     username : usuario.username,
+        //     password : usuario.password,
+        //     color1 : usuario.color1,
+        //     color2 : usuario.color2
+        // }
+        // console.log(username);
 
         fetch('/api/users/actualize', {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(usuario),
         })
         .then(response => {
             if (!response.ok) {
@@ -31,7 +31,8 @@ class SeleccionJugador1 extends Phaser.Scene {
         })
         .then(data => {
             console.log('Respuesta del servidor:', data);
-            console.log('Color = ', usuario.color1);
+            console.log('Color1 = ', usuario.color1);
+            console.log('Color2 = ', usuario.color2);
             // Aquí puedes manejar la respuesta del servidor
         })
         .catch(error => {
