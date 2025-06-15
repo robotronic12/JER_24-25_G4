@@ -278,7 +278,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
 
     checkChat(){
-        if(GlobalData.isInChat) return;
+        if(GlobalData.isInChat || !GlobalData.imConectedToServer) return;
         
         if (this.keyStates.t) {
             //Quito los controles

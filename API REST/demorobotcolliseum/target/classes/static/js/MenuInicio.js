@@ -62,7 +62,6 @@ class MenuInicio extends Phaser.Scene {
                 GlobalData.playing = true;
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuInicio'); //carga la escena de intro
-                this.scene.pause('EstadoServidor'); //pausamos el estado de conexión para mostrarlo en la siguiente escena
                 this.scene.start('Juego'); //carga la escena de game
         });
         const salir = this.add.image(400, 450, 'salir');
@@ -82,6 +81,7 @@ class MenuInicio extends Phaser.Scene {
         
         const vestir = this.add.image(750, 530, 'vestir');
         vestir.setInteractive().on('pointerdown', () => {
+            if(!GlobalData.imConectedToServer) return;
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
             this.scene.start('SeleccionJugador1'); //carga la escena de game

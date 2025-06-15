@@ -107,6 +107,7 @@ class MenuLogin extends Phaser.Scene {
                         this.scene.stop('MenuLogin');   
                         this.scene.start('MenuInicio');
                         this.scene.start('EstadoServidor');
+                        this.scene.bringToTop('EstadoServidor');
                         return response.json();
                     })
                     .then(data => {

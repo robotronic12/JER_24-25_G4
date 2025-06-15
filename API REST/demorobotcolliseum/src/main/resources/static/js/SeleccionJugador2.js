@@ -195,6 +195,10 @@ class SeleccionJugador2 extends Phaser.Scene {
     }
 
     update() { 
+        if(!GlobalData.imConectedToServer){
+            this.scene.stop('SeleccionJugador2'); //carga la escena de intro
+            this.scene.start('MenuInicio'); //carga la escena de game
+        }
     } //se puede poner un delta 
 
 }

@@ -127,6 +127,11 @@ class Chat extends Phaser.Scene {
         this.chatKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
     update() {
+        if(!GlobalData.imConectedToServer){            
+            this.scene.stop('Chat'); //carga la escena de intro
+            GlobalData.isInChat = false;
+        }
+
         if (Phaser.Input.Keyboard.JustDown(this.chatKey)) {
             
             this.scene.stop('Chat'); //carga la escena de intro
