@@ -61,7 +61,9 @@ class EstadoServidor extends Phaser.Scene {
                 // Ya se maneja la desconexión en el bloque if(response.ok) en caso de error
             });
     
+            GlobalData.imConectedToServer = this.estadoConexion;
             
     } //se puede poner un delta 
+
 
 }
