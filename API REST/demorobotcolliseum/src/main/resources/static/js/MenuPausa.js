@@ -42,6 +42,7 @@ class MenuPausa extends Phaser.Scene {
         opciones.setInteractive().on('pointerdown', () => {
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuPausa'); //carga la escena de intro
+            this.scene.bringToTop('Ajustes');
             this.scene.launch('Ajustes'); //carga la escena de game
         });
 
