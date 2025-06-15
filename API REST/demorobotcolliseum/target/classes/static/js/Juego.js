@@ -421,6 +421,7 @@ class Juego extends Phaser.Scene
         console.log("Juego terminado, cerrando conexión WebSocket");
         this.webManager.closeConection(); // Cerrar la conexión WebSocket
         this.scene.stop('Juego');
+        this.scene.stop('Ajustes');
         this.start = false;
         this.scene.start('MenuVictoriaJ1'); //carga la escena 
     }
