@@ -7,7 +7,8 @@ var GlobalData = {
     isMaster : false,
     numPowerUps : 0,
     initPlay: true,
-    noPlaying: false
+    noPlaying: false,
+    imConectedToServer: false
 }
 
 var usuario = {

@@ -67,22 +67,32 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> loginUser(@RequestBody User user) {
         // String username = "alo";
         // String password = "aa";
         boolean exist = this.userService.login(user.getUsername(), user.getPassword());//username, password   user.getUsername(), user.getPassword()
-        if(exist) return ResponseEntity.ok().build();
+        if (exist) {
+            UserDTO userDTO = new UserDTO(this.userService.getUser(user.getUsername()).get());
+            System.out.println("Usuario logueado: " + userDTO.getName()+" con colores: " + userDTO.getColor1() + " y " + userDTO.getColor2());
+            return ResponseEntity.ok(userDTO);
+        }
+            
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/actualize")
     public ResponseEntity<UserDTO> actuliceUser(@RequestBody User user) {
-        Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
-        if(usu.isPresent()){            
-            UserDTO userDTO = (new UserDTO(usu.get()));
-            return ResponseEntity.ok(userDTO);
+        try{        
+            Optional<User> usu = this.userService.modifyUser(user.getUsername(), user);
+            if(usu.isPresent()){            
+                UserDTO userDTO = (new UserDTO(usu.get()));
+                return ResponseEntity.ok(userDTO);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping

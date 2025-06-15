@@ -82,6 +82,7 @@ class MenuInicio extends Phaser.Scene {
         const vestir = this.add.image(750, 530, 'vestir');
         
         vestir.setInteractive().on('pointerdown', () => {
+            if(!GlobalData.imConectedToServer) return;
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
             if(GlobalData.isMaster){

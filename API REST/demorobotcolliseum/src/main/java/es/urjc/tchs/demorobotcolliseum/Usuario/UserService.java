@@ -68,6 +68,8 @@ public class UserService {
         
         if(usu.isPresent()){
             usu.get().copiaProfunda(user);
+            this.userDAO.updateUser(usu.get());
+
             return Optional.of(usu.get());
         }
         return Optional.empty();
