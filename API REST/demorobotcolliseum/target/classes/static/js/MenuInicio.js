@@ -3,6 +3,8 @@ class MenuInicio extends Phaser.Scene {
         super({ key: 'MenuInicio' });
     }
 
+    eliminarCuenta = false
+
     preload() {
         //Cargo los audios con this.load.audio("path")
 		this.load.audio("select", "assets/musica/click.mp3"); 
@@ -96,6 +98,47 @@ class MenuInicio extends Phaser.Scene {
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
             this.scene.start('SeleccionJugador1'); //carga la escena de game
+        });
+
+        const eliminarUsuario = this.add.image(750, 530, 'eliminarUsuario').setOrigin(0.5, 0.5);    
+        
+        eliminarUsuario.setInteractive().on('pointerdown', () => {
+            if(this.eliminarCuenta === false){
+                this.eliminarCuenta = true;
+                const seguro = this.add.text(560, 575, '¿Estás seguro de eliminar tu tuerca (cuenta)?', { 
+                    fill: '#f00', 
+                    fontSize: 20,
+                    stroke: '#000',
+                    strokeThickness: 2
+                }).setOrigin(0.5, 0.5); 
+            }else{
+                fetch(`/api/users/${usuario.username}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error petición de login no disponible');
+                    }
+                    this.scene.stop('MenuInicio');   
+                    this.scene.start('MenuLogin');
+                    this.scene.stop('EstadoServidor');
+                    return response.json();
+                })                    
+                .catch(error => {
+                    console.error('Error:', error);
+                    const seguro = this.add.text(560, 575, 'No se pudo eliminar la cuenta', { 
+                        fill: '#f00', 
+                        fontSize: 20,
+                        stroke: '#000',
+                        strokeThickness: 2
+                    }).setOrigin(0.5, 0.5); 
+                    
+                    // Mostrar mensaje de error al usuario
+                });
+            }
         });
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 

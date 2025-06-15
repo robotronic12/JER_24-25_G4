@@ -97,7 +97,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{username}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) {
         boolean delete = this.userService.deleteUser(username);
         if(delete){
