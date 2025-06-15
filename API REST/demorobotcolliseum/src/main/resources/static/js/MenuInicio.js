@@ -22,10 +22,32 @@ class MenuInicio extends Phaser.Scene {
 
         this.load.image('vestir', 'assets/botones/Vestir.png');
         //Cargo Fuentes
+        
+        // precargamos otros sprites de otras escenas
+        this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
+        this.load.audio('shoot', "assets/musica/Shoot.mp3"); 
+        this.load.audio('powerUpTake', 'assets/musica/PowerUp.mp3'); 
 
+        this.load.image('sky', 'assets/entorno/fondo.png');
+        this.load.image('ground', 'assets/entorno/suelo.png');
+        this.load.image('plataforma', 'assets/entorno/plataforma.png');
+        this.load.image('player', 'assets/jugador/PersonajesA.png'); // Ruta de tu imagen del jugador
+        this.load.image('player2', 'assets/jugador/PersonajesR.png'); // Ruta de tu imagen del jugador
+        
+        this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
+
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreLive, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreDamage, 'assets/powerups/Danio.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreJump, 'assets/powerups/Salto.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.multiplesDisparos, 'assets/powerups/Balas.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedUp, 'assets/powerups/Velocidad.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedAtkUp, 'assets/powerups/Reloj.png', { frameWidth: 10, frameHeight: 10 });
         
 
-        
+        this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
+        this.load.image('vida', 'assets/jugador/Vida.png'); 
     }
 
     create() {
