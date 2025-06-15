@@ -21,8 +21,8 @@ class WebManager{
             }
             this.connection.onclose = function() {
                 console.log("Closing socket");
-                self.juego.endGame();
                 self.juego.scene.stop("EsperaSincronizacion");
+                self.juego.endGame();
                 //Hacer algo si se cierra la conexión
             }
             this.connection.onopen = () => {

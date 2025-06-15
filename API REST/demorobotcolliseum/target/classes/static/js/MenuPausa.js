@@ -35,6 +35,7 @@ class MenuPausa extends Phaser.Scene {
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuPausa'); //carga la escena de intro
                 this.scene.resume('Juego'); //carga la escena de game
+                this.scene.resume('EsperaSincronizacion'); //carga la escena de game
         });
 
         const opciones = this.add.image(400, 375, 'opciones');
@@ -49,6 +50,7 @@ class MenuPausa extends Phaser.Scene {
             this.sound.play('select'); 
             this.scene.stop('MenuPausa'); 
             this.scene.stop('Juego'); 
+            this.scene.stop('EsperaSincronizacion'); 
             this.scene.start('MenuInicio'); 
             GlobalData.playing = false;
         });

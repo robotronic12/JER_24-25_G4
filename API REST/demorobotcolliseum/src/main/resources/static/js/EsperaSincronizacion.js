@@ -6,7 +6,9 @@ class EsperaSincronizacion extends Phaser.Scene {
     preload() { 
     }
 
-    create() {      
+    create() {     
+        this.escapeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
         //const copyright = this.add.text(560, 575, 'Two Chain Studios ©', { fill: '#0f0', fontSize: 20 })
         const ver = this.add.text(10, 575, 'Ver 1.0', { fill: '#0f0', fontSize: 40 })
         const width = this.cameras.main.width;
@@ -33,6 +35,17 @@ class EsperaSincronizacion extends Phaser.Scene {
         }
     }
 
+    checkPause(){
+        if(GlobalData.isInChat) return;
+
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+            this.scene.pause('EsperaSincronizacion');
+            this.scene.pause('Juego');
+            this.scene.launch('MenuPausa'); 
+            this.scene.bringToTop('MenuPausa');
+        }
+    }
+
     finEsperaSincronizacion() {
         this.scene.stop('EsperaSincronizacion');
     }
@@ -42,6 +55,7 @@ class EsperaSincronizacion extends Phaser.Scene {
             this.finEsperaSincronizacion();
         }
         console.log("Esperando a que se conecten los jugadores...");
+        this.checkPause();
     } //se puede poner un delta 
 
 }
