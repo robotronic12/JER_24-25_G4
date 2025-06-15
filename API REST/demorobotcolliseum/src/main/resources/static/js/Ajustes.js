@@ -4,19 +4,7 @@ class Ajustes extends Phaser.Scene {
     }
 
     preload() {
-        // Cargamos los audios
-        this.load.audio("select", "assets/musica/click.mp3"); 
-        this.load.audio("background", "assets/musica/menuMusic.mp3"); // y les ponemos sus respectivas etiquetas
         
-        // Cargamos fondo de título
-        this.load.image('fondo', "assets/entorno/fondo.png");
-        
-        // Cargamos los botones
-        this.load.image('volumen', 'assets/botones/Volumen.png');
-        this.load.image('volver', 'assets/botones/Volver.png');
-        this.load.image('base', 'assets/botones/Base.png');
-        this.load.image('der', 'assets/botones/Der.png');
-        this.load.image('izq', 'assets/botones/Izq.png');
     }
 
     create() {
