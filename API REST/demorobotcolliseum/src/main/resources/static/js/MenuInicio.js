@@ -81,13 +81,12 @@ class MenuInicio extends Phaser.Scene {
         
         const vestir = this.add.image(750, 530, 'vestir');
         vestir.setInteractive().on('pointerdown', () => {
-            noConectado = this.add.text(730, 530, '', { fill: '#ffff', fontSize: 20 })
+            this.noConectado = this.add.text(730, 530, '', { fill: '#ffff', fontSize: 20 });
             if(!GlobalData.imConectedToServer) 
             {
-                this.noConectado = this.add.text(730, 530, 'Necesitas estar conectado al servidor', { fill: '#ffff', fontSize: 20 })
+                this.noConectado = this.add.text(730, 530, 'Necesitas estar conectado al servidor', { fill: '#ffff', fontSize: 20 });
                 return;
             }
-            noConectado = this.add.text(730, 530, '', { fill: '#ffff', fontSize: 20 })
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
             this.scene.start('SeleccionJugador1'); //carga la escena de game
