@@ -53,7 +53,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
             String responseJson = mapper.writeValueAsString(response);
             sendMessageToAll(responseJson);
             
-            startCreatePowerUps();
+            startCreating = true; // Indica que se ha iniciado la creación de power-ups
         }
 
         if(spawnedItems.size() > 0) {
@@ -61,6 +61,15 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 PowerUpServer item = spawnedItems.get(id);
                 sendItem(id, item.type, item.owner, item.x, item.y, false);
             }
+        }
+        if(sessions.size() > 2) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> response = new java.util.HashMap<>();
+            response.put("id", -1);
+            response.put("type", "NoMorePlayers");
+
+            String responseJson = mapper.writeValueAsString(response);
+            sendMessageToOne(session, responseJson);
         }
     }
 
@@ -70,7 +79,11 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         sessions.remove(session.getId());
 
         System.out.println(sessions.size()); 
-        stopCreatePowerUps(); // Detener generación de power-ups
+        if(sessions.size() < 2) {
+            System.out.println("No more sessions, clearing items.");
+            spawnedItems.clear(); // Limpiar items si no hay jugadores
+            stopCreatePowerUps(); // Detener generación de power-ups
+        }
 
         if (masterSession != null && masterSession.getId().equals(session.getId())) {
             masterSession = null;
@@ -136,6 +149,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 }
                 break;
             case "MessageJPlayer":
+                if(startCreating) {
+                    startCreatePowerUps();
+                    startCreating = false; // Evita reiniciar la creación de power-ups
+                }
                 sendMessageToOther(session,root.toString());
             break;
 
@@ -225,8 +242,8 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     }
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private boolean powerUpSpawnerStarted = false;
     private boolean firtsPowerUpCreated = true;
+    private boolean startCreating = false;
     private ScheduledFuture<?> createItems;
 
     public void startCreatePowerUps() {

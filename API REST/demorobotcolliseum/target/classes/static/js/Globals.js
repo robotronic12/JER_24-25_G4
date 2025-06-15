@@ -6,7 +6,8 @@ var GlobalData = {
     isInChat : false,
     isMaster : false,
     numPowerUps : 0,
-    initPlay: true
+    initPlay: true,
+    noPlaying: false
 }
 
 var usuario = {

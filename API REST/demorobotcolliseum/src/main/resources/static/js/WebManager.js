@@ -22,6 +22,7 @@ class WebManager{
             this.connection.onclose = function() {
                 console.log("Closing socket");
                 self.juego.endGame();
+                self.juego.scene.stop("EsperaSincronizacion");
                 //Hacer algo si se cierra la conexión
             }
             this.connection.onopen = () => {
@@ -137,6 +138,12 @@ class WebManager{
             case 'EmpiezaPartida':
                 GlobalData.initPlay = true;
                 break;
+
+            case 'NoMorePlayers':
+                GlobalData.noPlaying = true;
+                this.juego.startWaitForSinchronization();
+                break;
+
 
             default:
                 console.log("Unknown message type: ", message.type);

@@ -760,8 +760,8 @@ class Juego extends Phaser.Scene
     }
 
     startWaitForSinchronization() {           
-        this.scene.launch('EsperandoSincronizacion'); // Inicia la escena sin parar la actual
-        this.scene.bringToTop('EsperandoSincronizacion');
+        this.scene.launch('EsperaSincronizacion'); // Inicia la escena sin parar la actual
+        this.scene.bringToTop('EsperaSincronizacion');
     }
 
     createPowerUps(){
@@ -786,7 +786,7 @@ class Juego extends Phaser.Scene
 
     update ()
     {
-        if(this.start === false || GlobalData.initPlay === false) return; // Si no se ha iniciado el juego, no hacemos nada
+        if(this.start === false || GlobalData.initPlay === false || GlobalData.noPlaying ) return; // Si no se ha iniciado el juego, no hacemos nada
 
         //platamorfas móviles
         
