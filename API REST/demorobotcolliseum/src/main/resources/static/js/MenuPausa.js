@@ -49,7 +49,8 @@ class MenuPausa extends Phaser.Scene {
         salir.setInteractive().on('pointerdown', () => {            
             this.sound.play('select'); 
             this.scene.stop('MenuPausa'); 
-            this.scene.stop('Juego'); 
+            const juegoScene = this.scene.get('Juego');
+            juegoScene.endToMenu();
             this.scene.stop('EsperaSincronizacion'); 
             this.scene.start('MenuInicio'); 
             GlobalData.playing = false;

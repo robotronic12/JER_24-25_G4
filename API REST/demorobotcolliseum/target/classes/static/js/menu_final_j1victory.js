@@ -43,6 +43,7 @@ class menu_final_j1victory extends Phaser.Scene {
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
+            if(!GlobalData.imConectedToServer) return;
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuInicio'); //carga la escena de intro
                 this.scene.start('Juego'); //carga la escena de game
@@ -53,14 +54,7 @@ class menu_final_j1victory extends Phaser.Scene {
         this.bgMusic.setVolume(0.1); // Cambiar volumen (por ejemplo, 50% del volumen máximo)
         this.bgMusic.loop = false; //que sea no sea loop
         this.bgMusic.play(); //que suene
-
-        /*const start_button = this.add.image(400, 300, "start_button")
-        .setInteractive()
-        .on('pointerdown',() => {
-                
-                
-               
-        });*/
+        
         const salir = this.add.image(400, 450, 'salir');
         
         salir.setInteractive().on('pointerdown', () => {
@@ -71,6 +65,14 @@ class menu_final_j1victory extends Phaser.Scene {
             console.log('Botón de Salir clickeado');
            
         });
+
+        /*const start_button = this.add.image(400, 300, "start_button")
+        .setInteractive()
+        .on('pointerdown',() => {
+                
+                
+               
+        });*/
         
         
     }

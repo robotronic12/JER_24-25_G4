@@ -413,13 +413,26 @@ class Juego extends Phaser.Scene
     endGame(){
         this.bgMusic.stop();
         
-        console.log("Juego terminado, cerrando conexión WebSocket");
-        if(this.webManager.isConnected()){ // Si la conexión ya está cerrada, no hacemos nada
-            this.webManager.closeConection(); // Cerrar la conexión WebSocket
+        if (GlobalData.isInChat){
+            this.juego.scene.stop('Chat');
+            GlobalData.isInChat = false;
         }
+        
+        console.log("Juego terminado, cerrando conexión WebSocket");
+        this.webManager.closeConection(); // Cerrar la conexión WebSocket
         this.scene.stop('Juego');
         this.start = false;
         this.scene.start('MenuVictoriaJ1'); //carga la escena 
+    }
+
+    endToMenu(){
+        this.bgMusic.stop();
+        
+        console.log("Juego terminado, cerrando conexión WebSocket");
+        this.webManager.closeConection(); // Cerrar la conexión WebSocket
+        this.scene.stop('Juego');
+        this.start = false;
+        this.scene.start('MenuInicio'); //carga la escena 
     }
 
     startUpdate(){
@@ -811,7 +824,15 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     // UPDATE
     ///////////////////////////////////////////////////////////////////////////////////////
-   
+    reiniciarPlataformas(){
+        //this.movingPlatform1.setVelocityX(50);
+        //this.movingPlatform1.x = 
+        this.movingPlatform2.setVelocityY(-50);
+        this.movingPlatform2.x = 410;
+        this.movingPlatform2.y = 250;
+        this.JuegoAcabaDeEmpezar = true;
+        console.log("Coordinando plataformas");
+    }
 
     update ()
     {       
@@ -821,9 +842,8 @@ class Juego extends Phaser.Scene
         //platamorfas móviles
         
         if(!this.JuegoAcabaDeEmpezar)
-        {
-            
-            this.movingPlatform1.setVelocityX(50);
+        {            
+            //this.movingPlatform1.setVelocityX(50);
             this.movingPlatform2.setVelocityY(50);
             this.JuegoAcabaDeEmpezar = true;
         }
@@ -881,18 +901,19 @@ class Juego extends Phaser.Scene
         
         //Plataformas
         //pataforma móvil 1 (abajo)
-        if (this.movingPlatform1.x >= 500)
-        {
-            this.movingPlatform1.setVelocityX(-50);
-        }
-        else if (this.movingPlatform1.x <= 300)
-        {
-            this.movingPlatform1.setVelocityX(50);
-        }
+        //if (this.movingPlatform1.x >= 500)
+        //{
+        //    this.movingPlatform1.setVelocityX(-50);
+        //}
+        //else if (this.movingPlatform1.x <= 300)
+        //{
+        //    this.movingPlatform1.setVelocityX(50);
+        //}
         //plataforma móvil 2 (arriba)
-        if (this.movingPlatform2.y >= 250)
+        if (this.movingPlatform2.y > 250)
         {
             this.movingPlatform2.setVelocityY(-50);
+            this.webManager.sendPlatform();
         }
         else if (this.movingPlatform2.y <= 125)
         {

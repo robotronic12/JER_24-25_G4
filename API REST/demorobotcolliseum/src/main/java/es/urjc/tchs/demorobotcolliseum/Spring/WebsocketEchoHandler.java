@@ -25,6 +25,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
     private final ReentrantReadWriteLock lock;
     private Map<String, Integer> playerLives = new ConcurrentHashMap<>();
     private Map<Integer, PowerUpServer> spawnedItems = new HashMap<>();
+    private String[] idPlayers = new String[2]; 
 
     // Inicializar vidas por defecto
     {
@@ -42,7 +43,11 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         sessions.put(session.getId(), session);
         System.out.println("Total sessions: " + sessions.size());
 
+        if (sessions.size() == 1){            
+            idPlayers[0] = session.getId();
+        }
         if (sessions.size() == 2) {
+            idPlayers[1] = session.getId();
             resetPlayerLives();
 
             ObjectMapper mapper = new ObjectMapper();
@@ -79,10 +84,10 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
         sessions.remove(session.getId());
 
         System.out.println(sessions.size()); 
-        if(sessions.size() < 2) {
+        if(session.getId() == idPlayers[1]||session.getId() == idPlayers[0]) {
             System.out.println("No more sessions, clearing items.");
-            spawnedItems.clear(); // Limpiar items si no hay jugadores
             stopCreatePowerUps(); // Detener generación de power-ups
+            spawnedItems.clear(); // Limpiar items si no hay jugadores
         }
 
         if (masterSession != null && masterSession.getId().equals(session.getId())) {
@@ -179,7 +184,14 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 break;
 
             case "MessageEnd":                
-                sendMessageToAll(msg);          
+                sendMessageToAll(msg);   
+                stopCreatePowerUps(); // Detener generación de power-ups
+                spawnedItems.clear(); // Limpiar items si no hay jugadores       
+                break;
+            
+            case "MessagePlat":
+                sendMessageToAll(msg);
+                System.out.println("Sincronizar plataformas");
                 break;
             
             default:

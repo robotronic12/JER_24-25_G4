@@ -59,10 +59,11 @@ class MenuInicio extends Phaser.Scene {
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
-                GlobalData.playing = true;
-                this.sound.play('select'); //que suene el sonido de play
-                this.scene.stop('MenuInicio'); //carga la escena de intro
-                this.scene.start('Juego'); //carga la escena de game
+            if(!GlobalData.imConectedToServer) return;
+            GlobalData.playing = true;
+            this.sound.play('select'); //que suene el sonido de play
+            this.scene.stop('MenuInicio'); //carga la escena de intro
+            this.scene.start('Juego'); //carga la escena de game
         });
         const salir = this.add.image(400, 450, 'salir');
         
@@ -85,11 +86,7 @@ class MenuInicio extends Phaser.Scene {
             if(!GlobalData.imConectedToServer) return;
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
-            if(GlobalData.isMaster){
-                this.scene.start('SeleccionJugador1'); //carga la escena de game
-            }else{
-                this.scene.start('SeleccionJugador2'); //carga la escena de game
-            }
+            this.scene.start('SeleccionJugador1'); //carga la escena de game
         });
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 

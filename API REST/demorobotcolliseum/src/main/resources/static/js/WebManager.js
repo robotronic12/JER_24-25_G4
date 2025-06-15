@@ -112,16 +112,9 @@ class WebManager{
                 } else if (message.player === "J2") {
                     GlobalData.ganador = 2;
                 }
+                
+                this.juego.endGame();
 
-                this.juego.scene.stop('Juego'); 
-                if (GlobalData.isInChat){
-                    this.juego.scene.stop('Chat');
-                    GlobalData.isInChat = false;
-                }
-                this.juego.scene.start('MenuVictoriaJ1');
-                break;
-
-            case 'MessageBegin':
                 break;
             case 'MessageMasterResponse':
                 console.log("Is master ...");
@@ -143,11 +136,22 @@ class WebManager{
                 GlobalData.noPlaying = true;
                 this.juego.startWaitForSinchronization();
                 break;
-
+            case 'MessagePlat':
+                this.juego.reiniciarPlataformas();
+                break;
 
             default:
                 console.log("Unknown message type: ", message.type);
         }
+    }
+
+    sendPlatform(){
+        var message = {
+            id: this.newId(),
+            type: 'MessagePlat',
+            reinicio: true
+        };
+        this.sendMessage(message);
     }
 
     sendLive(vida){
