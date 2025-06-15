@@ -39,8 +39,6 @@ class EsperaSincronizacion extends Phaser.Scene {
         if(GlobalData.isInChat) return;
 
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
-            this.scene.pause('EsperaSincronizacion');
-            this.scene.pause('Juego');
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
         }

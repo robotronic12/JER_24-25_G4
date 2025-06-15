@@ -357,8 +357,7 @@ class Juego extends Phaser.Scene
     checkPause(){
         if(GlobalData.isInChat) return;
 
-        if (this.keyStates.esc) {
-            this.scene.pause('Juego');
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
@@ -785,8 +784,7 @@ class Juego extends Phaser.Scene
    
 
     update ()
-    {        
-        this.checkPause();
+    {       
 
         if(this.start === false || GlobalData.initPlay === false || GlobalData.noPlaying ) return; // Si no se ha iniciado el juego, no hacemos nada
 
@@ -870,6 +868,8 @@ class Juego extends Phaser.Scene
         {
             this.movingPlatform2.setVelocityY(50);
         }
+
+        this.checkPause();
 
         //Cambiar el tamaño y la posición de la barra de vida
 
