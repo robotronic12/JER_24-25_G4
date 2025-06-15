@@ -278,8 +278,19 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
 
     checkChat(){
-        if(GlobalData.isInChat || !GlobalData.imConectedToServer) return;
+        if(!GlobalData.imConectedToServer)
+        {
+            this.noConectado = this.add.text(0, 0, 'Necesitas estar \nconectado \nal servidor\npara abrir el chat', { 
+                fill: '#f00', 
+                fontSize: 20,
+                stroke: '#000',
+                strokeThickness: 2  
+            }).setOrigin(0.5, 0.5);
+            return;
+        }
+        if(GlobalData.isInChat) return;
         
+        this.noConectado = this.add.text(0, 0, '', { fill: '#ffff', fontSize: 20 });
         if (this.keyStates.t) {
             //Quito los controles
             this.recogSonido.play();
