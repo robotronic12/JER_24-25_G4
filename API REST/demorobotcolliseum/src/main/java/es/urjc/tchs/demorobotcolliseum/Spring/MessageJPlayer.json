@@ -1,5 +1,12 @@
 {
     "id": "1",
     "type": "MessageJPlayer",
-    "player": "Player1"
+    "player": {
+        "id": "Player1",
+        "x": 123,
+        "y": 456,
+        "vx": 10,
+        "vy": 0,
+        "timestamp": 1723991172754
+    }
 }
