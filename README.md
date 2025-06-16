@@ -190,3 +190,15 @@ Por último, se ha implementado un sistema de elección de color del personaje
 ### Diagrama UML de las clases
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/Imagen de WhatsApp 2024-12-17 a las 21.06.38_af36e915.jpg"></div>
 
+# Intrucciones de uso
+## Como crear el .jar
+1. Abrir el proyecto de visual en la carpeta API REST y localizar la carpeta demorobotcollisem en la terminal: cd demorobotcolliseum
+2. Creamos el jar en la carpeta especificada (target): .\mvnw.cmd package
+3. Desde aquí podemos ejecutar el .jar mediante la siguiente instrucción: java -jar .\target\demo-0.0.1-SNAPSHOT.jar
+4. En caso de no estar en la ruta de la carpeta demorobotcolliseum, crear nueva terminal y seguir los siguientes pasos mostrados a continuación.
+
+## Como iniciar servidor mediante .jar:
+1. Abrir la carpeta API REST desde el visual studio code
+2. Ubicarse en la carpeta demorobotcolliseum (raíz donde está el pom.xml) mediante el comando: cd demorobotcolliseum
+3. Ejecutar en la terminal la siguiente línea para levantar el servidor: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
+4. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
