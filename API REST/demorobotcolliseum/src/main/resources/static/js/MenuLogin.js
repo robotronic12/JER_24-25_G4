@@ -78,7 +78,7 @@ class MenuLogin extends Phaser.Scene {
                 })
                 .then(data => {
                     console.log('Respuesta del servidor:', data);
-                    console.log('Usuario registrado con éxito');
+                    console.log('Usuario registrado con exito');
                     // Aquí puedes manejar la respuesta (e.g., pasar a la siguiente escena del juego)
                 })
                 .catch(error => {
@@ -102,7 +102,7 @@ class MenuLogin extends Phaser.Scene {
                 })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Error petición de login no disponible');
+                            throw new Error('Error peticion de login no disponible');
                         }
                         elementDOM.removeListener('click');
                         elementDOM.setVisible(false);
@@ -121,7 +121,7 @@ class MenuLogin extends Phaser.Scene {
                     
                     .catch(error => {
                         console.error('Error:', error);
-                        textFormulario.setText('Usuario o Contraseña incorrectos o no existen');
+                        textFormulario.setText('Usuario o Contrasena incorrectos o no existen');
                         // Mostrar mensaje de error al usuario
                     });
                 //comparamos si existe el usuario
