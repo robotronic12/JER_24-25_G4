@@ -74,6 +74,7 @@ class MenuInicio extends Phaser.Scene {
         this.load.image('volver', 'assets/botones/Volver.png');
         this.load.image('opciones', 'assets/botones/Opciones.png');
         this.load.image('salir', 'assets/botones/Salir.png');
+        this.load.image('eliminarUsuario', 'assets/botones/EliminarCuenta.png');
     }
 
     create() {
@@ -146,12 +147,12 @@ class MenuInicio extends Phaser.Scene {
             this.scene.start('SeleccionJugador1'); //carga la escena de game
         });
 
-        const eliminarUsuario = this.add.image(50, 460, 'eliminarUsuario').setOrigin(0.5, 0.5);    
+        const eliminarUsuario = this.add.image(100, 460, 'eliminarUsuario').setOrigin(0.5, 0.5);    
         
         eliminarUsuario.setInteractive().on('pointerdown', () => {
             if(this.eliminarCuenta === false){
                 this.eliminarCuenta = true;
-                this.seguroText = this.add.text(80, 530, '¿Estás seguro de eliminar \ntu tuerca (cuenta)?', { 
+                this.seguroText = this.add.text(120, 530, '¿Estas seguro de eliminar \ntu tuerca (cuenta)?', { 
                     fill: '#f00', 
                     fontSize: 20,
                     stroke: '#000',
