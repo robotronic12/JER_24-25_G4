@@ -438,6 +438,7 @@ class Juego extends Phaser.Scene
 
     startUpdate(){
         this.start = true;
+        this.JuegoAcabaDeEmpezar = false;
     }
 
     //Para power ups
