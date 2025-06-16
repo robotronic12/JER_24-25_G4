@@ -4,13 +4,7 @@ class MenuPausa extends Phaser.Scene {
     }
 
     preload() {
-        //Cargo los audios con this.load.audio("path")
-		this.load.audio("select", "assets/musica/click.mp3"); 
-        this.load.audio("background", "assets/musica/menuMusic.mp3");
-        //Cargo los botones
-        this.load.image('volver', 'assets/botones/Volver.png');
-        this.load.image('opciones', 'assets/botones/Opciones.png');
-        this.load.image('salir', 'assets/botones/Salir.png');
+        
     }
 
     create() {     
