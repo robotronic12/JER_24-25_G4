@@ -34,7 +34,8 @@ Francisco Peña caldito
 #### Arte y concept art
 #### Inspiraciones del juego
 
-
+## Video Fase 4
+[>>Video Fase 4<<](https://youtu.be/ZkGQQjHR9JQ)
 
 ## Introducción
 ### Concepto de juego
@@ -188,3 +189,225 @@ Por último, se ha implementado un sistema de elección de color del personaje
 ### Diagrama UML de las clases
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/Imagen de WhatsApp 2024-12-17 a las 21.06.38_af36e915.jpg"></div>
 
+# Desarrollo multijugador online
+En esta parte se ha desarrollado la comunicación mediante Web Sockets durante el juego.
+
+## Descripción del protocolo
+Los mensajes enviados durante el juego, a través de los web sockets son los siguientes:
+
+### "MessageItem"
+Este mensaje tiene la siguiente extructura:
+
+{
+
+    "id": "1",  
+    
+    "type": "MessageItem",    
+    
+    "item":{  
+    
+        "itemId": "12345",  
+        
+        "itemType": "speedUp",  
+        
+        "itemPosition": {  
+        
+            "x": 10.0,  
+            
+            "y": 20.0  
+            
+        },  
+        
+        "timestamp": "2023-10-01T12:00:00Z",  
+        
+        "collected": true,   
+        
+        "owner": "J1"  
+        
+    }  
+    
+}  
+
+Si "collected" es true nos indicará que se ha recogido un item y el campo "owner" indicará el jugador que lo ha recogido, en caso contrario nos indica que se ha creado el item y la posición en la que se ha creado.
+
+### "MessageJPlayer"
+Este mensaje lo manda cada cliente al servidor para que lo refleje en el otro jugador. Su estructura es la siguiente:
+
+{
+
+    "id": "1",
+    
+    "type": "MessageJPlayer",
+    
+    "player": {
+    
+        "id": "Player1",
+        
+        "x": 123,
+        
+        "y": 456,
+        
+        "vx": 10,
+        
+        "vy": 0,
+        
+        "timestamp": 1723991172754
+        
+    }
+    
+}
+
+"id" indica que jugador se ha movido junto con su posicion y la velocidad para que pueda ser simulado en el otro jugador.
+
+### "MessageDisparo"
+Este mensaje es enviado por el cliente que realiza un disparo. Contiene las caracteristicas necesarias del disparo para que el servidor lo reeenvie al otro cliente.
+Su estructura es la siguiente:
+
+{
+
+    "id": "6",
+    
+    "type": "MessageDisparo",
+    
+    "disparo": {
+    
+        "x": 100,
+        
+        "y": 200,
+        
+        "offsetX": 1,
+        
+        "offsetY": 0,
+        
+        "danio": 10,
+        
+        "velBala": 300
+        
+    }
+    
+}
+
+
+### "MessageEnd"
+Este mensaje lo manda el servidor cuando considera que la partida ha terminado. Sigue la siguiente extructura:  
+
+{
+
+    "id": "1",  
+    
+    "type": "MessageItem",  
+    
+    "player": 1  
+    
+}
+
+"player" es el id del jugador que ha ganado la partida.  
+
+### "MessageDamage"
+Lo manda el master cada vez que detecta que hay un daño en alguno de los dos jugadores para que actualice la vida de los jugadores y las refleje en los clientes.
+Su estructura es la siguiente:
+
+{
+
+    "id": "2",
+    
+    "type": "MessageDamage",
+    
+    "damage": {
+    
+        "target": "J1",
+        
+        "amount": 20
+        
+    }
+    
+}
+
+"target" nos indica el jugador afectado y "amount" es la cantidad de daño que le hace.
+
+### "DesconectionVictory"
+Mensaje enviado cuando se desconecta uno de los clientes que estan jugando. Su estructura es:
+
+{
+
+    "id": "3",
+    
+    "type": "DesconexionVictory",
+    
+    "player": "J1"
+    
+}
+
+"player" indica el jugador que aun sigue conectado y que es declarado como ganador por desconexion.
+
+### "MessageManagerResponse"
+Este mensaje se manda al principio y sirve para definir qué jugador es el J1 y cual es el J2.  
+
+{  
+
+    "id": "1",  
+    
+    "type": "MessageItem",  
+    
+    "master": false  
+    
+}
+
+Cuando el cliente hace la petición para saber si es el jugador 1 o el 2  el mensaje no tendrá necesariamente el campo "master" dado que este campo solo se utiliza cuando el servidor le indica si es el jugador 1 o no.  
+
+### "EmpiezaPartida"
+Este mensaje es enviado por el servidor cuando ya hay dos jugadores conectados. Su estructura es:
+
+{
+    
+    "id": "1",
+    
+    "type": "MessageBegin",
+    
+    "ready": true  
+    
+}
+
+Su recepcion activa la variable global "initPlay" en el cliente para iniciar la partida.
+
+### "NoMorePlayers"
+Indica que ya hay suficientes jugadores conectados y que no se aceptan mas. Su estructura es:
+
+{
+
+    "id": "4",
+    
+    "type": "NoMorePlayers"
+    
+}
+
+Activa la variable global de "noPlaying" para indicar que ese jugador esta en espera
+
+### "MessagePlat"
+Sirve para sincronizar las plataformas, indica que se deben reiniciar las plataformas del juego. Su estructura es:
+
+{
+
+    "id": "5",
+    
+    "type": "MessagePlat",
+    
+    "reinicio": true
+    
+}
+
+
+## Diagrama UML actualizado 
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/diagramaParte4.png"></div>
+
+# Intrucciones de uso
+## Como crear el .jar
+1. Localizar la carpeta demorobotcolliseum: cd 'tu ruta específica\JER_24-25_G4\API REST\demorobotcolliseum'
+2. Creamos el jar en la carpeta especificada: .\mvnw.cmd package
+3. Desde aquí podemos ejecutar el .jar mediante la siguiente instrucción: java -jar target\demo-0.0.1-SNAPSHOT.jar
+4. En caso de no estar en la ruta de la carpeta demorobotcolliseum, crear nueva terminal y seguir los siguientes pasos mostrados a continuación.
+
+## Como iniciar servidor mediante .jar:
+1. Abrir la carpeta API REST desde el visual studio code
+2. Ejecutar en una nueva terminal (si se ha entrado y no se ha ejecutado nada es lo mismo) la siguiente línea para levantar el servidor: java -jar .\demorobotcolliseum\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
+3. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
