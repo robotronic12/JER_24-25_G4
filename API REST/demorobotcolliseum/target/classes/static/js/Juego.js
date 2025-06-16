@@ -278,8 +278,16 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
 
     checkChat(){
-        if(GlobalData.isInChat || !GlobalData.imConectedToServer) return;
+        if(!GlobalData.imConectedToServer)
+        {
+            this.noConectado.setText('Necesitas estar \nconectado \nal servidor\npara abrir el chat');
+            return;
+        }
+
+        if(GlobalData.isInChat) return;
         
+        this.noConectado.setText('');
+
         if (this.keyStates.t) {
             //Quito los controles
             this.recogSonido.play();
@@ -467,16 +475,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     preload ()
     {
-        this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
-        this.load.audio('shoot', "assets/musica/Shoot.mp3"); 
-        this.load.audio('powerUpTake', 'assets/musica/PowerUp.mp3'); 
-
-        this.load.image('sky', 'assets/entorno/fondo.png');
-        this.load.image('ground', 'assets/entorno/suelo.png');
-        this.load.image('plataforma', 'assets/entorno/plataforma.png');
-        this.load.image('player', 'assets/jugador/PersonajesA.png'); // Ruta de tu imagen del jugador
-        this.load.image('player2', 'assets/jugador/PersonajesR.png'); // Ruta de tu imagen del jugador
-        //this.load.image('star', 'src/games/firstgame/assets/star.png');
+        
 
         switch (usuario.color1) {
             case 1:
@@ -507,23 +506,8 @@ class Juego extends Phaser.Scene
                 this.load.image('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
                 break;
         }
-        //this.load.spritesheet('j1', 'assets/jugador/PersonajesA.png', { frameWidth: 60, frameHeight: 70 });
-        //this.load.spritesheet('j2', 'assets/jugador/PersonajesR.png', { frameWidth: 60, frameHeight: 70 });
-
-        this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
-
-        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.moreLive, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.moreDamage, 'assets/powerups/Danio.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.moreJump, 'assets/powerups/Salto.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.multiplesDisparos, 'assets/powerups/Balas.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.speedUp, 'assets/powerups/Velocidad.png', { frameWidth: 10, frameHeight: 10 });
-        this.load.image(PowerUps.speedAtkUp, 'assets/powerups/Reloj.png', { frameWidth: 10, frameHeight: 10 });
         
-
-        this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
-        this.load.image('vida', 'assets/jugador/Vida.png');       
+        
     }
     //#endregion
     
@@ -684,6 +668,14 @@ class Juego extends Phaser.Scene
             callbackScope: this,
             loop: true          // Se repite indefinidamente
         });
+
+        
+        this.noConectado = this.add.text(150, 50, '' , { 
+            fill: '#f00', 
+            fontSize: 20,
+            stroke: '#000',
+            strokeThickness: 2  
+        }).setOrigin(0.5, 0.5);
         
     }
     //#endregion
