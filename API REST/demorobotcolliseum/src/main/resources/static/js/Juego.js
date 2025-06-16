@@ -366,7 +366,6 @@ class Juego extends Phaser.Scene
         if(GlobalData.isInChat) return;
 
         if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
-            this.scene.pause('Juego');
             this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
             this.scene.bringToTop('MenuPausa');
@@ -437,7 +436,7 @@ class Juego extends Phaser.Scene
 
     endToMenu(){
         this.bgMusic.stop();
-        
+
         console.log("Juego terminado, cerrando conexión WebSocket");
         this.webManager.closeConection(); // Cerrar la conexión WebSocket
         this.scene.stop('Juego');
@@ -569,12 +568,7 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     preload ()
     {
-        if (this.textures.exists('j1')) {
-            this.textures.remove('j1');
-        }
-        if (this.textures.exists('j2')) {
-            this.textures.remove('j2');
-        }
+        
 
         switch (usuario.color1) {
             case 1:
@@ -615,6 +609,7 @@ class Juego extends Phaser.Scene
         console.log("Abrir conexión WebSocket al iniciar la escena");
         this.webManager.openConnection(); // Abrir la conexión WebSocket al iniciar la escena
 
+        
     }
     //#endregion
     
@@ -780,18 +775,6 @@ class Juego extends Phaser.Scene
             maxSize: 2,            // Número máximo de powerups activas           
         });
 
-        //while (GlobalData.isMaster == null){}
-        //console.log('isMaster: ' + GlobalData.isMaster);
-        //if(GlobalData.isMaster){
-        //    this.time.addEvent({
-        //        delay: 10000,        // Milisegundos
-        //        callback: () => {
-        //            this.createPowerUp();
-        //        },
-        //        callbackScope: this,
-        //        loop: true          // Se repite indefinidamente
-        //    });
-        //}    
         this.startWaitForSinchronization();
 
         
@@ -838,6 +821,28 @@ class Juego extends Phaser.Scene
 
     update ()
     {       
+        
+        //Plataformas
+        //pataforma móvil 1 (abajo)
+        //if (this.movingPlatform1.x >= 500)
+        //{
+        //    this.movingPlatform1.setVelocityX(-50);
+        //}
+        //else if (this.movingPlatform1.x <= 300)
+        //{
+        //    this.movingPlatform1.setVelocityX(50);
+        //}
+        //plataforma móvil 2 (arriba)
+        if (this.movingPlatform2.y > 250)
+        {
+            this.movingPlatform2.setVelocityY(-50);
+            this.webManager.sendPlatform();
+        }
+        else if (this.movingPlatform2.y <= 125)
+        {
+            this.movingPlatform2.setVelocityY(50);
+        }
+
 
         if(this.start === false || GlobalData.initPlay === false || GlobalData.noPlaying ) return; // Si no se ha iniciado el juego, no hacemos nada
 
@@ -900,27 +905,6 @@ class Juego extends Phaser.Scene
 
         //gestionamos el disparo
         this.inputDisparoBala();
-        
-        //Plataformas
-        //pataforma móvil 1 (abajo)
-        //if (this.movingPlatform1.x >= 500)
-        //{
-        //    this.movingPlatform1.setVelocityX(-50);
-        //}
-        //else if (this.movingPlatform1.x <= 300)
-        //{
-        //    this.movingPlatform1.setVelocityX(50);
-        //}
-        //plataforma móvil 2 (arriba)
-        if (this.movingPlatform2.y > 250)
-        {
-            this.movingPlatform2.setVelocityY(-50);
-            this.webManager.sendPlatform();
-        }
-        else if (this.movingPlatform2.y <= 125)
-        {
-            this.movingPlatform2.setVelocityY(50);
-        }
 
         this.checkPause();
 
