@@ -2,17 +2,26 @@
 
 
 
-
-
 # GDD “Robot Coliseum”
 Two Chain Studios
 
-
 ### Realizado por:
- Alba Poza Vela
+
+Alba Poza Vela
+
 Alberto Palomino Montañez
+
 Julio Hornos Rodriguez
+
 Francisco Peña caldito
+
+## Video Fase 4
+[>>Video Fase 4<<](https://youtu.be/ZkGQQjHR9JQ)
+
+## Enlaces del juego
+Gamejolt: https://gamejolt.com/games/RobotColliseum/1000104
+Itch.io: https://alba1212.itch.io/robot-colliseum
+
 
 ## Índice
 #### Índice
@@ -34,8 +43,7 @@ Francisco Peña caldito
 #### Arte y concept art
 #### Inspiraciones del juego
 
-## Video Fase 4
-[>>Video Fase 4<<](https://youtu.be/ZkGQQjHR9JQ)
+
 
 ## Introducción
 ### Concepto de juego
@@ -82,9 +90,13 @@ Se desarrollarán una serie de niveles para que el juego sea más variado y dive
 Hemos tomado varias inspiraciones a la hora de desarrollar el juego, sus mecánicas y sus diseños. Las principales son:
 
 Duck Game,
+
 Move or die,
+
 Rounds,
+
 Stick fight
+
 
 # Desarrollo de Videojuego
 ## Juego: Robot Coliseum
