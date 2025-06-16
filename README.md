@@ -189,3 +189,54 @@ Por último, se ha implementado un sistema de elección de color del personaje
 ### Diagrama UML de las clases
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/Imagen de WhatsApp 2024-12-17 a las 21.06.38_af36e915.jpg"></div>
 
+#Desarrollo multijugador online
+En esta parte se ha desarrollado la comunicación mediante Web Sockets durante el juego.
+
+##Descripción del protocolo
+Los mensajes enviados durante el juego, a través de los web sockets son los siguientes:
+
+### "MessageItem"
+Este mensaje tiene la siguiente extructura:
+{
+    "id": "1",  
+    "type": "MessageItem",    
+    "item":{  
+        "itemId": "12345",  
+        "itemType": "speedUp",  
+        "itemPosition": {  
+            "x": 10.0,  
+            "y": 20.0  
+        },  
+        "timestamp": "2023-10-01T12:00:00Z",  
+        "collected": true,   
+        "owner": "J1"  
+    }  
+}  
+Si "collected" es true nos indicará que se ha recogido un item y el campo "owner" indicará el jugador que lo ha recogido, en caso contrario nos indica que se ha creado el item y la posición en la que se ha creado.
+
+### "MessageJPlayer"
+### "MessageDisparo"
+### "MessageEnd"
+Este mensaje lo manda el servidor cuando considera que la partida ha terminado. Sigue la siguiente extructura:  
+{
+    "id": "1",  
+    "type": "MessageItem",  
+    "player": 1  
+}
+"player" es el id del jugador que ha ganado la partida.  
+
+### "MessageDamage"
+### "DesconectionVictory"
+### "MessageManagerResponse"
+Este mensaje se manda al principio y sirve para definir qué jugador es el J1 y cual es el J2.  
+{  
+    "id": "1",  
+    "type": "MessageItem",  
+    "master": false  
+}
+Cuando el cliente hace la petición para saber si es el jugador 1 o el 2  el mensaje no tendrá necesariamente el campo "master" dado que este campo solo se utiliza cuando el servidor le indica si es el jugador 1 o no.  
+
+### "EmpiezaPartida"
+### "NoMorePlayers"
+### "MessagePlat"
+
