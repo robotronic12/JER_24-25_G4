@@ -58,6 +58,8 @@ class MenuLogin extends Phaser.Scene {
                 
                 usuario.username = inputUsername;
                 usuario.password = inputPassword;
+                usuario.color1 = 1;
+                usuario.color2 = 4;
 
                 fetch('/api/users/', {
                     method: 'POST',
