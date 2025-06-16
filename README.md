@@ -423,7 +423,13 @@ Sirve para sincronizar las plataformas, indica que se deben reiniciar las plataf
 3. Ejecutar en la terminal la siguiente línea para levantar el servidor: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
 4. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
 
+La url que debe ejecutar el ordenador a partir del cual no está ejecutando el servidor es la siguiente:
+1. ip del servidor que aloja el servidor:8080
+2. la url que debe ejecutar el ordenador que ejecuta el servidor es la siguiente: localhost:8080
+   
 ## Como Rebuildear el .jar para nuevos cambios implementados
 1. Localizarnos en demorobotcolliseum desde la carpeta API REST mediante: cd demorobotcolliseum
 2. Rebuildear el .jar mediante el siguiente comando: ./mvnw clean package
 3. Ejecutar el .jar mediante: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
+
+
