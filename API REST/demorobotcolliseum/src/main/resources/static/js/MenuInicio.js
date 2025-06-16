@@ -75,6 +75,12 @@ class MenuInicio extends Phaser.Scene {
         this.load.image('opciones', 'assets/botones/Opciones.png');
         this.load.image('salir', 'assets/botones/Salir.png');
         this.load.image('eliminarUsuario', 'assets/botones/EliminarCuenta.png');
+
+        //Menu victoria
+		this.load.audio("select", "assets/musica/click.mp3"); 
+        this.load.audio("victory", "assets/musica/victory.mp3"); //y les pongo sus respestivas etiquetas
+        this.load.image('salir', 'assets/botones/Salir.png');
+
     }
 
     create() {
@@ -103,12 +109,24 @@ class MenuInicio extends Phaser.Scene {
          //estado de conexión del jugador
         const icono_conect = this.add.image(500, 60, 'user_conect');
 
-        
+            
+        this.noPuedesJugarSinConexion = this.add.text(400, 300, '', { 
+                    fill: '#f00', 
+                    fontSize: 20,
+                    stroke: '#000',
+                    strokeThickness: 2  
+                }).setOrigin(0.5, 0.5);
+        this.noPuedesJugarSinConexion.setDepth(10);        
 
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
-            if(!GlobalData.imConectedToServer) return;
+            this.noPuedesJugarSinConexion.setText('');
+            if(!GlobalData.imConectedToServer) 
+            {
+                this.noPuedesJugarSinConexion.setText('Necesitas estar \nconectado \nal servidor');                
+                return;
+            }
             GlobalData.playing = true;
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro

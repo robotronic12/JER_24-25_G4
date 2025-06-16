@@ -770,6 +770,18 @@ class Juego extends Phaser.Scene
 
         const recuadro1 = this.add.image(100, 568, 'marcoVida');
         this.vidaLabel1 = this.add.image(100, 568, 'vida');
+        const textJ1 = this.add.text(40, 530, "J1",{
+            ill: '#0f0', 
+            fontSize: 20,
+            stroke: '#000',
+            strokeThickness: 2 
+        })
+        const textJ2 = this.add.text(730, 530, "J2",{
+            ill: '#0f0', 
+            fontSize: 20,
+            stroke: '#000',
+            strokeThickness: 2 
+        })
 
         this.vida1 = 100
         this.vida2 = 100
