@@ -85,7 +85,7 @@ Move or die,
 Rounds,
 Stick fight
 
-# Desarrollo de Multijugador Local
+# Desarrollo del Videojuego
 ## Juego: Robot Coliseum
 
 Esta es la memoria sobre como se ha avanzado y desarrollado nuestro juego Robot Coliseum a lo largo de la parte 2 práctica. Se explicarán entre otras cosas el progreso 
@@ -177,6 +177,11 @@ Se ha implementado una escena que habilita el inicio de sesión si tienes una cu
 ### Chat
 Se ha creado un chat en el que se puede hablar, mandando mensajes al servidor y reciviendo de igual manera.
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/chat.png"></div>
+
+### Interfaz usuarios activos
+También, se ha implementado una interfaz donde te muestra los usuarios activos en todo momento en el juego.
+Ademas, se ha implementado un boton en el menu principal que sirve para eliminar la cuenta.
+<div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/pantallaInicioDelete.png"></div>
 
 ### Interfaz usuarios activos
 También, se ha implementado una interfaz donde te muestra los usuarios activos en todo momento en el juego.
