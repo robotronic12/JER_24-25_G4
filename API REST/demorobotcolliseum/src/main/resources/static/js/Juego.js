@@ -280,17 +280,14 @@ class Juego extends Phaser.Scene
     checkChat(){
         if(!GlobalData.imConectedToServer)
         {
-            this.noConectado = this.add.text(0, 0, 'Necesitas estar \nconectado \nal servidor\npara abrir el chat', { 
-                fill: '#f00', 
-                fontSize: 20,
-                stroke: '#000',
-                strokeThickness: 2  
-            }).setOrigin(0.5, 0.5);
+            this.noConectado.setText('Necesitas estar \nconectado \nal servidor\npara abrir el chat');
             return;
         }
+
         if(GlobalData.isInChat) return;
         
-        this.noConectado = this.add.text(0, 0, '', { fill: '#ffff', fontSize: 20 });
+        this.noConectado.setText('');
+
         if (this.keyStates.t) {
             //Quito los controles
             this.recogSonido.play();
@@ -671,6 +668,14 @@ class Juego extends Phaser.Scene
             callbackScope: this,
             loop: true          // Se repite indefinidamente
         });
+
+        
+        this.noConectado = this.add.text(150, 50, '' , { 
+            fill: '#f00', 
+            fontSize: 20,
+            stroke: '#000',
+            strokeThickness: 2  
+        }).setOrigin(0.5, 0.5);
         
     }
     //#endregion
