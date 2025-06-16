@@ -3,6 +3,8 @@ class MenuInicio extends Phaser.Scene {
         super({ key: 'MenuInicio' });
     }
 
+    eliminarCuenta = false
+
     preload() {
         //Cargo los audios con this.load.audio("path")
 		this.load.audio("select", "assets/musica/click.mp3"); 
@@ -72,6 +74,7 @@ class MenuInicio extends Phaser.Scene {
         this.load.image('volver', 'assets/botones/Volver.png');
         this.load.image('opciones', 'assets/botones/Opciones.png');
         this.load.image('salir', 'assets/botones/Salir.png');
+        this.load.image('eliminarUsuario', 'assets/botones/EliminarCuenta.png');
     }
 
     create() {
@@ -143,6 +146,44 @@ class MenuInicio extends Phaser.Scene {
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
             this.scene.start('SeleccionJugador1'); //carga la escena de game
+        });
+
+        const eliminarUsuario = this.add.image(100, 460, 'eliminarUsuario').setOrigin(0.5, 0.5);    
+        
+        eliminarUsuario.setInteractive().on('pointerdown', () => {
+            if(this.eliminarCuenta === false){
+                this.eliminarCuenta = true;
+                this.seguroText = this.add.text(120, 530, '¿Estas seguro de eliminar \ntu tuerca (cuenta)?', { 
+                    fill: '#f00', 
+                    fontSize: 20,
+                    stroke: '#000',
+                    strokeThickness: 2
+                }).setOrigin(0.5, 0.5); 
+            }else{
+                fetch(`/api/users/${usuario.username}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error petición de delete no disponible');
+                    }
+                    this.scene.stop('MenuInicio');   
+                    this.scene.start('MenuLogin');
+                    this.scene.stop('EstadoServidor');
+                    this.seguroText.setText('Cuenta eliminada');
+                })                    
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.seguroText.setText('No se pudo eliminar la cuenta');
+                    this.eliminarCuenta = false;
+
+                    
+                    // Mostrar mensaje de error al usuario
+                });
+            }
         });
 
         this.events.on('shutdown', () => { this.bgMusic.stop(); }); 
