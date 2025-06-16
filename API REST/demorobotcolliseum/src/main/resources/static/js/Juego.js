@@ -436,7 +436,7 @@ class Juego extends Phaser.Scene
 
     endToMenu(){
         this.bgMusic.stop();
-        
+
         console.log("Juego terminado, cerrando conexión WebSocket");
         this.webManager.closeConection(); // Cerrar la conexión WebSocket
         this.scene.stop('Juego');
@@ -774,7 +774,7 @@ class Juego extends Phaser.Scene
             classType: PowerUp,
             maxSize: 2,            // Número máximo de powerups activas           
         });
-          
+
         this.startWaitForSinchronization();
 
         
@@ -821,6 +821,28 @@ class Juego extends Phaser.Scene
 
     update ()
     {       
+        
+        //Plataformas
+        //pataforma móvil 1 (abajo)
+        //if (this.movingPlatform1.x >= 500)
+        //{
+        //    this.movingPlatform1.setVelocityX(-50);
+        //}
+        //else if (this.movingPlatform1.x <= 300)
+        //{
+        //    this.movingPlatform1.setVelocityX(50);
+        //}
+        //plataforma móvil 2 (arriba)
+        if (this.movingPlatform2.y > 250)
+        {
+            this.movingPlatform2.setVelocityY(-50);
+            this.webManager.sendPlatform();
+        }
+        else if (this.movingPlatform2.y <= 125)
+        {
+            this.movingPlatform2.setVelocityY(50);
+        }
+
 
         if(this.start === false || GlobalData.initPlay === false || GlobalData.noPlaying ) return; // Si no se ha iniciado el juego, no hacemos nada
 
@@ -883,27 +905,6 @@ class Juego extends Phaser.Scene
 
         //gestionamos el disparo
         this.inputDisparoBala();
-        
-        //Plataformas
-        //pataforma móvil 1 (abajo)
-        //if (this.movingPlatform1.x >= 500)
-        //{
-        //    this.movingPlatform1.setVelocityX(-50);
-        //}
-        //else if (this.movingPlatform1.x <= 300)
-        //{
-        //    this.movingPlatform1.setVelocityX(50);
-        //}
-        //plataforma móvil 2 (arriba)
-        if (this.movingPlatform2.y > 250)
-        {
-            this.movingPlatform2.setVelocityY(-50);
-            this.webManager.sendPlatform();
-        }
-        else if (this.movingPlatform2.y <= 125)
-        {
-            this.movingPlatform2.setVelocityY(50);
-        }
 
         this.checkPause();
 

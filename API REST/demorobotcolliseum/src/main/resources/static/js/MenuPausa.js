@@ -47,7 +47,7 @@ class MenuPausa extends Phaser.Scene {
             const juegoScene = this.scene.get('Juego');
             juegoScene.endToMenu();
             this.scene.stop('EsperaSincronizacion'); 
-            this.scene.stop('MenuVictoriaJ1')
+            this.scene.stop('MenuVictoriaJ1');
             this.scene.start('MenuInicio'); 
             GlobalData.playing = false;
         });

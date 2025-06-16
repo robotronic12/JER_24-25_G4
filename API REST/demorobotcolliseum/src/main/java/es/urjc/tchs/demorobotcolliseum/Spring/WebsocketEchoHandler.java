@@ -151,6 +151,8 @@ public class WebsocketEchoHandler extends TextWebSocketHandler{
                 if (spawnedItems.containsKey(itemId)) {
                     spawnedItems.remove(itemId);
                     sendMessageToAll(msg);
+
+                    sendMessageToAll(msg);
                 }
                 break;
             case "MessageJPlayer":
