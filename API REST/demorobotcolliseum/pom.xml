@@ -52,10 +52,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>es.urjc.tchs.demorobotcolliseum.DemorobotcolliseumAppication</mainClass>
+					<mainClass>es.urjc.tchs.demorobotcolliseum.DemorobotcolliseumApplication</mainClass>
 					<layout>ZIP</layout>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 
