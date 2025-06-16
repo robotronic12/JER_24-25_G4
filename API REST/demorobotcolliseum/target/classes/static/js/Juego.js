@@ -475,7 +475,12 @@ class Juego extends Phaser.Scene
     ///////////////////////////////////////////////////////////////////////////////////////
     preload ()
     {
-        
+        if (this.textures.exists('j1')) {
+            this.textures.remove('j1');
+        }
+        if (this.textures.exists('j2')) {
+            this.textures.remove('j2');
+        }
 
         switch (usuario.color1) {
             case 1:
