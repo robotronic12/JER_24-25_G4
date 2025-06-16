@@ -1,5 +1,8 @@
 {
-    "id": "1",
+    "id": "2",
     "type": "MessageDamage",
-    "live": 0
+    "damage": {
+        "target": "J1",
+        "amount": 20
+    }
 }
