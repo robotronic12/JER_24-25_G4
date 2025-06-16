@@ -416,12 +416,18 @@ Sirve para sincronizar las plataformas, indica que se deben reiniciar las plataf
 
 # Intrucciones de uso
 ## Como crear el .jar
-1. Localizar la carpeta demorobotcolliseum: cd 'tu ruta específica\JER_24-25_G4\API REST\demorobotcolliseum'
-2. Creamos el jar en la carpeta especificada: .\mvnw.cmd package
-3. Desde aquí podemos ejecutar el .jar mediante la siguiente instrucción: java -jar target\demo-0.0.1-SNAPSHOT.jar
+1. Abrir el proyecto de visual en la carpeta API REST y localizar la carpeta demorobotcollisem en la terminal: cd demorobotcolliseum
+2. Creamos el jar en la carpeta especificada (target): .\mvnw.cmd package
+3. Desde aquí podemos ejecutar el .jar mediante la siguiente instrucción: java -jar .\target\demo-0.0.1-SNAPSHOT.jar
 4. En caso de no estar en la ruta de la carpeta demorobotcolliseum, crear nueva terminal y seguir los siguientes pasos mostrados a continuación.
 
 ## Como iniciar servidor mediante .jar:
 1. Abrir la carpeta API REST desde el visual studio code
-2. Ejecutar en una nueva terminal (si se ha entrado y no se ha ejecutado nada es lo mismo) la siguiente línea para levantar el servidor: java -jar .\demorobotcolliseum\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
-3. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
+2. Ubicarse en la carpeta demorobotcolliseum (raíz donde está el pom.xml) mediante el comando: cd demorobotcolliseum
+3. Ejecutar en la terminal la siguiente línea para levantar el servidor: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
+4. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
+
+## Como Rebuildear el .jar para nuevos cambios implementados
+1. Localizarnos en demorobotcolliseum desde la carpeta API REST mediante: cd demorobotcolliseum
+2. Rebuildear el .jar mediante el siguiente comando: ./mvnw clean package
+3. Ejecutar el .jar mediante: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
