@@ -330,7 +330,7 @@ class Juego extends Phaser.Scene
     checkPause(){
         if(GlobalData.isInChat) return;
 
-        if (this.keyStates.esc) {
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
             this.scene.pause('Juego');
             this.bgMusic.pause();         
             this.scene.launch('MenuPausa'); 
