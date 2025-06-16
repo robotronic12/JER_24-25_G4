@@ -108,7 +108,18 @@ class MenuInicio extends Phaser.Scene {
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
-            if(!GlobalData.imConectedToServer) return;
+            this.noPuedesJugarSinConexion = this.setText(400, 300, '', { fill: '#ffff', fontSize: 20 });
+            if(!GlobalData.imConectedToServer) 
+            {
+                this.noPuedesJugarSinConexion = this.setText(400, 370, 'Necesitas estar \nconectado \nal servidor', { 
+                    fill: '#f00', 
+                    fontSize: 20,
+                    stroke: '#000',
+                    strokeThickness: 2  
+                }).setOrigin(0.5, 0.5);
+                
+                return;
+            }
             GlobalData.playing = true;
             this.sound.play('select'); //que suene el sonido de play
             this.scene.stop('MenuInicio'); //carga la escena de intro
@@ -131,13 +142,13 @@ class MenuInicio extends Phaser.Scene {
         
         const vestir = this.add.image(750, 530, 'vestir').setOrigin(0.5, 0.5);
         vestir.setInteractive().on('pointerdown', () => {
-            this.noConectado = this.add.text(750, 530, '', { fill: '#ffff', fontSize: 20 });
+            this.noConectado = this.setText(750, 530, '', { fill: '#ffff', fontSize: 20 });
             if(!GlobalData.imConectedToServer) 
             {
-                this.noConectado = this.add.text(700, 460, 'Necesitas estar \nconectado \nal servidor', { 
+                this.noConectado = this.setText(700, 460, 'Necesitas estar \nconectado \nal servidor', { 
                     fill: '#f00', 
                     fontSize: 20,
-                    stroke: '#000',         // Color del borde (por ejemplo, negro)
+                    stroke: '#000',
                     strokeThickness: 2  
                 }).setOrigin(0.5, 0.5);
                 

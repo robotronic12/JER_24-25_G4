@@ -43,7 +43,18 @@ class menu_final_j1victory extends Phaser.Scene {
         const start_button = this.add.image(400, 300, "start_button")
         .setInteractive()
         .on('pointerdown',() => {
-            if(!GlobalData.imConectedToServer) return;
+            this.noConectado = this.setText(400, 300, '', { fill: '#ffff', fontSize: 20 });
+            if(!GlobalData.imConectedToServer) 
+            {
+                this.noConectado = this.setText(400, 370, 'Necesitas estar \nconectado \nal servidor', { 
+                    fill: '#f00', 
+                    fontSize: 20,
+                    stroke: '#000',
+                    strokeThickness: 2  
+                }).setOrigin(0.5, 0.5);
+                
+                return;
+            }
                 this.sound.play('select'); //que suene el sonido de play
                 this.scene.stop('MenuInicio'); //carga la escena de intro
                 this.scene.start('Juego'); //carga la escena de game
