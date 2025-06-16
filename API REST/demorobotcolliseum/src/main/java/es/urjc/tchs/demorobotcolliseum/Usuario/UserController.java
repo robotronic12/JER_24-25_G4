@@ -99,14 +99,11 @@ public class UserController {
 
     @DeleteMapping("/{username}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) {
-        boolean delete = this.userService.deleteUser(username);
-        if(delete){
-            Optional<User> user = this.userService.getUser(username);
-            if(user.isPresent()){
-                this.userService.deleteUser(username);
-                UserDTO userDTO = new UserDTO(user.get());
-                return ResponseEntity.ok(userDTO);
-            }
+        Optional<User> user = this.userService.getUser(username);
+        if(user.isPresent()){
+            this.userService.deleteUser(username);
+            UserDTO userDTO = new UserDTO(user.get());
+            return ResponseEntity.ok(userDTO);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }

@@ -24,10 +24,32 @@ class MenuInicio extends Phaser.Scene {
 
         this.load.image('vestir', 'assets/botones/Vestir.png');
         //Cargo Fuentes
+        
+        // precargamos otros sprites de otras escenas
+        this.load.audio("background", "assets/musica/menuMusic.mp3"); //y les pongo sus respestivas etiquetas
+        this.load.audio('shoot', "assets/musica/Shoot.mp3"); 
+        this.load.audio('powerUpTake', 'assets/musica/PowerUp.mp3'); 
 
+        this.load.image('sky', 'assets/entorno/fondo.png');
+        this.load.image('ground', 'assets/entorno/suelo.png');
+        this.load.image('plataforma', 'assets/entorno/plataforma.png');
+        this.load.image('player', 'assets/jugador/PersonajesA.png'); // Ruta de tu imagen del jugador
+        this.load.image('player2', 'assets/jugador/PersonajesR.png'); // Ruta de tu imagen del jugador
+        
+        this.load.image('bala', 'assets/jugador/bala.png', { frameWidth: 10, frameHeight: 10 });
+
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreLive, 'assets/powerups/Vida.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreDamage, 'assets/powerups/Danio.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.moreJump, 'assets/powerups/Salto.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.multiplesDisparos, 'assets/powerups/Balas.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedBulletkUp, 'assets/powerups/VelocidadBala.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedUp, 'assets/powerups/Velocidad.png', { frameWidth: 10, frameHeight: 10 });
+        this.load.image(PowerUps.speedAtkUp, 'assets/powerups/Reloj.png', { frameWidth: 10, frameHeight: 10 });
         
 
-        
+        this.load.image('marcoVida', 'assets/jugador/MarcoVida.png');
+        this.load.image('vida', 'assets/jugador/Vida.png'); 
     }
 
     create() {
@@ -100,12 +122,12 @@ class MenuInicio extends Phaser.Scene {
             this.scene.start('SeleccionJugador1'); //carga la escena de game
         });
 
-        const eliminarUsuario = this.add.image(750, 530, 'eliminarUsuario').setOrigin(0.5, 0.5);    
+        const eliminarUsuario = this.add.image(50, 460, 'eliminarUsuario').setOrigin(0.5, 0.5);    
         
         eliminarUsuario.setInteractive().on('pointerdown', () => {
             if(this.eliminarCuenta === false){
                 this.eliminarCuenta = true;
-                const seguro = this.add.text(560, 575, '¿Estás seguro de eliminar tu tuerca (cuenta)?', { 
+                this.seguroText = this.add.text(80, 530, '¿Estás seguro de eliminar \ntu tuerca (cuenta)?', { 
                     fill: '#f00', 
                     fontSize: 20,
                     stroke: '#000',
@@ -120,21 +142,18 @@ class MenuInicio extends Phaser.Scene {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Error petición de login no disponible');
+                        throw new Error('Error petición de delete no disponible');
                     }
                     this.scene.stop('MenuInicio');   
                     this.scene.start('MenuLogin');
                     this.scene.stop('EstadoServidor');
-                    return response.json();
+                    this.seguroText.setText('Cuenta eliminada');
                 })                    
                 .catch(error => {
                     console.error('Error:', error);
-                    const seguro = this.add.text(560, 575, 'No se pudo eliminar la cuenta', { 
-                        fill: '#f00', 
-                        fontSize: 20,
-                        stroke: '#000',
-                        strokeThickness: 2
-                    }).setOrigin(0.5, 0.5); 
+                    this.seguroText.setText('No se pudo eliminar la cuenta');
+                    this.eliminarCuenta = false;
+
                     
                     // Mostrar mensaje de error al usuario
                 });

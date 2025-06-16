@@ -122,12 +122,12 @@ class MenuInicio extends Phaser.Scene {
             this.scene.start('SeleccionJugador1'); //carga la escena de game
         });
 
-        const eliminarUsuario = this.add.image(750, 530, 'eliminarUsuario').setOrigin(0.5, 0.5);    
+        const eliminarUsuario = this.add.image(50, 460, 'eliminarUsuario').setOrigin(0.5, 0.5);    
         
         eliminarUsuario.setInteractive().on('pointerdown', () => {
             if(this.eliminarCuenta === false){
                 this.eliminarCuenta = true;
-                const seguro = this.add.text(560, 575, '¿Estás seguro de eliminar tu tuerca (cuenta)?', { 
+                this.seguroText = this.add.text(80, 530, '¿Estás seguro de eliminar \ntu tuerca (cuenta)?', { 
                     fill: '#f00', 
                     fontSize: 20,
                     stroke: '#000',
@@ -142,21 +142,18 @@ class MenuInicio extends Phaser.Scene {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Error petición de login no disponible');
+                        throw new Error('Error petición de delete no disponible');
                     }
                     this.scene.stop('MenuInicio');   
                     this.scene.start('MenuLogin');
                     this.scene.stop('EstadoServidor');
-                    return response.json();
+                    this.seguroText.setText('Cuenta eliminada');
                 })                    
                 .catch(error => {
                     console.error('Error:', error);
-                    const seguro = this.add.text(560, 575, 'No se pudo eliminar la cuenta', { 
-                        fill: '#f00', 
-                        fontSize: 20,
-                        stroke: '#000',
-                        strokeThickness: 2
-                    }).setOrigin(0.5, 0.5); 
+                    this.seguroText.setText('No se pudo eliminar la cuenta');
+                    this.eliminarCuenta = false;
+
                     
                     // Mostrar mensaje de error al usuario
                 });
