@@ -202,3 +202,8 @@ Por último, se ha implementado un sistema de elección de color del personaje
 2. Ubicarse en la carpeta demorobotcolliseum (raíz donde está el pom.xml) mediante el comando: cd demorobotcolliseum
 3. Ejecutar en la terminal la siguiente línea para levantar el servidor: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
 4. Para cerrar servidor desde la terminal de visual pulsar ctrl+c
+
+## Como Rebuildear el .jar para nuevos cambios implementados
+1. Localizarnos en demorobotcolliseum desde la carpeta API REST mediante: cd demorobotcolliseum
+2. Rebuildear el .jar mediante el siguiente comando: ./mvnw clean package
+3. Ejecutar el .jar mediante: java -jar .\target\demorobotcolliseum-0.0.1-SNAPSHOT.jar
