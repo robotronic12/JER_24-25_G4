@@ -183,9 +183,6 @@ También, se ha implementado una interfaz donde te muestra los usuarios activos 
 Ademas, se ha implementado un boton en el menu principal que sirve para eliminar la cuenta.
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/pantallaInicioDelete.png"></div>
 
-### Interfaz usuarios activos
-También, se ha implementado una interfaz donde te muestra los usuarios activos en todo momento en el juego.
-
 ### Selección de color de robots
 Por último, se ha implementado un sistema de elección de color del personaje
 <div align="center"><img src="API REST\demorobotcolliseum\src\main\resources\static\assets/ReadMe/seleccionColor.png"></div>
